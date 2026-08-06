@@ -1,0 +1,162 @@
+import { useState, useEffect } from "react";
+import { Sparkles, Menu, X, Clock, HelpCircle, UtensilsCrossed, Instagram } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { BelakuLogoFull } from "./BelakuLogo";
+
+interface NavbarProps {
+  onNavClick: (sectionId: string) => void;
+  activeSection: string;
+}
+
+export default function Navbar({ onNavClick, activeSection }: NavbarProps) {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navItems = [
+    { label: "The Story", id: "about" },
+    { label: "Our Bakes", id: "menu" },
+    { label: "Bespoke Requests", id: "custom" },
+    { label: "Our Location", id: "pickup" }
+  ];
+
+  const handleItemClick = (id: string) => {
+    onNavClick(id);
+    setIsMobileMenuOpen(false);
+  };
+
+  return (
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          isScrolled
+            ? "bg-brand-cream/90 backdrop-blur-md border-b border-brand-stone/40 py-4 shadow-sm"
+            : "bg-transparent py-6"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+          {/* Logo Brand area */}
+          <button
+            onClick={() => handleItemClick("hero")}
+            className="group flex items-center text-left cursor-pointer focus:outline-hidden"
+          >
+            <BelakuLogoFull size={48} />
+          </button>
+
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center space-x-10">
+            {navItems.map((item) => {
+              const active = activeSection === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleItemClick(item.id)}
+                  className={`relative font-sans text-sm tracking-wide transition-colors duration-300 py-1.5 focus:outline-hidden cursor-pointer ${
+                    active ? "text-brand-espresso font-semibold" : "text-brand-espresso/70 hover:text-brand-espresso"
+                  }`}
+                >
+                  {item.label}
+                  {active && (
+                    <motion.div
+                      layoutId="activeIndicator"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-caramel rounded-full"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Action button */}
+          <div className="hidden md:flex items-center space-x-3.5">
+            <a
+              href="https://www.instagram.com/belaku_bakes/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 bg-brand-linen text-brand-espresso hover:text-brand-caramel rounded-full transition-colors duration-300 border border-brand-stone/40 inline-flex items-center justify-center cursor-pointer shadow-xs"
+              title="Follow us on Instagram @belaku_bakes"
+            >
+              <Instagram className="w-4 h-4" />
+            </a>
+            <button
+              onClick={() => handleItemClick("custom")}
+              className="px-5 py-2.5 bg-brand-espresso text-brand-cream hover:bg-brand-caramel hover:text-brand-espresso rounded-full text-xs tracking-widest uppercase font-semibold transition-all duration-500 shadow-sm cursor-pointer border border-transparent hover:border-brand-stone"
+            >
+              Custom Request
+            </button>
+          </div>
+
+          {/* Mobile Menu Icon */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+            className="md:hidden p-2 text-brand-espresso focus:outline-hidden cursor-pointer rounded-full hover:bg-brand-linen/60"
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Menu Drawer */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed inset-x-0 top-[72px] z-40 bg-brand-cream border-b border-brand-stone shadow-lg max-h-screen overflow-y-auto block md:hidden"
+          >
+            <div className="p-6 space-y-6">
+              <nav className="flex flex-col space-y-4">
+                {navItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleItemClick(item.id)}
+                    className={`text-left text-lg font-serif py-2.5 border-b border-brand-stone/30 focus:outline-hidden cursor-pointer ${
+                      activeSection === item.id ? "text-brand-caramel font-semibold" : "text-brand-espresso/80"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </nav>
+
+              <div className="pt-2 flex flex-col space-y-3.5">
+                <button
+                  onClick={() => handleItemClick("custom")}
+                  className="w-full text-center py-3.5 bg-brand-espresso text-brand-cream hover:bg-brand-caramel rounded-full text-sm uppercase tracking-wider font-semibold transition-colors duration-300 cursor-pointer"
+                >
+                  Begin Custom Creation
+                </button>
+                
+                <a
+                  href="https://www.instagram.com/belaku_bakes/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full text-center py-3 bg-transparent text-brand-espresso hover:bg-brand-linen rounded-full text-sm uppercase tracking-wider font-bold transition-colors duration-300 cursor-pointer border border-brand-stone/60 inline-flex items-center justify-center space-x-2"
+                >
+                  <Instagram className="w-4 h-4 text-brand-caramel" />
+                  <span>Follow @belaku_bakes</span>
+                </a>
+                
+                <div className="flex items-center justify-between text-xs text-brand-espresso/60 pt-4 border-t border-brand-stone/40">
+                  <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> 10:30 AM - 8:30 PM</span>
+                  <span className="flex items-center gap-1.5"><UtensilsCrossed className="w-3.5 h-3.5" /> Cloud Kitchen</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
