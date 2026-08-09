@@ -20,8 +20,8 @@ export default function About() {
               {/* Image box */}
               <div className="relative w-full h-full rounded-xl overflow-hidden shadow-lg bg-brand-stone">
                 <SafeImage
-                  src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=800&auto=format&fit=crop"
-                  alt="Belaku Bakes artisan baker kitchen"
+                  src="our_story.png"
+                  alt="Belaku Bakes Our Story & Vision"
                   className="w-full h-full object-cover select-none scale-102 hover:scale-105 duration-700 transition-transform"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/40 via-transparent to-transparent pointer-events-none" />
