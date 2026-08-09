@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -8,13 +8,24 @@ import PickupGuide from "./components/PickupGuide";
 import InstagramShowcase from "./components/InstagramShowcase";
 import { MenuItem } from "./types";
 import { TESTIMONIALS, CONTACT_INFO, STORE_CHEF_STATEMENT } from "./data";
-import { Star, MessageSquare, MapPin, Instagram, Mail, ShieldAlert, Sparkles, Sliders, CheckCircle2, ChevronDown, Hand } from "lucide-react";
+import { Star, MessageSquare, MapPin, Instagram, Mail, ShieldAlert, Sparkles, Sliders, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, Hand } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("hero");
   const [selectedBakeFromMenu, setSelectedBakeFromMenu] = useState<MenuItem | null>(null);
   const [showWelcomeBanner, setShowWelcomeBanner] = useState(true);
+  const reviewsContainerRef = useRef<HTMLDivElement>(null);
+
+  const scrollReviews = (direction: "left" | "right") => {
+    if (reviewsContainerRef.current) {
+      const scrollAmount = reviewsContainerRef.current.clientWidth * 0.8;
+      reviewsContainerRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth"
+      });
+    }
+  };
 
   // Smooth scroll helper
   const handleScrollToSection = (sectionId: string) => {
@@ -113,28 +124,57 @@ export default function App() {
           onClearSelectedItem={handleClearSelectedItem}
         />
 
-        {/* 5. Pickup logistics guides */}
+        {/* 5. Pickup Guide / Map */}
         <PickupGuide />
 
-        {/* 6. Gourmet Testimonials review carousel */}
+        {/* 6. Customer Testimonials & Reviews */}
         <section className="py-24 bg-brand-linen relative overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
             
-            <div className="space-y-4 mb-16 max-w-2xl mx-auto">
-              <span className="inline-flex items-center space-x-2 text-xs uppercase tracking-widest text-brand-caramel font-bold">
-                <Star className="w-3.5 h-3.5 text-brand-caramel fill-brand-caramel" />
-                <span>Belaku Patrons</span>
-              </span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-brand-espresso tracking-tight">
-                Sweet Words from Happy Hearts
-              </h2>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-4">
+              <div className="text-left space-y-2 max-w-2xl">
+                <span className="inline-flex items-center space-x-2 text-xs uppercase tracking-widest text-brand-caramel font-bold">
+                  <Star className="w-3.5 h-3.5 text-brand-caramel fill-brand-caramel" />
+                  <span>Real Customer Love</span>
+                </span>
+                <h2 className="font-serif text-3xl sm:text-4xl font-bold text-brand-espresso tracking-tight">
+                  Sweet Words from Happy Hearts
+                </h2>
+                <p className="font-sans text-brand-espresso/70 text-xs sm:text-sm font-light">
+                  Read genuine feedback from our beloved clients in Bangalore.
+                </p>
+              </div>
+
+              {/* Horizontal Scroll Navigation Controls */}
+              {TESTIMONIALS.length > 3 && (
+                <div className="flex items-center space-x-2 shrink-0">
+                  <button
+                    onClick={() => scrollReviews("left")}
+                    aria-label="Previous reviews"
+                    className="w-10 h-10 rounded-full bg-brand-cream border border-brand-stone/60 hover:bg-brand-espresso hover:text-brand-cream hover:border-brand-espresso flex items-center justify-center text-brand-espresso transition-colors shadow-xs cursor-pointer"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => scrollReviews("right")}
+                    aria-label="Next reviews"
+                    className="w-10 h-10 rounded-full bg-brand-cream border border-brand-stone/60 hover:bg-brand-espresso hover:text-brand-cream hover:border-brand-espresso flex items-center justify-center text-brand-espresso transition-colors shadow-xs cursor-pointer"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Horizontal Scrolling Card Track: 3 cards visible at once on desktop */}
+            <div
+              ref={reviewsContainerRef}
+              className="flex gap-6 overflow-x-auto pb-6 pt-2 scrollbar-none snap-x snap-mandatory scroll-smooth"
+            >
               {TESTIMONIALS.map((test) => (
                 <div
                   key={test.id}
-                  className="bg-brand-cream p-8 rounded-3xl border border-brand-stone/50 shadow-sm flex flex-col justify-between text-left group hover:shadow-lg transition-shadow duration-300"
+                  className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start bg-brand-cream p-8 rounded-3xl border border-brand-stone/50 shadow-sm flex flex-col justify-between text-left group hover:shadow-lg transition-shadow duration-300 min-h-[220px]"
                 >
                   <div className="space-y-4">
                     {/* Stars bar */}
@@ -144,7 +184,7 @@ export default function App() {
                       ))}
                     </div>
                     
-                    <p className="text-xs sm:text-sm text-brand-espresso/80 italic font-light leading-relaxed">
+                    <p className="text-xs sm:text-sm text-brand-espresso/80 italic font-light leading-relaxed whitespace-pre-line">
                       "{test.text}"
                     </p>
                   </div>

@@ -1,34 +1,11 @@
-import { Testimonial } from "./types";
 import { DYNAMIC_MENU_ITEMS, DYNAMIC_PRICE_CATALOG, DYNAMIC_BOOKLET_PAGES } from "./menuDataLoader";
+import { DYNAMIC_TESTIMONIALS } from "./reviewsLoader";
 
-// Dynamically exported menu items derived directly from the CSV
+// Dynamically exported datasets derived directly from CSV files
 export const MENU_ITEMS = DYNAMIC_MENU_ITEMS;
 export const PRICE_CATALOG = DYNAMIC_PRICE_CATALOG;
 export const BOOK_PAGES = DYNAMIC_BOOKLET_PAGES;
-
-export const TESTIMONIALS: Testimonial[] = [
-  {
-    id: "t-1",
-    name: "Aparna Sharma",
-    role: "Regular Hennur Resident",
-    text: "Belaku Bakes made our daughter's birthday genuinely unforgettable. The Signature Chocolate Truffle was incredibly moist, decadent yet not overly sugary. You can immediately taste the pure butter and premium Belgian chocolate. Seamless pickup via Uber Package!",
-    rating: 5
-  },
-  {
-    id: "t-2",
-    name: "Rohan & Sneha",
-    role: "Milestone Celebration",
-    text: "The customized floral buttercream cake was literally the centerpiece of our anniversary. Vaishnavi was so attentive on WhatsApp to every aesthetic detail. Highly recommend the Nutella Brownie Bites box too—disappeared within 10 minutes!",
-    rating: 5
-  },
-  {
-    id: "t-3",
-    name: "Meera Sen",
-    role: "Sunday Savouries Lover",
-    text: "We ordered the Garlic Bread and Korean Buns alongside the Strawberry Cheesecake 500g for a cozy family dinner gathering. Not only was the bread incredibly soft and fragrant with actual fresh rosemary, but the cheesecake was outstandingly dense. Clean ingredients make all the difference!",
-    rating: 5
-  }
-];
+export const TESTIMONIALS = DYNAMIC_TESTIMONIALS;
 
 export const STORE_CHEF_STATEMENT = {
   brandName: "Belaku Bakes",
