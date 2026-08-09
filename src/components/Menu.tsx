@@ -1,6 +1,6 @@
 import { useState, useTransition } from "react";
-import { Star, ArrowUpRight, ArrowLeft, ArrowRight, MessageSquare, Info, Sparkles, BookOpen, LayoutGrid, CheckCircle2 } from "lucide-react";
-import { MENU_ITEMS } from "../data";
+import { Star, ArrowUpRight, ArrowLeft, ArrowRight, Sparkles, BookOpen, LayoutGrid, Info, Check } from "lucide-react";
+import { MENU_ITEMS, BOOK_PAGES } from "../data";
 import { MenuItem } from "../types";
 import { motion, AnimatePresence } from "motion/react";
 import { BelakuLogoSymbol } from "./BelakuLogo";
@@ -10,166 +10,57 @@ interface MenuProps {
   onSelectItemForCustomOrder: (item: MenuItem) => void;
 }
 
-// Complete PDF Menu pages replication
-const BOOK_PAGES = [
-  {
-    id: "chocolate_cakes",
-    title: "Artis artisanal Chocolate Cakes",
-    category: "cakes",
-    baseId: "cake-chocolate",
-    tagline: "Customisation will be additional • Baked with pure premium butter & chocolate",
-    columns: ["Chocolate Flavour", "500g", "1000g"],
-    rows: [
-      { name: "Signature chocolate", p500: "₹850", p1000: "₹1700" },
-      { name: "Choco oreo", p500: "₹850", p1000: "₹1700" },
-      { name: "Chocolate truffle", p500: "₹900", p1000: "₹1800" },
-      { name: "Choco hazelnut", p500: "₹950", p1000: "₹1900" },
-      { name: "Choco almond", p500: "₹950", p1000: "₹1900" },
-      { name: "Choco cranberry", p500: "₹950", p1000: "₹1900" },
-    ]
-  },
-  {
-    id: "fruit_cakes",
-    title: "Premium Fruit & Butterscotch Cakes",
-    category: "cakes",
-    baseId: "cake-gourmet-flavors",
-    tagline: "Customisation will be additional • Fresh real fruit pulps and praline",
-    columns: ["Gourmet Sponges", "500g", "1000g"],
-    rows: [
-      { name: "Pineapple gateau", p500: "₹750", p1000: "₹1550" },
-      { name: "Butterscotch", p500: "₹800", p1000: "₹1600" },
-      { name: "Rasmalai", p500: "₹900", p1000: "₹1800" },
-      { name: "Strawberry", p500: "₹900", p1000: "₹1800" },
-      { name: "Blueberry", p500: "₹900", p1000: "₹1800" },
-    ]
-  },
-  {
-    id: "brownie_bites",
-    title: "Artisanal Brownie Bites (Mini Squares)",
-    category: "brownies",
-    baseId: "brownie-bites",
-    tagline: "Perfect miniature cubes of dense chocolatey goodness with crinkle top",
-    columns: ["Bites Choice", "Box of 8", "Box of 16", "Box of 24", "Box of 36"],
-    rows: [
-      { name: "Fudgy", p8: "₹280", p16: "₹560", p24: "₹840", p36: "₹1260" },
-      { name: "Peanut butter", p8: "₹300", p16: "₹600", p24: "₹900", p36: "₹1350" },
-      { name: "Nutella", p8: "₹320", p16: "₹640", p24: "₹960", p36: "₹1440" },
-      { name: "Biscoff", p8: "₹360", p16: "₹720", p24: "₹1080", p36: "₹1620" },
-    ]
-  },
-  {
-    id: "medium_brownies",
-    title: "Classic Medium Brownie Slabs",
-    category: "brownies",
-    baseId: "brownie-medium",
-    tagline: "Traditional cut slabs. Indulgent texture layered with premium toppings.",
-    columns: ["Slab Choice", "Box of 3", "Box of 6", "Box of 8", "Box of 16"],
-    rows: [
-      { name: "Fudgy", p3: "₹270", p6: "₹540", p8: "₹720", p16: "₹1440" },
-      { name: "Peanut butter", p3: "₹280", p6: "₹560", p8: "₹750", p16: "₹1500" },
-      { name: "Nutella", p3: "₹290", p6: "₹580", p8: "₹770", p16: "₹1550" },
-      { name: "Biscoff", p3: "₹300", p6: "₹600", p8: "₹800", p16: "₹1600" },
-    ]
-  },
-  {
-    id: "large_brownies",
-    title: "Elite Large Brownie Blocks",
-    category: "brownies",
-    baseId: "brownie-large",
-    tagline: "Deep thick blocks of luxurious Belgian chocolate. Ideal for dessert platters",
-    columns: ["Block Choice", "Box of 4", "Box of 6", "Box of 9"],
-    rows: [
-      { name: "Fudgy", p4: "₹600", p6: "₹900", p9: "₹1350" },
-      { name: "Peanut butter", p4: "₹610", p6: "₹920", p9: "₹1380" },
-      { name: "Nutella", p4: "₹620", p6: "₹930", p9: "₹1400" },
-      { name: "Biscoff", p4: "₹640", p6: "₹960", p9: "₹1500" },
-    ]
-  },
-  {
-    id: "cheesecakes",
-    title: "Artisanal Cream Cheesecake",
-    category: "cheesecakes",
-    baseId: "cheesecake-premium",
-    tagline: "Velvety smooth pure cheese baked on buttery biscuit base. Exquisite flavor.",
-    columns: ["Cheesecake choice", "100g Slice", "500g Slab", "1Kg block"],
-    rows: [
-      { name: "Blueberry", p100: "₹125", p500: "₹600", p1000: "₹1200" },
-      { name: "Strawberry", p100: "₹125", p500: "₹600", p1000: "₹1200" },
-      { name: "Nutella", p100: "₹150", p500: "₹620", p1000: "₹1240" },
-      { name: "Biscoff", p100: "₹150", p500: "₹650", p1000: "₹1300" },
-    ]
-  },
-  {
-    id: "cupcakes_cookies",
-    title: "Gourmet Cupcakes & Butter Cookies",
-    category: "cookies",
-    baseId: "cookies-buttery",
-    tagline: "Freshly-whipped frosted intimate cupcakes and pure boutique cookies.",
-    columns: ["Bake Choice", "Portions / Packs", "Price Breakdown"],
-    rows: [
-      { name: "Cupcake: Chocolate truffle", info: "Mini / Medium / Large", price: "₹35 / ₹85 / ₹100" },
-      { name: "Cupcake: Signature chocolate", info: "Mini / Medium / Large", price: "₹35 / ₹80 / ₹95" },
-      { name: "Cupcake: Vanilla choco chip", info: "Mini / Medium / Large", price: "₹35 / ₹85 / ₹100" },
-      { name: "Cupcake: Vanilla", info: "Mini / Medium / Large", price: "₹35 / ₹75 / ₹90" },
-      { name: "Cookie: Choco chips", info: "Box of 8 (mini) / Box of 15 (mini)", price: "₹200 / ₹400" },
-      { name: "Cookie: Jam cookies", info: "Box of 8 (mini) / Box of 15 (mini)", price: "₹250 / ₹512" },
-    ]
-  },
-  {
-    id: "savouries",
-    title: "Artesian Warm Savouries & Snacks",
-    category: "savory",
-    baseId: "savory-gourmet",
-    tagline: "Baked to golden crispy perfection with delicious herby vegetable fillings.",
-    columns: ["Savoury Selection", "Portion size", "Price per unit"],
-    rows: [
-      { name: "Sandwich", info: "Single Portion", price: "₹150" },
-      { name: "Burger", info: "Single Portion", price: "₹150" },
-      { name: "Canape with corn and tangy filling", info: "Portion platter", price: "₹150" },
-      { name: "Canape with pasta filling", info: "Portion platter", price: "₹150" },
-      { name: "Korean buns", info: "Single Portion", price: "₹90" },
-      { name: "Cutlets veg", info: "Single Portion", price: "₹80" },
-      { name: "Bread pizza", info: "Single Portion", price: "₹80" },
-      { name: "Potato buns", info: "Single Portion", price: "₹60" },
-      { name: "Garlic bread", info: "Single Portion", price: "₹60" },
-    ]
-  }
-];
-
 export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
   const [viewMode, setViewMode] = useState<"booklet" | "grid">("grid");
   const [activePageIndex, setActivePageIndex] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [activeModalImage, setActiveModalImage] = useState<string>("");
+  const [selectedFlavorInModal, setSelectedFlavorInModal] = useState<string>("");
+  const [activeSubcategory, setActiveSubcategory] = useState<string>("");
   const [, startTransition] = useTransition();
 
   const categories = [
     { label: "All Delights", value: "all" },
     { label: "Cakes", value: "cakes" },
-    { label: "Fudgy Brownies", value: "brownies" },
+    { label: "Brownies", value: "brownies" },
     { label: "Cheesecakes", value: "cheesecakes" },
-    { label: "Cupcakes & Cookies", value: "cookies_cupcakes" },
-    { label: "Savory Crusts", value: "savory" }
+    { label: "Cupcakes", value: "cupcakes" },
+    { label: "Cookies", value: "cookies" },
+    { label: "Tarts", value: "tarts" },
+    { label: "Savory Snacks", value: "savory" }
   ];
 
   const filteredItems = MENU_ITEMS.filter((item) => {
-    let matchesCategory = false;
-    if (selectedCategory === "all") {
-      matchesCategory = true;
-    } else if (selectedCategory === "cookies_cupcakes") {
-      matchesCategory = item.category === "cookies" || item.category === "cupcakes";
-    } else {
-      matchesCategory = item.category === selectedCategory;
-    }
-
+    const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
     const matchesSearch =
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.tags.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+      item.tags.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.flavors && item.flavors.some((f) => f.toLowerCase().includes(searchQuery.toLowerCase())));
 
     return matchesCategory && matchesSearch;
   });
+
+  const handleOpenItemModal = (item: MenuItem) => {
+    setSelectedItem(item);
+    setActiveModalImage(item.image);
+    setSelectedFlavorInModal("");
+    if (item.subcategories && item.subcategories.length > 0) {
+      setActiveSubcategory(item.subcategories[0].id);
+    } else {
+      setActiveSubcategory("");
+    }
+  };
+
+  const handleSelectFlavorInModal = (flavorName: string) => {
+    setSelectedFlavorInModal(flavorName);
+    const cleanFlavor = flavorName.split(" (")[0].trim();
+    if (selectedItem?.flavorImages && selectedItem.flavorImages[cleanFlavor]) {
+      setActiveModalImage(selectedItem.flavorImages[cleanFlavor]);
+    }
+  };
 
   const handleCustomOrderRequest = (item: MenuItem) => {
     onSelectItemForCustomOrder(item);
@@ -177,10 +68,12 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
   };
 
   // Helper to click listed row in booklets and auto resolve back to custom form
-  const handleDirectSelectBake = (baseId: string) => {
-    const matchedItem = MENU_ITEMS.find((m) => m.id === baseId);
+  const handleDirectSelectBake = (baseCategory: string) => {
+    const matchedItem = MENU_ITEMS.find((m) => m.category === baseCategory || m.id === baseCategory);
     if (matchedItem) {
       onSelectItemForCustomOrder(matchedItem);
+    } else if (MENU_ITEMS.length > 0) {
+      onSelectItemForCustomOrder(MENU_ITEMS[0]);
     }
   };
 
@@ -192,7 +85,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
     }
   };
 
-  const currentBookPage = BOOK_PAGES[activePageIndex];
+  const currentBookPage = BOOK_PAGES[activePageIndex] || BOOK_PAGES[0];
 
   return (
     <section id="menu" className="py-24 bg-brand-cream relative overflow-hidden">
@@ -221,7 +114,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
           <div className="inline-flex p-1.5 bg-brand-linen rounded-full border border-brand-stone/60 shadow-inner">
             <button
               onClick={() => startTransition(() => setViewMode("grid"))}
-              className={`px-5 py-2 rounded-full text-xs font-sans font-bold uppercase tracking-wider inline-flex items-center space-x-2 transition-all ${
+              className={`px-5 py-2 rounded-full text-xs font-sans font-bold uppercase tracking-wider inline-flex items-center space-x-2 transition-all cursor-pointer ${
                 viewMode === "grid"
                   ? "bg-brand-espresso text-brand-cream shadow-sm"
                   : "bg-transparent text-brand-espresso/60 hover:text-brand-espresso"
@@ -232,7 +125,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
             </button>
             <button
               onClick={() => startTransition(() => setViewMode("booklet"))}
-              className={`px-5 py-2 rounded-full text-xs font-sans font-bold uppercase tracking-wider inline-flex items-center space-x-2 transition-all ${
+              className={`px-5 py-2 rounded-full text-xs font-sans font-bold uppercase tracking-wider inline-flex items-center space-x-2 transition-all cursor-pointer ${
                 viewMode === "booklet"
                   ? "bg-brand-espresso text-brand-cream shadow-sm"
                   : "bg-transparent text-brand-espresso/60 hover:text-brand-espresso"
@@ -246,7 +139,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
 
         {/* 1. DIGITAL BOOKLET PRESENTATION (SECONDARY VIEW) */}
         <AnimatePresence mode="wait">
-          {viewMode === "booklet" && (
+          {viewMode === "booklet" && currentBookPage && (
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -265,7 +158,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                         : "bg-brand-cream/40 border-brand-stone/40 text-brand-espresso/60 hover:text-brand-espresso hover:bg-brand-linen"
                     }`}
                   >
-                    {pg.title.split(" (")[0].replace("Artis artisanal ", "").replace("Gourmet ", "").replace("Classic ", "")}
+                    {pg.title}
                   </button>
                 ))}
               </div>
@@ -302,23 +195,23 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                   </p>
                 </div>
 
-                {/* Printable Menu Table Listing (Pre-aligned column blocks) */}
+                {/* Printable Menu Table Listing */}
                 <div className="my-8 relative z-10 overflow-x-auto">
                   <table className="w-full text-left font-sans text-xs">
                     <thead>
                       <tr className="border-b border-[#4E2E25]/15 text-[#4E2E25] font-bold text-[11px] uppercase tracking-wider">
-                        {currentBookPage.columns.map((col, cIdx) => (
-                          <th key={cIdx} className="py-2.5 px-4 first:pl-2 last:text-right font-black">
+                        {currentBookPage.columns.map((col: string, cIdx: number) => (
+                          <th key={cIdx} className={`py-2.5 px-4 first:pl-2 font-black ${cIdx === currentBookPage.columns.length - 1 ? "last:text-right" : ""}`}>
                             {col}
                           </th>
                         ))}
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#4E2E25]/5 text-brand-espresso/90">
-                      {currentBookPage.rows.map((row: any, rIdx) => (
+                      {currentBookPage.rows.map((row: any, rIdx: number) => (
                         <tr
                           key={rIdx}
-                          onClick={() => handleDirectSelectBake(currentBookPage.baseId)}
+                          onClick={() => handleDirectSelectBake(currentBookPage.category)}
                           className="hover:bg-[#EAE1D4]/40 transition-colors group/row cursor-pointer"
                         >
                           {/* Col 1: Name */}
@@ -331,37 +224,19 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                             </span>
                           </td>
 
-                          {/* Col 2 */}
-                          <td className="py-3 px-4 text-[#8D5B4C] font-mono font-medium">
-                            {row.p500 || row.p8 || row.p3 || row.p4 || row.p100 || row.info || ""}
-                          </td>
-
-                          {/* Col 3 */}
-                          {(row.p1000 || row.p16 || row.p6 || row.price || row.p500) && (
-                            <td className="py-3 px-4 text-[#8D5B4C] font-mono font-medium last:text-right">
-                              {row.p1000 || row.p16 || row.p6 || row.price || row.p500 || ""}
-                            </td>
-                          )}
-
-                          {/* Render Col 4 & Col 5 if present (E.g. Brownies Box sizes) */}
-                          {row.p24 !== undefined && (
-                            <td className="py-3 px-4 text-[#8D5B4C] font-mono font-medium">
-                              {row.p24}
-                            </td>
-                          )}
-                          {row.p36 !== undefined && (
-                            <td className="py-3 px-4 text-[#8D5B4C] font-mono font-medium">
-                              {row.p36}
-                            </td>
-                          )}
-                          {row.p8 !== undefined && row.p24 === undefined && (
-                            <td className="py-3 px-4 text-[#8D5B4C] font-mono font-medium">
-                              {row.p8}
-                            </td>
-                          )}
-                          {row.p9 !== undefined && (
-                            <td className="py-3 px-4 text-[#8D5B4C] font-mono font-medium last:text-right">
-                              {row.p9}
+                          {/* Dynamic price columns */}
+                          {currentBookPage.sizes && currentBookPage.sizes.length > 0 ? (
+                            currentBookPage.sizes.map((sz: string, sIdx: number) => (
+                              <td
+                                key={sz}
+                                className={`py-3 px-4 text-[#8D5B4C] font-mono font-medium ${sIdx === currentBookPage.sizes.length - 1 ? "text-right" : ""}`}
+                              >
+                                {row[sz] || "-"}
+                              </td>
+                            ))
+                          ) : (
+                            <td className="py-3 px-4 text-[#8D5B4C] font-mono font-medium text-right">
+                              {row.price || "-"}
                             </td>
                           )}
                         </tr>
@@ -380,10 +255,10 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                   </div>
 
                   <button
-                    onClick={() => handleDirectSelectBake(currentBookPage.baseId)}
-                    className="py-3 px-6 bg-brand-espresso text-brand-cream hover:bg-brand-caramel hover:text-brand-espresso rounded-xl text-xs uppercase font-bold tracking-widest transition-all shadow-md inline-flex items-center space-x-2"
+                    onClick={() => handleDirectSelectBake(currentBookPage.category)}
+                    className="py-3 px-6 bg-brand-espresso text-brand-cream hover:bg-brand-caramel hover:text-brand-espresso rounded-xl text-xs uppercase font-bold tracking-widest transition-all shadow-md inline-flex items-center space-x-2 cursor-pointer"
                   >
-                    <span>Request Custom {currentBookPage.title.replace("Artis artisanal ", "").split(" (")[0]}</span>
+                    <span>Request Custom {currentBookPage.title}</span>
                     <ArrowUpRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -393,7 +268,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
               <div className="flex items-center justify-between px-2 pt-2 text-xs text-brand-espresso/60 font-sans">
                 <button
                   onClick={() => handlePageChange("prev")}
-                  className="inline-flex items-center space-x-1.5 py-2 px-4 hover:text-brand-espresso rounded-full hover:bg-brand-linen transition-all"
+                  className="inline-flex items-center space-x-1.5 py-2 px-4 hover:text-brand-espresso rounded-full hover:bg-brand-linen transition-all cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   <span>Previous Page</span>
@@ -405,7 +280,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
 
                 <button
                   onClick={() => handlePageChange("next")}
-                  className="inline-flex items-center space-x-1.5 py-2 px-4 hover:text-brand-espresso rounded-full hover:bg-brand-linen transition-all"
+                  className="inline-flex items-center space-x-1.5 py-2 px-4 hover:text-brand-espresso rounded-full hover:bg-brand-linen transition-all cursor-pointer"
                 >
                   <span>Next Page</span>
                   <ArrowRight className="w-4 h-4" />
@@ -440,7 +315,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                             : "bg-transparent text-brand-espresso/60 hover:text-brand-espresso"
                         }`}
                       >
-                        {isActive && <span className="w-1.5 h-1.5 rounded-full bg-brand-gold animate-ping animate-duration-1000" />}
+                        {isActive && <span className="w-1.5 h-1.5 rounded-full bg-brand-gold animate-ping" />}
                         {cat.label}
                       </button>
                     );
@@ -464,7 +339,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                   <motion.div
                     key={item.id}
                     layoutId={`menu-card-${item.id}`}
-                    onClick={() => setSelectedItem(item)}
+                    onClick={() => handleOpenItemModal(item)}
                     className="group flex flex-col h-full bg-brand-linen/20 rounded-2xl overflow-hidden border border-brand-stone/40 luxury-card-hover cursor-pointer text-left"
                   >
                     <div className="relative aspect-4/3 overflow-hidden bg-brand-stone">
@@ -493,7 +368,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                           {item.name}
                         </h3>
                         <span className="font-sans text-sm font-bold text-brand-caramel whitespace-nowrap bg-brand-cream/80 border border-brand-stone/20 py-0.5 px-2 rounded-md">
-                          {item.priceEstimate.split(" (")[0].split(" starts")[0]}
+                          {item.priceEstimate}
                         </span>
                       </div>
 
@@ -511,10 +386,10 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
 
                       <div className="flex justify-between items-center pt-3 border-t border-brand-stone/20 mt-auto">
                         <span className="inline-flex items-center text-[10px] sm:text-[11px] text-brand-espresso/50 font-mono">
-                          Price Sheet: {item.priceEstimate}
+                          {item.subcategories ? "3 Cuts Available" : `${item.flavors?.length || 1} Flavor Choices`}
                         </span>
                         <span className="text-xs font-sans font-semibold text-brand-caramel flex items-center space-x-1 group-hover:underline">
-                          <span>View Details</span>
+                          <span>View Details &amp; Photos</span>
                           <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                         </span>
                       </div>
@@ -536,7 +411,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
 
       </div>
 
-      {/* Detail Modal Component */}
+      {/* Detail Modal Component with Interactive Image Gallery & Flavor Selector */}
       <AnimatePresence>
         {selectedItem && (
           <div className="fixed inset-0 z-55 flex items-center justify-center p-4">
@@ -553,58 +428,132 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ type: "spring", duration: 0.5 }}
-              className="relative w-full max-w-2xl bg-brand-cream rounded-3xl overflow-hidden shadow-2xl border border-brand-stone z-10 flex flex-col"
+              className="relative w-full max-w-3xl bg-brand-cream rounded-3xl overflow-hidden shadow-2xl border border-brand-stone z-10 flex flex-col max-h-[90vh] overflow-y-auto"
             >
-              <div className="grid grid-cols-1 sm:grid-cols-12">
-                <div className="sm:col-span-5 h-[200px] sm:h-auto relative bg-brand-stone">
-                  <SafeImage
-                    src={selectedItem.image}
-                    alt={selectedItem.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/60 via-transparent to-transparent pointer-events-none" />
+              <div className="grid grid-cols-1 sm:grid-cols-12 items-stretch">
+                
+                {/* Image Section with Gallery */}
+                <div className="sm:col-span-5 flex flex-col bg-brand-stone/30 border-b sm:border-b-0 sm:border-r border-brand-stone/40">
+                  <div className="relative aspect-4/3 sm:aspect-square overflow-hidden bg-brand-stone">
+                    <SafeImage
+                      src={activeModalImage || selectedItem.image}
+                      alt={selectedItem.name}
+                      className="w-full h-full object-cover transition-all duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/50 via-transparent to-transparent pointer-events-none" />
+                  </div>
+
+                  {/* Scrollable Gallery Thumbnails */}
+                  {selectedItem.galleryImages && selectedItem.galleryImages.length > 1 && (
+                    <div className="p-3 bg-brand-linen/40 border-t border-brand-stone/30">
+                      <span className="block text-[9px] uppercase tracking-wider font-bold text-brand-espresso/60 mb-2 text-left">
+                        Category Gallery ({selectedItem.galleryImages.length} Photos)
+                      </span>
+                      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+                        {selectedItem.galleryImages.map((imgSrc, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => setActiveModalImage(imgSrc)}
+                            className={`relative w-12 h-12 rounded-lg overflow-hidden shrink-0 border-2 cursor-pointer transition-all ${
+                              activeModalImage === imgSrc
+                                ? "border-brand-caramel scale-105 shadow-sm"
+                                : "border-transparent opacity-70 hover:opacity-100"
+                            }`}
+                          >
+                            <SafeImage src={imgSrc} alt="gallery thumbnail" className="w-full h-full object-cover" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
+                {/* Information and Options Panel */}
                 <div className="sm:col-span-7 p-6 sm:p-8 flex flex-col justify-between text-left space-y-6">
-                  <div className="space-y-3">
-                    <span className="bg-brand-linen text-brand-caramel text-[9px] uppercase tracking-wider font-bold py-1 px-2.5 rounded-full border border-brand-stone/40 inline-block">
-                      {selectedItem.category}
-                    </span>
-
-                    <h3 className="font-serif text-2xl font-bold text-brand-espresso leading-tight">
-                      {selectedItem.name}
-                    </h3>
-
-                    <p className="text-xs text-brand-espresso/80 leading-relaxed font-light">
-                      {selectedItem.description}
-                    </p>
-
-                    <div className="flex items-center space-x-2 pt-1 border-t border-brand-stone/20">
-                      <span className="text-xs font-sans font-semibold text-brand-espresso">Price range :</span>
-                      <span className="font-mono text-sm font-bold text-brand-caramel bg-brand-linen/40 px-2 py-0.5 rounded-sm">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-start">
+                      <span className="bg-brand-linen text-brand-caramel text-[9px] uppercase tracking-wider font-bold py-1 px-2.5 rounded-full border border-brand-stone/40 inline-block">
+                        {selectedItem.category}
+                      </span>
+                      <span className="font-mono text-xs font-bold text-brand-caramel bg-brand-linen/60 px-2.5 py-1 rounded-lg">
                         {selectedItem.priceEstimate}
                       </span>
                     </div>
 
-                    {selectedItem.flavors && selectedItem.flavors.length > 0 && (
-                      <div className="pt-2">
-                        <span className="block text-[11px] text-brand-espresso/60 tracking-tight font-medium">Bespoke Flavor Options:</span>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {selectedItem.flavors.map((fl) => (
-                            <span key={fl} className="text-[10px] bg-brand-cream border border-brand-stone px-2 py-0.5 rounded-full font-light text-brand-espresso/90">
-                              {fl.split(" (")[0]}
-                            </span>
+                    <div>
+                      <h3 className="font-serif text-2xl font-bold text-brand-espresso leading-tight">
+                        {selectedItem.name}
+                      </h3>
+                      <p className="text-xs text-brand-espresso/80 leading-relaxed font-light mt-1.5">
+                        {selectedItem.description}
+                      </p>
+                    </div>
+
+                    {/* Brownie Subcategories Switcher */}
+                    {selectedItem.subcategories && selectedItem.subcategories.length > 0 && (
+                      <div className="pt-2 border-t border-brand-stone/30 space-y-2">
+                        <span className="block text-[11px] text-brand-espresso/70 tracking-tight font-semibold">
+                          Choose Brownie Cut &amp; Size:
+                        </span>
+                        <div className="grid grid-cols-3 gap-1.5">
+                          {selectedItem.subcategories.map((sub) => (
+                            <button
+                              key={sub.id}
+                              type="button"
+                              onClick={() => setActiveSubcategory(sub.id)}
+                              className={`py-2 px-2 rounded-xl text-[10px] font-sans font-bold text-center border transition-all cursor-pointer ${
+                                activeSubcategory === sub.id
+                                  ? "bg-brand-espresso text-brand-cream border-brand-espresso shadow-xs"
+                                  : "bg-brand-cream text-brand-espresso/70 border-brand-stone/60 hover:bg-brand-linen"
+                              }`}
+                            >
+                              {sub.name}
+                            </button>
                           ))}
                         </div>
                       </div>
                     )}
 
+                    {/* Interactive Flavor Pills linked to photo preview */}
+                    {selectedItem.flavors && selectedItem.flavors.length > 0 && (
+                      <div className="pt-2 border-t border-brand-stone/30 space-y-1.5">
+                        <span className="block text-[11px] text-brand-espresso/70 tracking-tight font-semibold">
+                          Click Flavor to View Specific Photo:
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {selectedItem.flavors.map((fl) => {
+                            const cleanFl = fl.split(" (")[0].trim();
+                            const isSelected = selectedFlavorInModal === fl;
+                            return (
+                              <button
+                                key={fl}
+                                type="button"
+                                onClick={() => handleSelectFlavorInModal(fl)}
+                                className={`text-[10px] px-2.5 py-1 rounded-full font-sans transition-all flex items-center space-x-1 cursor-pointer border ${
+                                  isSelected
+                                    ? "bg-brand-caramel text-brand-cream border-brand-caramel font-bold shadow-xs"
+                                    : "bg-brand-cream/80 border-brand-stone/70 text-brand-espresso/85 hover:border-brand-caramel hover:text-brand-espresso"
+                                }`}
+                              >
+                                {isSelected && <Check className="w-2.5 h-2.5 mr-0.5 text-brand-cream" />}
+                                <span>{cleanFl}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Sizes list */}
                     {selectedItem.sizes && selectedItem.sizes.length > 0 && (
-                      <div className="pt-1">
-                        <span className="block text-[11px] text-brand-espresso/60 tracking-tight font-medium">Available Dimensions:</span>
+                      <div className="pt-2">
+                        <span className="block text-[11px] text-brand-espresso/70 tracking-tight font-semibold">
+                          Available Dimension Options:
+                        </span>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {selectedItem.sizes.map((sz) => (
-                            <span key={sz} className="text-[10px] bg-brand-cream border border-brand-stone px-2 py-0.5 rounded-sm font-light text-brand-espresso/90">
+                            <span key={sz} className="text-[10px] bg-brand-cream border border-brand-stone/60 px-2 py-0.5 rounded-md font-mono text-brand-espresso/80">
                               {sz}
                             </span>
                           ))}
@@ -613,7 +562,8 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                     )}
                   </div>
 
-                  <div className="flex flex-col gap-2 pt-2 border-t border-brand-stone/20">
+                  {/* Actions */}
+                  <div className="flex flex-col gap-2 pt-4 border-t border-brand-stone/30">
                     <button
                       onClick={() => handleCustomOrderRequest(selectedItem)}
                       className="w-full py-3 bg-brand-espresso text-brand-cream hover:bg-brand-caramel hover:text-brand-espresso rounded-xl text-xs uppercase tracking-wider font-semibold transition-all duration-300 flex items-center justify-center space-x-2 cursor-pointer shadow-md"
@@ -624,7 +574,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
 
                     <button
                       onClick={() => setSelectedItem(null)}
-                      className="w-full py-2 bg-transparent text-brand-espresso/80 hover:bg-brand-linen/55 rounded-xl text-xs font-medium transition-colors"
+                      className="w-full py-2 bg-transparent text-brand-espresso/70 hover:text-brand-espresso hover:bg-brand-linen/50 rounded-xl text-xs font-medium transition-colors cursor-pointer"
                     >
                       Keep Browsing
                     </button>

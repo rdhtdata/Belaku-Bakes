@@ -1,8 +1,9 @@
 import { useState, useEffect, FormEvent } from "react";
 import { MenuItem } from "../types";
-import { CONTACT_INFO, PRICE_CATALOG } from "../data";
-import { MessageSquare, Sparkles, AlertCircle, Copy, Check, Cake, HelpCircle, ArrowRight } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { CONTACT_INFO } from "../data";
+import { PARSED_SECTIONS, DYNAMIC_PRICE_CATALOG, CATEGORY_GALLERY } from "../menuDataLoader";
+import { Send, Sliders, AlertCircle, Info, Sparkles, CheckCircle2, Clock, Calendar, ShieldCheck } from "lucide-react";
+import { SafeImage } from "./SafeImage";
 
 interface CustomFormProps {
   selectedItem: MenuItem | null;
@@ -10,166 +11,91 @@ interface CustomFormProps {
 }
 
 export default function CustomForm({ selectedItem, onClearSelectedItem }: CustomFormProps) {
-  // Client state
-  const [customerName, setCustomerName] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [category, setCategory] = useState("cakes");
-  const [selectedBakeType, setSelectedBakeType] = useState("");
-  const [selectedFlavor, setSelectedFlavor] = useState("");
-  const [selectedSize, setSelectedSize] = useState("");
-  const [isEggless, setIsEggless] = useState(false);
-  const [writingOnCake, setWritingOnCake] = useState("");
-  const [pickupDate, setPickupDate] = useState("");
-  const [pickupTime, setPickupTime] = useState("");
-  const [specialInstructions, setSpecialInstructions] = useState("");
-  const [isCopied, setIsCopied] = useState(false);
+  const [category, setCategory] = useState<string>("cakes");
+  const [selectedBakeType, setSelectedBakeType] = useState<string>("cake-artisanal");
+  const [selectedFlavor, setSelectedFlavor] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("500g");
+  const [isEggless, setIsEggless] = useState<boolean>(false);
+  const [writingOnCake, setWritingOnCake] = useState<string>("");
+  const [specialInstructions, setSpecialInstructions] = useState<string>("");
 
-  // Auto-populate when user clicks "Configure in Custom Form" from menu
+  // Customer Contact State
+  const [customerName, setCustomerName] = useState<string>("");
+  const [contactNumber, setContactNumber] = useState<string>("");
+  const [pickupDate, setPickupDate] = useState<string>("");
+  const [pickupTime, setPickupTime] = useState<string>("");
+
+  // Populate form if item is passed through from Menu Component
   useEffect(() => {
     if (selectedItem) {
       setCategory(selectedItem.category);
-      setSelectedBakeType(selectedItem.id);
-      
-      if (selectedItem.flavors && selectedItem.flavors.length > 0) {
-        setSelectedFlavor(selectedItem.flavors[0]);
+      if (selectedItem.category === "brownies") {
+        setSelectedBakeType("brownie-bites");
       } else {
-        setSelectedFlavor("");
+        setSelectedBakeType(selectedItem.id);
       }
 
+      if (selectedItem.flavors && selectedItem.flavors.length > 0) {
+        setSelectedFlavor(selectedItem.flavors[0]);
+      }
       if (selectedItem.sizes && selectedItem.sizes.length > 0) {
         setSelectedSize(selectedItem.sizes[0]);
-      } else {
-        setSelectedSize("");
       }
     }
   }, [selectedItem]);
 
-  // Determine sub option listings based on Category
+  // Derive Bake Types/Subcategories for the selected category
   const getBakeTypesForCategory = () => {
-    switch (category) {
-      case "cakes":
-        return [
-          { id: "cake-chocolate", name: "Artisanal Chocolate Cakes" },
-          { id: "cake-gourmet-flavors", name: "Premium Fruit & Butterscotch Cakes" }
-        ];
-      case "brownies":
-        return [
-          { id: "brownie-bites", name: "Artisanal Brownie Bites (Mini Squares)" },
-          { id: "brownie-medium", name: "Medium Brownie Slabs" },
-          { id: "brownie-large", name: "Elite Large Brownie Blocks" }
-        ];
-      case "cheesecakes":
-        return [{ id: "cheesecake-premium", name: "Artisanal Cream Cheesecake" }];
-      case "cupcakes":
-        return [{ id: "cupcake-gourmet", name: "Artisan Whipped Cupcakes" }];
-      case "cookies":
-        return [{ id: "cookies-buttery", name: "Pure Butter Boutique Cookies" }];
-      case "savory":
-        return [{ id: "savory-gourmet", name: "Artesian Warm Savouries & Snacks" }];
-      default:
-        return [];
+    if (category === "brownies") {
+      return [
+        { id: "brownie-bites", name: "Brownie Bites (Mini Squares)" },
+        { id: "brownie-medium", name: "Medium Brownie Slabs" },
+        { id: "brownie-large", name: "Elite Large Brownie Blocks" }
+      ];
     }
+    const section = PARSED_SECTIONS.find((s) => s.category === category);
+    return [{ id: section?.category || category, name: section?.title || category }];
   };
 
+  // Derive Flavors for the selected category & bake type
   const getFlavorsForBakeType = () => {
-    if (category === "cakes") {
-      if (selectedBakeType === "cake-chocolate") {
-        return [
-          "Signature chocolate (500g: ₹850 / 1kg: ₹1700)",
-          "Choco oreo (500g: ₹850 / 1kg: ₹1700)",
-          "Chocolate truffle (500g: ₹900 / 1kg: ₹1800)",
-          "Choco hazelnut (500g: ₹950 / 1kg: ₹1900)",
-          "Choco almond (500g: ₹950 / 1kg: ₹1900)",
-          "Choco cranberry (500g: ₹950 / 1kg: ₹1900)"
-        ];
-      } else {
-        return [
-          "Pineapple gateau (500g: ₹750 / 1kg: ₹1550)",
-          "Butterscotch (500g: ₹800 / 1kg: ₹1600)",
-          "Rasmalai (500g: ₹900 / 1kg: ₹1800)",
-          "Strawberry (500g: ₹900 / 1kg: ₹1800)",
-          "Blueberry (500g: ₹900 / 1kg: ₹1800)"
-        ];
-      }
-    } else if (category === "brownies") {
-      const isBites = selectedBakeType === "brownie-bites";
-      const isMedium = selectedBakeType === "brownie-medium";
-      const label = isBites ? "Bites" : isMedium ? "Medium" : "Large";
-      return [
-        `Fudgy ${label}`,
-        `Peanut butter ${label}`,
-        `Nutella ${label}`,
-        `Biscoff ${label}`
-      ];
-    } else if (category === "cheesecakes") {
-      return [
-        "Blueberry Cheesecake",
-        "Strawberry Cheesecake",
-        "Nutella Cheesecake",
-        "Biscoff Cheesecake"
-      ];
-    } else if (category === "cupcakes") {
-      return [
-        "Chocolate truffle Cupcake",
-        "Signature chocolate Cupcake",
-        "Vanilla choco chip Cupcake",
-        "Vanilla Cupcake"
-      ];
-    } else if (category === "cookies") {
-      return ["Choco chips Cookies", "Jam cookies"];
-    } else if (category === "savory") {
-      return [
-        "Sandwich (₹150)",
-        "Burger (₹150)",
-        "Canape with corn and tangy filling (₹150)",
-        "Canape with pasta filling (₹150)",
-        "Korean buns (₹90)",
-        "Cutlets veg (₹80)",
-        "Bread pizza (₹80)",
-        "Potato buns (₹60)",
-        "Garlic bread (₹60)"
-      ];
+    if (category === "brownies") {
+      let sectionName = "Brownie Bites";
+      if (selectedBakeType === "brownie-medium") sectionName = "Medium Brownies";
+      if (selectedBakeType === "brownie-large") sectionName = "Large Brownies";
+      const section = PARSED_SECTIONS.find((s) => s.title.toLowerCase().includes(sectionName.toLowerCase()));
+      return section ? section.rows.map((r) => r.flavor) : ["Fudgy", "Peanut Butter", "Nutella", "Biscoff"];
     }
-    return [];
+
+    const section = PARSED_SECTIONS.find((s) => s.category === category);
+    return section ? section.rows.map((r) => r.flavor) : [];
   };
 
+  // Derive Sizes for the selected category & bake type
   const getSizesForBakeType = () => {
-    if (category === "cakes") {
-      return ["500g", "1000g"];
-    } else if (category === "brownies") {
-      if (selectedBakeType === "brownie-bites") {
-        return ["Box of 8", "Box of 16", "Box of 24", "Box of 36"];
-      } else if (selectedBakeType === "brownie-medium") {
-        return ["Box of 3", "Box of 6", "Box of 8", "Box of 16"];
-      } else {
-        return ["Box of 4", "Box of 6", "Box of 9"];
-      }
-    } else if (category === "cheesecakes") {
-      return ["100g", "500g", "1000g"];
-    } else if (category === "cupcakes") {
-      return ["Mini", "Medium", "Large"];
-    } else if (category === "cookies") {
-      return ["Box of 8 (mini)", "Box of 15 (mini)"];
-    } else if (category === "savory") {
-      return ["Single Portion"];
+    if (category === "brownies") {
+      let sectionName = "Brownie Bites";
+      if (selectedBakeType === "brownie-medium") sectionName = "Medium Brownies";
+      if (selectedBakeType === "brownie-large") sectionName = "Large Brownies";
+      const section = PARSED_SECTIONS.find((s) => s.title.toLowerCase().includes(sectionName.toLowerCase()));
+      return section ? section.sizes : ["Box of 8", "Box of 16"];
     }
-    return [];
+
+    const section = PARSED_SECTIONS.find((s) => s.category === category);
+    return section ? section.sizes : ["Standard Portion"];
   };
 
   // Switch category updates defaults
   const handleCategoryChange = (cat: string) => {
     setCategory(cat);
-    const types = getBakeTypesForCategory();
-    const defaultType = types[0]?.id || "";
-    setSelectedBakeType(defaultType);
-
-    // Update flavor corresponding to category change
-    setTimeout(() => {
-      setSelectedBakeType(defaultType);
-    }, 10);
+    if (cat === "brownies") {
+      setSelectedBakeType("brownie-bites");
+    } else {
+      setSelectedBakeType(cat);
+    }
   };
 
-  // Track dependencies when bake type updates to refresh default selections
+  // Track dependencies when bake type or category updates
   useEffect(() => {
     const flavors = getFlavorsForBakeType();
     if (flavors.length > 0) {
@@ -181,45 +107,44 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
     }
   }, [category, selectedBakeType]);
 
-  // Pricing Estimator Live Calculator
+  // Live Price Estimator Calculator
   const computeEstimatedPrice = () => {
+    const cleanFlavor = selectedFlavor.split(" (")[0].trim();
+
     if (category === "cakes") {
-      const rawPrice = PRICE_CATALOG[selectedFlavor] || 850;
-      // standard catalog is for 500g, if 1000g we double or take catalog offset
-      if (selectedSize === "1000g") {
-        // Find if we have 1kg price in flavor text
-        if (selectedFlavor.includes("1kg: ₹")) {
-          const match = selectedFlavor.match(/1kg: ₹(\d+)/);
-          if (match) return parseInt(match[1], 10);
-        }
-        return rawPrice * 2;
-      }
-      return rawPrice;
+      const lookupKey = `${cleanFlavor}-${selectedSize}`;
+      if (DYNAMIC_PRICE_CATALOG[lookupKey]) return DYNAMIC_PRICE_CATALOG[lookupKey];
+      const base500 = DYNAMIC_PRICE_CATALOG[cleanFlavor] || 850;
+      return selectedSize === "1000g" ? base500 * 2 : base500;
     }
 
     if (category === "brownies") {
-      // Key format: "Fudgy Bites-Box of 8"
-      const lookupKey = `${selectedFlavor}-${selectedSize}`;
-      return PRICE_CATALOG[lookupKey] || 0;
+      const lookupKey = `${cleanFlavor}-${selectedSize}`;
+      return DYNAMIC_PRICE_CATALOG[lookupKey] || 0;
     }
 
     if (category === "cheesecakes") {
-      const lookupKey = `${selectedFlavor}-${selectedSize}`;
-      return PRICE_CATALOG[lookupKey] || 0;
+      const lookupKey = `${cleanFlavor}-${selectedSize}`;
+      return DYNAMIC_PRICE_CATALOG[lookupKey] || 0;
     }
 
     if (category === "cupcakes") {
-      const lookupKey = `${selectedFlavor}-${selectedSize}`;
-      return PRICE_CATALOG[lookupKey] || PRICE_CATALOG[`${selectedFlavor}-Mini`] || 35;
+      const lookupKey = `${cleanFlavor}-${selectedSize}`;
+      return DYNAMIC_PRICE_CATALOG[lookupKey] || 35;
     }
 
     if (category === "cookies") {
-      const lookupKey = `${selectedFlavor}-${selectedSize}`;
-      return PRICE_CATALOG[lookupKey] || 200;
+      const lookupKey = `${cleanFlavor}-${selectedSize}`;
+      return DYNAMIC_PRICE_CATALOG[lookupKey] || 200;
+    }
+
+    if (category === "tarts") {
+      const lookupKey = `Tarts-${selectedSize}`;
+      return DYNAMIC_PRICE_CATALOG[lookupKey] || 35;
     }
 
     if (category === "savory") {
-      return PRICE_CATALOG[selectedFlavor] || 150;
+      return DYNAMIC_PRICE_CATALOG[cleanFlavor] || 150;
     }
 
     return 0;
@@ -229,20 +154,26 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
   const calculatedEgglessAddon = isEggless && category === "cakes" ? 50 : 0;
   const grandTotalEstimate = calculatedBasePrice + calculatedEgglessAddon;
 
-  // Form Submission & Whatsapp linking
+  // Active preview image
+  const getActivePreviewImage = () => {
+    const cleanFlavor = selectedFlavor.split(" (")[0].trim();
+    if (CATEGORY_GALLERY[category]?.flavorMap?.[cleanFlavor]) {
+      return CATEGORY_GALLERY[category].flavorMap[cleanFlavor];
+    }
+    return CATEGORY_GALLERY[category]?.main || "menu-images/cakes/chocalate cake.png";
+  };
+
+  // Form Submission & WhatsApp linking
   const handleOnSendWhatsApp = (e: FormEvent) => {
     e.preventDefault();
 
     if (!customerName || !contactNumber || !pickupDate) {
-      alert("Please provide your name, contact number, and desired pickup date to generate request.");
+      alert("Please provide your name, contact number, and desired pickup date to generate your custom request.");
       return;
     }
 
-    // Compose high-end professional message format
-    const eggText = isEggless ? "🍃 YES (100% Pure Eggless)" : "🥚 Normal (Contains egg)";
-    const cakeDetails = category === "cakes" && writingOnCake 
-      ? `\n✍️ Text on Cake: "${writingOnCake}"` 
-      : "";
+    const eggText = isEggless ? "🍃 YES (100% Pure Eggless)" : "🥚 Regular";
+    const cakeDetails = category === "cakes" && writingOnCake ? `\n✍️ Text on Cake: "${writingOnCake}"` : "";
 
     const messageTemplate = `*✨ NEW CUSTOM ORDER REQUEST - BELAKU BAKES ✨*
 
@@ -254,26 +185,24 @@ Hello Vaishnavi, I would love to place a gourmet custom request from the Belaku 
 
 *🎂 ORDER DETAILS:*
 - Category: ${category.toUpperCase()}
-- Bake Style: ${selectedFlavor.split(" (")[0]}
-- Portion/Dimension: ${selectedSize}
+- Selection: ${selectedFlavor.split(" (")[0]}
+- Portion / Size: ${selectedSize}
 - Dietary Preference: ${eggText}${cakeDetails}
 
 *📅 PICKUP LOGISTICS:*
 - Desired Date: ${pickupDate}
 - Preferred Time Window: ${pickupTime || "Flexible"}
-- Delivery Method: Self-pickup arranged at gate (Hennur)
+- Delivery Method: Self-pickup arranged at Hennur gate
 
-*✍️ SPECIAL INSTRUCTIONS / FLAVOUR CHOICE:*
+*✍️ SPECIAL INSTRUCTIONS:*
 "${specialInstructions || "No additional notes. Please bake with utmost care!"}"
 
 *💰 ESTIMATED TOTAL:*
 - Base Selection: ₹${calculatedBasePrice}
-- Eggless Modifier: +₹${calculatedEgglessAddon}
-- Estimated Total: *₹${grandTotalEstimate}* (Subject to additional custom art decor)
+${calculatedEgglessAddon > 0 ? `- Eggless Modifier: +₹${calculatedEgglessAddon}\n` : ""}- Estimated Total: *₹${grandTotalEstimate}* (Subject to additional custom art decor)
 
-Looking forward to your conformation and payment coordinates! Thank you.`;
+Looking forward to your confirmation and payment coordinates! Thank you.`;
 
-    // Encode URL and redirect safely
     const encodedMessage = encodeURIComponent(messageTemplate);
     const cleanNumber = CONTACT_INFO.whatsappNumber.replace(/[^0-9]/g, "");
     const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
@@ -286,35 +215,34 @@ Looking forward to your conformation and payment coordinates! Thank you.`;
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
-        {/* Title area */}
+        {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-4 mb-16">
           <span className="inline-flex items-center space-x-2 text-xs uppercase tracking-widest text-brand-caramel font-bold">
-            <Sparkles className="w-3.5 h-3.5 text-brand-caramel animate-bounce" />
-            <span>Artisanal Customizer</span>
+            <Sliders className="w-3.5 h-3.5 text-brand-caramel" />
+            <span>Direct WhatsApp Order Configurator</span>
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-espresso tracking-tight">
-            Order Your Bespoke Creation
+            Order Custom Delicacies
           </h2>
-          <p className="font-sans text-brand-espresso/70 text-sm sm:text-base font-light">
-            Need a gorgeous custom cake or a tailored assortment box of fudgy brownies? Tell us your preference below. Our form computes transparent pricing before redirecting you directly to owner <span className="font-semibold text-brand-espresso">Vaishnavi K.S.</span> over WhatsApp.
+          <p className="font-sans text-brand-espresso/70 text-sm sm:text-base font-light leading-relaxed">
+            Need a gorgeous custom cake, a box of fudgy brownies, or artisan cookies? Tell us your preference below. Our configurator computes transparent pricing directly from our official menu before opening WhatsApp.
           </p>
         </div>
 
-        {/* Master Box Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-5xl mx-auto">
+        {/* Builder Container Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
-          {/* Left Side: Interactive Configurator */}
-          <div className="lg:col-span-7 bg-brand-cream rounded-3xl p-6 sm:p-10 shadow-lg border border-brand-stone/60">
-            
+          {/* Left Side: Interactive Configuration Form */}
+          <div className="lg:col-span-7 bg-brand-cream rounded-3xl p-6 sm:p-10 border border-brand-stone shadow-sm">
             {selectedItem && (
-              <div className="mb-6 p-4 bg-brand-linen/60 rounded-2xl border border-brand-stone flex items-center justify-between">
+              <div className="mb-6 bg-brand-linen/60 p-4 rounded-2xl flex items-center justify-between border border-brand-stone/40">
                 <div className="flex items-center space-x-3 text-left">
-                  <div className="w-10 h-10 rounded-lg bg-brand-cream flex items-center justify-center text-brand-caramel">
-                    <Cake className="w-5 h-5" />
+                  <div className="w-12 h-12 rounded-xl overflow-hidden bg-brand-stone shrink-0">
+                    <SafeImage src={selectedItem.image} alt={selectedItem.name} className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <span className="block text-[10px] uppercase font-bold tracking-wider text-brand-caramel">Configuring Selection</span>
-                    <span className="block text-sm font-serif font-bold text-brand-espresso">{selectedItem.name}</span>
+                    <span className="text-[10px] uppercase font-bold text-brand-caramel tracking-wider block">Selected from Menu:</span>
+                    <span className="text-sm font-serif font-bold text-brand-espresso">{selectedItem.name}</span>
                   </div>
                 </div>
                 <button
@@ -334,15 +262,15 @@ Looking forward to your conformation and payment coordinates! Thank you.`;
                 <label className="block text-xs uppercase font-bold tracking-wider text-brand-espresso">
                   1. Choose Category
                 </label>
-                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                  {["cakes", "brownies", "cheesecakes", "cupcakes", "cookies", "savory"].map((cat) => (
+                <div className="grid grid-cols-3 sm:grid-cols-7 gap-1.5">
+                  {["cakes", "brownies", "cheesecakes", "cupcakes", "cookies", "tarts", "savory"].map((cat) => (
                     <button
                       key={cat}
                       type="button"
                       onClick={() => handleCategoryChange(cat)}
                       className={`py-2 px-1 text-[10px] font-sans font-bold uppercase rounded-lg border text-center cursor-pointer transition-all ${
                         category === cat
-                          ? "bg-brand-espresso text-brand-cream border-brand-espresso"
+                          ? "bg-brand-espresso text-brand-cream border-brand-espresso shadow-xs"
                           : "bg-transparent text-brand-espresso/60 border-brand-stone/50 hover:bg-brand-linen"
                       }`}
                     >
@@ -354,20 +282,31 @@ Looking forward to your conformation and payment coordinates! Thank you.`;
 
               {/* Dynamic Bake Type & Flavor dropdown combinations */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="block text-xs uppercase font-bold tracking-wider text-brand-espresso">
-                    2. Select Style
-                  </label>
-                  <select
-                    value={selectedBakeType}
-                    onChange={(e) => setSelectedBakeType(e.target.value)}
-                    className="w-full px-4 py-3 bg-brand-cream border border-brand-stone/80 rounded-xl focus:outline-hidden focus:border-brand-caramel font-sans text-xs text-brand-espresso"
-                  >
-                    {getBakeTypesForCategory().map((t) => (
-                      <option key={t.id} value={t.id}>{t.name}</option>
-                    ))}
-                  </select>
-                </div>
+                {category === "brownies" ? (
+                  <div className="space-y-2">
+                    <label className="block text-xs uppercase font-bold tracking-wider text-brand-espresso">
+                      2. Brownie Cut
+                    </label>
+                    <select
+                      value={selectedBakeType}
+                      onChange={(e) => setSelectedBakeType(e.target.value)}
+                      className="w-full px-4 py-3 bg-brand-cream border border-brand-stone/80 rounded-xl focus:outline-hidden focus:border-brand-caramel font-sans text-xs text-brand-espresso cursor-pointer"
+                    >
+                      {getBakeTypesForCategory().map((t) => (
+                        <option key={t.id} value={t.id}>{t.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <label className="block text-xs uppercase font-bold tracking-wider text-brand-espresso">
+                      2. Style
+                    </label>
+                    <div className="px-4 py-3 bg-brand-linen/40 border border-brand-stone/80 rounded-xl font-sans text-xs font-semibold text-brand-espresso">
+                      {category.toUpperCase()} Collection
+                    </div>
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <label className="block text-xs uppercase font-bold tracking-wider text-brand-espresso">
@@ -376,7 +315,7 @@ Looking forward to your conformation and payment coordinates! Thank you.`;
                   <select
                     value={selectedFlavor}
                     onChange={(e) => setSelectedFlavor(e.target.value)}
-                    className="w-full px-4 py-3 bg-brand-cream border border-brand-stone/80 rounded-xl focus:outline-hidden focus:border-brand-caramel font-sans text-xs text-brand-espresso"
+                    className="w-full px-4 py-3 bg-brand-cream border border-brand-stone/80 rounded-xl focus:outline-hidden focus:border-brand-caramel font-sans text-xs text-brand-espresso cursor-pointer"
                   >
                     {getFlavorsForBakeType().map((f) => (
                       <option key={f} value={f}>{f.split(" (")[0]}</option>
@@ -394,7 +333,7 @@ Looking forward to your conformation and payment coordinates! Thank you.`;
                   <select
                     value={selectedSize}
                     onChange={(e) => setSelectedSize(e.target.value)}
-                    className="w-full px-4 py-3 bg-brand-cream border border-brand-stone/80 rounded-xl focus:outline-hidden focus:border-brand-caramel font-sans text-xs text-brand-espresso"
+                    className="w-full px-4 py-3 bg-brand-cream border border-brand-stone/80 rounded-xl focus:outline-hidden focus:border-brand-caramel font-sans text-xs text-brand-espresso cursor-pointer"
                   >
                     {getSizesForBakeType().map((sz) => (
                       <option key={sz} value={sz}>{sz}</option>
@@ -413,7 +352,7 @@ Looking forward to your conformation and payment coordinates! Thank you.`;
                         id="eggless"
                         checked={isEggless}
                         onChange={(e) => setIsEggless(e.target.checked)}
-                        className="w-4 h-4 accent-brand-caramel rounded focus:ring-0 focus:outline-hidden"
+                        className="w-4 h-4 accent-brand-caramel rounded focus:ring-0 focus:outline-hidden cursor-pointer"
                       />
                       <label htmlFor="eggless" className="text-xs text-brand-espresso/80 font-sans cursor-pointer select-none">
                         Yes, make it 100% Eggless
@@ -457,40 +396,36 @@ Looking forward to your conformation and payment coordinates! Thank you.`;
 
                 <div className="space-y-2">
                   <label className="block text-xs uppercase font-bold tracking-wider text-brand-espresso">
-                    Preferred Time (10:30 AM - 8:30 PM)
+                    Preferred Time Window
                   </label>
-                  <select
+                  <input
+                    type="text"
+                    placeholder="E.g. 4:00 PM - 6:00 PM"
                     value={pickupTime}
                     onChange={(e) => setPickupTime(e.target.value)}
                     className="w-full px-4 py-3 bg-brand-cream border border-brand-stone/80 rounded-xl focus:outline-hidden focus:border-brand-caramel font-sans text-xs text-brand-espresso"
-                  >
-                    <option value="">Choose window...</option>
-                    <option value="Morning (10:30 AM - 1:00 PM)">Morning (10:30 AM - 1:00 PM)</option>
-                    <option value="Afternoon (1:00 PM - 4:00 PM)">Afternoon (1:00 PM - 4:00 PM)</option>
-                    <option value="Evening (4:00 PM - 7:00 PM)">Evening (4:00 PM - 7:00 PM)</option>
-                    <option value="Late Hour (7:00 PM - 8:30 PM)">Late Hour (7:00 PM - 8:30 PM)</option>
-                  </select>
+                  />
                 </div>
               </div>
 
-              {/* Special instructions */}
+              {/* Special Instructions */}
               <div className="space-y-2">
                 <label className="block text-xs uppercase font-bold tracking-wider text-brand-espresso">
-                  Special Notes &amp; Customization ideas
+                  Special Notes / Custom Deco Instructions
                 </label>
                 <textarea
-                  placeholder="Need high-end decor? Specify color themes, raw fruit garnishes, chocolate type, toppings, or Uber instructions here..."
-                  rows={3}
+                  rows={2}
+                  placeholder="E.g. 'Please make it extra fudgy with roasted almonds on top' or 'Pastel pink floral accents'"
                   value={specialInstructions}
                   onChange={(e) => setSpecialInstructions(e.target.value)}
                   className="w-full px-4 py-3 bg-brand-cream border border-brand-stone/80 rounded-xl focus:outline-hidden focus:border-brand-caramel font-sans text-xs text-brand-espresso resize-none"
                 />
               </div>
 
-              {/* Customer information details */}
-              <div className="border-t border-brand-stone/30 pt-6 space-y-4">
-                <span className="block text-xs uppercase font-bold tracking-wider text-brand-espresso">
-                  5. Sender Details
+              {/* Customer Contact Details */}
+              <div className="pt-4 border-t border-brand-stone/40 space-y-4">
+                <span className="block text-[11px] uppercase tracking-wider font-bold text-brand-caramel">
+                  Your Details for WhatsApp Confirmation
                 </span>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -502,6 +437,7 @@ Looking forward to your conformation and payment coordinates! Thank you.`;
                     onChange={(e) => setCustomerName(e.target.value)}
                     className="w-full px-4 py-3 bg-brand-cream border border-brand-stone/80 rounded-xl focus:outline-hidden focus:border-brand-caramel font-sans text-xs text-brand-espresso"
                   />
+
                   <input
                     type="tel"
                     required
@@ -516,53 +452,66 @@ Looking forward to your conformation and payment coordinates! Thank you.`;
               {/* Submit triggers whatsapp */}
               <button
                 type="submit"
-                className="w-full py-4 bg-brand-espresso text-brand-cream hover:bg-brand-caramel hover:text-brand-espresso rounded-xl text-xs uppercase font-bold tracking-widest transition-all duration-500 flex items-center justify-center space-x-2 cursor-pointer shadow-lg active:scale-98"
+                className="w-full py-4 px-6 bg-brand-espresso text-brand-cream hover:bg-brand-caramel hover:text-brand-espresso rounded-xl text-xs uppercase font-bold tracking-widest transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg cursor-pointer group"
               >
-                <MessageSquare className="w-4 h-4 fill-current" />
+                <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 <span>Submit Request to WhatsApp</span>
               </button>
+
             </form>
           </div>
 
-          {/* Right Side: Estimated Bill Card */}
-          <div className="lg:col-span-5 flex flex-col justify-between">
-            <div className="bg-brand-espresso text-brand-cream rounded-3xl p-6 sm:p-8 space-y-8 shadow-2xl relative overflow-hidden border border-brand-stone/30">
-              {/* Golden line element */}
+          {/* Right Side: Estimated Bill Card with Dynamic Image Preview */}
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+            <div className="bg-brand-espresso text-brand-cream rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden border border-brand-stone/30">
               <div className="absolute top-0 left-0 right-0 h-1 bg-brand-gold" />
               
-              <div className="space-y-2 border-b border-brand-cream/10 pb-4 text-left">
+              {/* Flavor Photo Thumbnail Preview */}
+              <div className="relative h-40 rounded-2xl overflow-hidden bg-brand-stone/40 border border-brand-cream/10">
+                <SafeImage
+                  src={getActivePreviewImage()}
+                  alt="Flavor preview"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/80 via-transparent to-transparent" />
+                <span className="absolute bottom-3 left-3 text-xs font-serif font-bold text-brand-cream">
+                  {selectedFlavor ? selectedFlavor.split(" (")[0] : category.toUpperCase()}
+                </span>
+              </div>
+
+              <div className="space-y-1 border-b border-brand-cream/10 pb-4 text-left">
                 <span className="text-[10px] uppercase font-bold tracking-widest text-brand-gold block">Belaku Estimator</span>
                 <h3 className="font-serif text-xl font-bold">Calculation Sheet</h3>
                 <span className="text-xs text-brand-cream/60 block font-light">Freshly computed estimate</span>
               </div>
 
               {/* Ledger list */}
-              <div className="space-y-4 text-left font-sans text-sm font-light">
+              <div className="space-y-3 text-left font-sans text-xs font-light">
                 <div className="flex justify-between items-start pb-2 border-b border-brand-cream/5">
                   <div>
                     <span className="block font-semibold text-brand-gold">Base Selection:</span>
-                    <span className="text-xs text-brand-cream/75 block mt-0.5 max-w-[200px]">
+                    <span className="text-[11px] text-brand-cream/75 block mt-0.5 max-w-[200px]">
                       {selectedFlavor ? selectedFlavor.split(" (")[0] : "None Selected"}
                     </span>
                   </div>
-                  <span className="font-mono text-brand-gold">₹{calculatedBasePrice}</span>
+                  <span className="font-mono text-sm text-brand-gold">₹{calculatedBasePrice}</span>
                 </div>
 
                 <div className="flex justify-between items-center pb-2 border-b border-brand-cream/5">
                   <div>
                     <span className="block font-semibold text-brand-gold">Size/Dimensions:</span>
-                    <span className="text-xs text-brand-cream/75">{selectedSize || "Standard"}</span>
+                    <span className="text-[11px] text-brand-cream/75">{selectedSize || "Standard"}</span>
                   </div>
-                  <span className="text-xs text-brand-cream/50">Incl.</span>
+                  <span className="text-[10px] text-brand-cream/50 font-mono">Incl.</span>
                 </div>
 
                 {category === "cakes" && (
                   <div className="flex justify-between items-center pb-2 border-b border-brand-cream/5">
                     <div>
                       <span className="block font-semibold text-brand-gold">Dietary modifier:</span>
-                      <span className="text-xs text-brand-cream/75">{isEggless ? "🍃 100% Pure Eggless sponge" : "🥚 Regular Sponge"}</span>
+                      <span className="text-[11px] text-brand-cream/75">{isEggless ? "🍃 100% Pure Eggless sponge" : "🥚 Regular Sponge"}</span>
                     </div>
-                    <span className="font-mono text-brand-gold">+{calculatedEgglessAddon}</span>
+                    <span className="font-mono text-sm text-brand-gold">+{calculatedEgglessAddon}</span>
                   </div>
                 )}
 
@@ -570,9 +519,9 @@ Looking forward to your conformation and payment coordinates! Thank you.`;
                   <div className="flex justify-between items-start pb-2 border-b border-brand-cream/5">
                     <div>
                       <span className="block font-semibold text-brand-gold">Writing script:</span>
-                      <span className="text-xs italic text-brand-cream/80">"{writingOnCake}"</span>
+                      <span className="text-[11px] italic text-brand-cream/80">"{writingOnCake}"</span>
                     </div>
-                    <span className="text-xs text-brand-cream/50">Free</span>
+                    <span className="text-[10px] text-brand-cream/50">Free</span>
                   </div>
                 )}
               </div>
@@ -583,39 +532,34 @@ Looking forward to your conformation and payment coordinates! Thank you.`;
                   <span className="block text-xs uppercase font-semibold tracking-wider text-brand-gold">Estimated Total</span>
                   <span className="text-[10px] text-brand-cream/40">*Excluding custom decorations</span>
                 </div>
-                <span className="font-mono text-3xl font-bold text-brand-gold">
+                <span className="font-mono text-2xl sm:text-3xl font-bold text-brand-gold">
                   ₹{grandTotalEstimate}
                 </span>
               </div>
 
               {/* Quality assurance bullets */}
-              <div className="text-left space-y-3 pt-2 text-xs font-light text-brand-cream/80 border-t border-brand-cream/10">
-                <div className="flex items-start space-x-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-gold mt-1.5" />
-                  <p>Baked **freshly on receipt** of actual confirmed orders; guaranteed premium butter quality.</p>
+              <div className="text-left space-y-2.5 pt-2 text-[11px] font-light text-brand-cream/80 border-t border-brand-cream/10">
+                <div className="flex items-start space-x-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-gold mt-1 shrink-0" />
+                  <p>Baked freshly on receipt; guaranteed pure butter and clean ingredients.</p>
                 </div>
-                <div className="flex items-start space-x-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-gold mt-1.5" />
-                  <p>Custom designs are verified and custom-priced with owner Vaishnavi K.S. over chat.</p>
-                </div>
-                <div className="flex items-start space-x-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-gold mt-1.5" />
-                  <p>Arranging self-pickup from **Hennur** using Swiggy Genie/Uber/Porter courier fleet.</p>
+                <div className="flex items-start space-x-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-gold mt-1 shrink-0" />
+                  <p>Custom decorations are finalized with Vaishnavi K.S. over chat.</p>
                 </div>
               </div>
             </div>
 
             {/* Quick Helper Tips area */}
-            <div className="mt-6 bg-brand-cream rounded-2xl p-6 border border-brand-stone/60 text-left space-y-3">
+            <div className="bg-brand-cream rounded-2xl p-6 border border-brand-stone/60 text-left space-y-3 shadow-xs">
               <span className="inline-flex items-center text-xs uppercase font-bold tracking-wide text-brand-caramel gap-1.5">
                 <AlertCircle className="w-3.5 h-3.5" />
                 <span>How to place order?</span>
               </span>
               <p className="text-xs text-brand-espresso/80 leading-relaxed font-light">
-                Simply click the <strong className="font-semibold">Submit Request</strong> button. The website will automatically pre-compile an elegant card summary message containing all selected specifications, and open WhatsApp directly. Your order can be locked after selecting final design accents and baking hours over chat!
+                Simply click the <strong className="font-semibold">Submit Request</strong> button. The website will automatically pre-compile an elegant summary message with all selected specifications, and open WhatsApp directly!
               </p>
             </div>
-
           </div>
 
         </div>
