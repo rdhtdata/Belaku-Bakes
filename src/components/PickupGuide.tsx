@@ -122,9 +122,15 @@ export default function PickupGuide() {
               allowFullScreen
               loading="lazy"
             />
-            <div className="absolute bottom-4 right-4 bg-brand-espresso/90 text-brand-cream text-xs font-medium px-3 py-2 rounded-lg backdrop-blur-md shadow-md select-none border border-brand-stone/20">
-              📍 Hennur Bande, Bengaluru
-            </div>
+            <a
+              href={CONTACT_INFO.mapCoordinateGoogleMaps}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute bottom-4 right-4 bg-brand-espresso/90 hover:bg-brand-espresso text-brand-cream text-xs font-medium px-3.5 py-2 rounded-lg backdrop-blur-md shadow-md border border-brand-stone/20 transition-all flex items-center space-x-1.5 group cursor-pointer"
+            >
+              <span>📍 Hennur Bande, Bengaluru</span>
+              <ExternalLink className="w-3 h-3 text-brand-gold group-hover:translate-x-0.5 transition-transform" />
+            </a>
           </div>
 
         </div>
