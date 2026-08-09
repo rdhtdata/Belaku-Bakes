@@ -115,15 +115,19 @@ export const CATEGORY_GALLERY: Record<string, { main: string; gallery: string[];
     }
   },
   savory: {
-    main: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800&auto=format&fit=crop",
+    main: "menu-images/snacks/snacks main.jpeg",
     gallery: [
-      "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=800&auto=format&fit=crop"
+      "menu-images/snacks/snacks main.jpeg",
+      "menu-images/snacks/korean buns.jpeg",
+      "menu-images/snacks/Garlic Bread.jpeg",
+      "menu-images/snacks/Pizza Pasta Skewers.jpeg"
     ],
     flavorMap: {
-      "Korean buns (2)": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800&auto=format&fit=crop",
-      "Garlic Bread": "https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?q=80&w=800&auto=format&fit=crop",
-      "Pizza Pasta Skewers (5)": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop"
+      "Korean buns (2)": "menu-images/snacks/korean buns.jpeg",
+      "Korean buns": "menu-images/snacks/korean buns.jpeg",
+      "Garlic Bread": "menu-images/snacks/Garlic Bread.jpeg",
+      "Pizza Pasta Skewers (5)": "menu-images/snacks/Pizza Pasta Skewers.jpeg",
+      "Pizza Pasta Skewers": "menu-images/snacks/Pizza Pasta Skewers.jpeg"
     }
   }
 };
