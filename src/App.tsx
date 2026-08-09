@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import FoodCartBanner from "./components/FoodCartBanner";
 import About from "./components/About";
 import Menu from "./components/Menu";
 import CustomForm from "./components/CustomForm";
@@ -101,9 +100,6 @@ export default function App() {
         
         {/* 1. Hero Showcase Area */}
         <Hero onScrollToSection={handleScrollToSection} />
-
-        {/* Upcoming Food Cart Announcement Banner */}
-        <FoodCartBanner />
 
         {/* 2. Brand story Statement quote block */}
         <About />
