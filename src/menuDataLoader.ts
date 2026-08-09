@@ -267,6 +267,18 @@ export function buildPriceCatalog(sections: ParsedCsvSection[]): Record<string, 
   return catalog;
 }
 
+// Helper to calculate minimum starting price in a section
+function getMinPrice(section?: ParsedCsvSection): number {
+  if (!section) return 0;
+  let min = Infinity;
+  section.rows.forEach((r) => {
+    Object.values(r.prices).forEach((p) => {
+      if (p > 0 && p < min) min = p;
+    });
+  });
+  return min === Infinity ? 0 : min;
+}
+
 // Dynamically generate Menu Items for Card Album view
 export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
   const items: MenuItem[] = [];
@@ -274,6 +286,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
   // 1. ARTISANAL CAKES
   const cakesSection = sections.find((s) => s.category === "cakes");
   if (cakesSection) {
+    const minCake = getMinPrice(cakesSection);
     const flavors = cakesSection.rows.map((r) => {
       const p500 = r.prices["500g"] || 0;
       const p1000 = r.prices["1000g"] || 0;
@@ -284,7 +297,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
       id: "cake-artisanal",
       name: "Artisanal Celebration Cakes",
       description: "Sponge layers of pure premium cocoa and gourmet fruit gateau baked freshly on order. Stacked with velvet creams and crafted using only pure dairy butter.",
-      priceEstimate: "Starts at ₹750",
+      priceEstimate: `Starts at ₹${minCake || 750}`,
       category: "cakes",
       image: CATEGORY_GALLERY.cakes.main,
       galleryImages: CATEGORY_GALLERY.cakes.gallery,
@@ -302,6 +315,11 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
   const mediumBrownies = sections.find((s) => s.title.toLowerCase().includes("medium"));
   const largeBrownies = sections.find((s) => s.title.toLowerCase().includes("large"));
 
+  const minBites = getMinPrice(brownieBites);
+  const minMedium = getMinPrice(mediumBrownies);
+  const minLarge = getMinPrice(largeBrownies);
+  const minBrownieOverall = Math.min(minBites || 9999, minMedium || 9999, minLarge || 9999);
+
   const brownieSubcategories = [];
   if (brownieBites) {
     brownieSubcategories.push({
@@ -310,7 +328,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
       description: "Bite-sized cubes of chocolatey bliss, crispy on the outer shell and soft-fudgy inside.",
       sizes: brownieBites.sizes,
       flavors: brownieBites.rows.map((r) => r.flavor),
-      priceEstimate: "Starts at ₹280 (Box of 8)"
+      priceEstimate: `Starts at ₹${minBites} (${brownieBites.sizes[0] || 'Box of 8'})`
     });
   }
   if (mediumBrownies) {
@@ -320,7 +338,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
       description: "Classic medium-cut slabs with dense, rich Belgian chocolate crumb and indulgent toppings.",
       sizes: mediumBrownies.sizes,
       flavors: mediumBrownies.rows.map((r) => r.flavor),
-      priceEstimate: "Starts at ₹540 (Box of 6)"
+      priceEstimate: `Starts at ₹${minMedium} (${mediumBrownies.sizes[0] || 'Box of 6'})`
     });
   }
   if (largeBrownies) {
@@ -330,7 +348,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
       description: "Deep, thick artisanal blocks sliced generously from pure chocolate couverture.",
       sizes: largeBrownies.sizes,
       flavors: largeBrownies.rows.map((r) => r.flavor),
-      priceEstimate: "Starts at ₹600 (Box of 6)"
+      priceEstimate: `Starts at ₹${minLarge} (${largeBrownies.sizes[0] || 'Box of 6'})`
     });
   }
 
@@ -338,7 +356,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
     id: "brownies-unified",
     name: "Artisanal Belgian Brownies",
     description: "Our signature Belgian chocolate brownies with crinkle tops and rich fudgy centers. Available in three distinct cuts: Brownie Bites, Medium Slabs, and Large Blocks.",
-    priceEstimate: "Starts at ₹280",
+    priceEstimate: `Starts at ₹${minBrownieOverall === 9999 ? 280 : minBrownieOverall}`,
     category: "brownies",
     image: CATEGORY_GALLERY.brownies.main,
     galleryImages: CATEGORY_GALLERY.brownies.gallery,
@@ -354,11 +372,12 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
   // 3. CHEESECAKES
   const cheeseSection = sections.find((s) => s.category === "cheesecakes");
   if (cheeseSection) {
+    const minCheese = getMinPrice(cheeseSection);
     items.push({
       id: "cheesecake-artisanal",
       name: "Artisanal Cream Cheesecakes",
       description: "Velvety smooth pure Philadelphia-style cream cheese baked on a crunchy buttery biscuit crust with fresh gourmet fruit and caramel toppings.",
-      priceEstimate: "Starts at ₹125 (100g)",
+      priceEstimate: `Starts at ₹${minCheese || 125} (${cheeseSection.sizes[0] || '100g'})`,
       category: "cheesecakes",
       image: CATEGORY_GALLERY.cheesecakes.main,
       galleryImages: CATEGORY_GALLERY.cheesecakes.gallery,
@@ -374,11 +393,12 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
   // 4. CUPCAKES
   const cupcakesSection = sections.find((s) => s.category === "cupcakes");
   if (cupcakesSection) {
+    const minCupcake = getMinPrice(cupcakesSection);
     items.push({
       id: "cupcakes-gourmet",
       name: "Gourmet Artisanal Cupcakes",
       description: "Fluffy, freshly whipped boutique cupcakes with hand-piped frostings and delicate toppings. Perfect for parties, gifting, and sweet cravings.",
-      priceEstimate: "Starts at ₹35 (Mini)",
+      priceEstimate: `Starts at ₹${minCupcake || 35} (${cupcakesSection.sizes[0] || 'Mini'})`,
       category: "cupcakes",
       image: CATEGORY_GALLERY.cupcakes.main,
       galleryImages: CATEGORY_GALLERY.cupcakes.gallery,
@@ -394,11 +414,12 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
   // 5. COOKIES
   const cookiesSection = sections.find((s) => s.category === "cookies");
   if (cookiesSection) {
+    const minCookie = getMinPrice(cookiesSection);
     items.push({
       id: "cookies-buttery",
       name: "Handmade Butter Cookies",
       description: "Crispy, buttery cookies packed with premium chocolate chunks, gourmet red velvet dough, and artisanal fruit jams.",
-      priceEstimate: "Starts at ₹200 (Box of 8)",
+      priceEstimate: `Starts at ₹${minCookie || 200} (${cookiesSection.sizes[0] || 'Box of 8'})`,
       category: "cookies",
       image: CATEGORY_GALLERY.cookies.main,
       galleryImages: CATEGORY_GALLERY.cookies.gallery,
@@ -414,11 +435,12 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
   // 6. TARTS
   const tartsSection = sections.find((s) => s.category === "tarts");
   if (tartsSection) {
+    const minTart = getMinPrice(tartsSection);
     items.push({
       id: "tarts-artisanal",
       name: "Artisanal Dessert Tarts",
       description: "Crispy golden shortcrust pastry shells filled with luscious creams, dark chocolate ganache, and seasonal garnishes.",
-      priceEstimate: "Starts at ₹35 (Mini)",
+      priceEstimate: `Starts at ₹${minTart || 35} (${tartsSection.sizes[0] || 'Mini'})`,
       category: "tarts",
       image: CATEGORY_GALLERY.tarts.main,
       galleryImages: CATEGORY_GALLERY.tarts.gallery,
@@ -434,11 +456,12 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
   // 7. SAVORY SNACKS
   const snacksSection = sections.find((s) => s.category === "savory");
   if (snacksSection) {
+    const minSnack = getMinPrice(snacksSection);
     items.push({
       id: "savory-snacks",
       name: "Artisanal Warm Snacks & Buns",
       description: "Baked to golden perfection with rich cheese, herby garlic butter, and savoury toppings. Oven-fresh Korean cream cheese buns, garlic bread, and skewers.",
-      priceEstimate: "Starts at ₹150",
+      priceEstimate: `Starts at ₹${minSnack || 150}`,
       category: "savory",
       image: CATEGORY_GALLERY.savory.main,
       galleryImages: CATEGORY_GALLERY.savory.gallery,
