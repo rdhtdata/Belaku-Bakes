@@ -11,15 +11,15 @@ export default function Hero({ onScrollToSection }: HeroProps) {
   return (
     <section
       id="hero"
-      className="relative min-h-screen bg-brand-cream overflow-hidden pt-28 pb-16 flex flex-col justify-center px-6"
+      className="relative min-h-[calc(100vh-80px)] bg-brand-cream overflow-hidden pt-6 sm:pt-10 lg:pt-14 pb-14 sm:pb-16 flex flex-col justify-center px-4 sm:px-6"
     >
       {/* Absolute luxury aesthetic background ornaments */}
       <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-brand-linen/40 blur-3xl pointer-events-none" />
       <div className="absolute bottom-[5%] left-[-15%] w-[600px] h-[600px] rounded-full bg-brand-stone/30 blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-10">
         {/* Text Content Area */}
-        <div className="lg:col-span-6 space-y-8 text-left">
+        <div className="lg:col-span-6 space-y-6 sm:space-y-8 text-left">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -37,7 +37,7 @@ export default function Hero({ onScrollToSection }: HeroProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="font-serif text-5xl sm:text-6xl xl:text-7xl font-bold text-brand-espresso tracking-tight leading-[1.05]"
+              className="font-serif text-4xl sm:text-6xl xl:text-7xl font-bold text-brand-espresso tracking-tight leading-[1.08] sm:leading-[1.05]"
             >
               Artisanal bakes <br />
               <span className="text-brand-caramel italic font-normal">made with love,</span> <br />

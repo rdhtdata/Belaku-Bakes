@@ -76,35 +76,13 @@ export default function App() {
   return (
     <div className="min-h-screen font-sans bg-brand-cream text-brand-espresso flex flex-col relative antialiased selection:bg-brand-caramel/20 selection:text-brand-espresso">
       
-      {/* Top Welcome notification bar */}
-      <AnimatePresence>
-        {showWelcomeBanner && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="bg-brand-espresso text-brand-cream py-2.5 px-6 shrink-0 relative overflow-hidden z-50 shadow-sm border-b border-brand-stone/20"
-          >
-            <div className="max-w-7xl mx-auto flex items-center justify-between text-left text-xs tracking-wide">
-              <span className="font-light flex items-center gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-brand-gold animate-spin" style={{ animationDuration: "12s" }} />
-                <span>
-                  Oven-fresh custom bakes by <strong className="font-semibold text-brand-gold">Vaishnavi K.S.</strong> in Hennur, Bangalore. Orders place directly via WhatsApp!
-                </span>
-              </span>
-              <button
-                onClick={() => setShowWelcomeBanner(false)}
-                className="text-brand-cream hover:text-brand-gold text-[10px] uppercase font-bold tracking-widest pl-4 shrink-0 transition-colors cursor-pointer"
-              >
-                [ Dismiss ]
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Styled Navbar */}
-      <Navbar onNavClick={handleScrollToSection} activeSection={activeSection} />
+      {/* Styled Navbar with Integrated Announcement Bar */}
+      <Navbar
+        onNavClick={handleScrollToSection}
+        activeSection={activeSection}
+        showWelcomeBanner={showWelcomeBanner}
+        onDismissBanner={() => setShowWelcomeBanner(false)}
+      />
 
       {/* Master Main Body Wrapper */}
       <main className="flex-grow">
