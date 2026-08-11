@@ -194,7 +194,7 @@ export default function App() {
             
             {/* Column 1: Brand details */}
             <div className="md:col-span-4 text-left space-y-4">
-              <span className="font-serif text-2xl tracking-wider font-bold text-brand-cream block">
+              <span className="font-serif text-2xl tracking-wider font-bold text-brand-caramel block">
                 Belaku Bakes
               </span>
               <p className="text-xs text-brand-cream/70 leading-relaxed font-light max-w-sm">
@@ -275,7 +275,7 @@ export default function App() {
           {/* Bottom Copyright area */}
           <div className="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-brand-cream/50 font-light space-y-3 sm:space-y-0 text-center sm:text-left">
             <span>
-              &copy; {new Date().getFullYear()} **Belaku Bakes**. All rights reserved. Baked freshly by hand in Bengaluru.
+              &copy; {new Date().getFullYear()} <strong className="text-brand-caramel font-bold">Belaku Bakes</strong>. All rights reserved. Baked freshly by hand in Bengaluru.
             </span>
             <div className="flex space-x-4">
               <span className="hover:text-brand-gold transition-colors">Pure Butter &amp; Organic Flour Purists</span>

@@ -155,7 +155,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                     className={`py-2 px-3.5 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer ${
                       activePageIndex === index
                         ? "bg-transparent border-[#DF8CA3] text-brand-espresso font-black"
-                        : "bg-brand-cream/40 border-brand-stone/40 text-brand-espresso/60 hover:text-brand-espresso hover:bg-brand-linen"
+                        : "bg-brand-cream border-brand-stone/80 text-brand-espresso font-semibold hover:bg-brand-linen"
                     }`}
                   >
                     {pg.title}
@@ -180,10 +180,10 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
 
                 {/* Card Sheet Header */}
                 <div className="text-center relative z-10 space-y-1.5 pb-6 border-b border-[#38322E]/15">
-                  <div className="flex items-center justify-center space-x-1.5 text-xs text-[#DF8CA3] tracking-widest uppercase font-bold">
-                    <Star className="w-3.5 h-3.5 fill-current" />
-                    <span>Belaku Bakes</span>
-                    <Star className="w-3.5 h-3.5 fill-current" />
+                  <div className="flex items-center justify-center space-x-1.5 text-xs text-[#38322E] tracking-widest uppercase font-bold">
+                    <Star className="w-3.5 h-3.5 fill-brand-caramel text-brand-caramel" />
+                    <span className="text-brand-caramel font-bold">Belaku Bakes</span>
+                    <Star className="w-3.5 h-3.5 fill-brand-caramel text-brand-caramel" />
                   </div>
                   
                   <h3 className="font-serif text-2xl sm:text-3.5xl font-extrabold text-[#38322E] tracking-tight py-1">
@@ -309,10 +309,10 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                       <button
                         key={cat.value}
                         onClick={() => setSelectedCategory(cat.value)}
-                        className={`px-4 py-2 text-xs font-sans font-semibold tracking-wide uppercase rounded-full whitespace-nowrap transition-all duration-300 gap-1.5 inline-flex items-center cursor-pointer ${
+                        className={`px-4 py-2 text-xs font-sans font-bold tracking-wide uppercase rounded-full whitespace-nowrap transition-all duration-300 gap-1.5 inline-flex items-center cursor-pointer ${
                           isActive
                             ? "bg-brand-espresso text-brand-cream shadow-sm"
-                            : "bg-transparent text-brand-espresso/60 hover:text-brand-espresso"
+                            : "bg-transparent text-brand-espresso/85 hover:text-brand-espresso hover:bg-brand-linen"
                         }`}
                       >
                         {isActive && <span className="w-1.5 h-1.5 rounded-full bg-brand-gold animate-ping" />}

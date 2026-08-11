@@ -9,9 +9,10 @@
   --color-brand-cream: #FAF6F0;
   --color-brand-linen: #F3EBE1;
   --color-brand-stone: #E8DDD0;
-  --color-brand-espresso: #38322E; /* Signature Dark Grey Brown */
+  --color-brand-espresso: #9C7C51; /* Primary Base Text: Warm Artisanal Caramel */
   --color-brand-dark: #38322E;
-  --color-brand-caramel: #9C7C51;
+  --color-brand-dark-grey-brown: #38322E;
+  --color-brand-caramel: #38322E; /* Minority Accent / Highlight: Dark Grey Brown */
   --color-brand-gold: #C5A880;
   
   --animate-subtle-pulse: subtle-pulse 3s infinite ease-in-out;
@@ -25,13 +26,18 @@
 html {
   scroll-behavior: smooth;
   background-color: #FAF6F0;
-  color: #38322E;
+  color: #9C7C51;
 }
 
 body {
-  color: #38322E;
+  color: #9C7C51;
   background-color: #FAF6F0;
   font-family: var(--font-sans);
+}
+
+/* Ensure inputs, dropdown selects, and textareas have clear caramel text */
+input, select, textarea {
+  color: #9C7C51;
 }
 
 /* Custom scrollbars for high-end boutique feeling */
@@ -50,12 +56,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9C7C51;
+  background: #38322E;
 }
 
 /* Custom styling to ensure the interactive elements stand out clearly */
 .custom-shadow {
-  box-shadow: 0 4px 20px -2px rgba(56, 50, 46, 0.08);
+  box-shadow: 0 4px 20px -2px rgba(156, 124, 81, 0.1);
 }
 
 .luxury-card-hover {
@@ -64,5 +70,5 @@ body {
 
 .luxury-card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 30px -4px rgba(56, 50, 46, 0.12);
+  box-shadow: 0 12px 30px -4px rgba(156, 124, 81, 0.15);
 }

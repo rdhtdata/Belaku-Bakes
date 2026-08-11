@@ -81,7 +81,7 @@ export function BelakuLogoFull({ className = "", size = 48 }: LogoProps) {
       <div className="flex flex-col">
         {/* Styled Typography to mimic the custom handwriting script perfectly */}
         <div className="relative">
-          <span className="block font-serif text-2xl tracking-wide font-bold text-brand-espresso flex items-end">
+          <span className="block font-serif text-2xl tracking-wide font-bold text-[#9C7C51] flex items-end">
             Belaku Bakes
             {/* Elegant vector swirling heart trailing from 's' */}
             <svg
@@ -108,7 +108,7 @@ export function BelakuLogoFull({ className = "", size = 48 }: LogoProps) {
           </span>
         </div>
         
-        <span className="block text-[9px] uppercase tracking-widest text-[#B5836C] font-bold -mt-0.5">
+        <span className="block text-[9px] uppercase tracking-widest text-[#38322E]/80 font-bold -mt-0.5">
           Gourmet Cloud Kitchen • Hennur
         </span>
       </div>

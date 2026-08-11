@@ -50,7 +50,7 @@ export default function Hero({ onScrollToSection }: HeroProps) {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="font-sans text-brand-espresso/80 text-base sm:text-lg max-w-lg leading-relaxed font-light"
             >
-              At <strong className="font-semibold text-brand-espresso">Belaku Bakes</strong>, every customized cake, fudgy brownie box, and savory bake is crafted using only the freshest, high-end organic ingredients. Handcrafted to brighten your celebrated milestones.
+              At <strong className="font-bold text-brand-caramel">Belaku Bakes</strong>, every customized cake, fudgy brownie box, and savory bake is crafted using only the freshest, high-end organic ingredients. Handcrafted to brighten your celebrated milestones.
             </motion.p>
           </div>
 

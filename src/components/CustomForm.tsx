@@ -311,7 +311,7 @@ Looking forward to your confirmation and payment coordinates! Thank you.`;
                       className={`py-2 px-1 text-[10px] font-sans font-bold uppercase rounded-lg border text-center cursor-pointer transition-all ${
                         category === cat
                           ? "bg-brand-espresso text-brand-cream border-brand-espresso shadow-xs"
-                          : "bg-transparent text-brand-espresso/60 border-brand-stone/50 hover:bg-brand-linen"
+                          : "bg-transparent text-brand-espresso border-brand-stone/80 hover:bg-brand-linen"
                       }`}
                     >
                       {cat}
