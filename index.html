@@ -4,10 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Belaku Bakes</title>
+    <link rel="stylesheet" crossorigin href="./assets/index-S5DuUNwp.css">
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module">
+      const isLocal = Boolean(
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '[::1]' ||
+        window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/) ||
+        window.location.hostname.startsWith('192.168.')
+      );
+
+      if (isLocal) {
+        import('/src/main.tsx');
+      } else {
+        const basePath = window.location.pathname.includes('/Belaku-Bakes') ? '/Belaku-Bakes' : '.';
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.crossOrigin = 'anonymous';
+        script.src = `${basePath}/assets/index-Bs28jH0t.js`;
+        document.body.appendChild(script);
+      }
+    </script>
   </body>
 </html>
-
