@@ -114,8 +114,8 @@ export default function Hero({ onScrollToSection }: HeroProps) {
               className="absolute inset-0 rounded-2xl overflow-hidden shadow-xl"
             >
               <SafeImage
-                src="https://images.unsplash.com/photo-1535254973040-607b474cb50d?q=80&w=1200&auto=format&fit=crop"
-                alt="Belaku Bakes custom blooming celebration cake"
+                src="menu-images/cakes/featured bake.jpg"
+                alt="Belaku Bakes featured celebration cake"
                 className="w-full h-full object-cover select-none scale-102 hover:scale-105 duration-700 transition-transform"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/50 via-transparent to-transparent pointer-events-none" />
@@ -129,8 +129,8 @@ export default function Hero({ onScrollToSection }: HeroProps) {
               className="absolute bottom-6 right-6 bg-brand-cream/95 backdrop-blur-md p-4 rounded-xl border border-brand-stone/60 max-w-[200px] shadow-lg text-left"
             >
               <span className="block text-[10px] uppercase tracking-widest text-brand-caramel font-semibold">Featured Bake</span>
-              <span className="block text-sm font-serif font-bold text-brand-espresso mt-0.5">Vanilla Blossom Cake</span>
-              <p className="text-[11px] text-brand-espresso/70 mt-1 font-light leading-tight">Madagascar bean base, real edible organic flowers.</p>
+              <span className="block text-sm font-serif font-bold text-brand-espresso mt-0.5">Artisanal Cake</span>
+              <p className="text-[11px] text-brand-espresso/70 mt-1 font-light leading-tight">Freshly baked celebration cake with pure dairy butter and velvet cream.</p>
             </motion.div>
 
             {/* Floating Pickup Guide Badge */}
