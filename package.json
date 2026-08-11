@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "build": "vite build && cp -r docs/assets/* assets/",
+    "build": "vite build && cp docs/src/template.html docs/index.html && cp docs/src/template.html ./index.html && cp -r docs/assets/* assets/",
     "deploy": "npm run build && npx gh-pages -d docs -b gh-pages",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
