@@ -9,6 +9,7 @@ export default defineConfig(() => {
     build: {
       outDir: "docs",
       rollupOptions: {
+        input: path.resolve(__dirname, "src/template.html"),
         output: {
           entryFileNames: "assets/index.js",
           chunkFileNames: "assets/[name].js",
