@@ -9,7 +9,7 @@
   --color-brand-cream: #FAF6F0;
   --color-brand-linen: #F3EBE1;
   --color-brand-stone: #E8DDD0;
-  --color-brand-espresso: #38322E; /* Authentic Dark Grey Brown */
+  --color-brand-espresso: #38322E; /* Signature Dark Grey Brown */
   --color-brand-dark: #38322E;
   --color-brand-caramel: #9C7C51;
   --color-brand-gold: #C5A880;
@@ -25,7 +25,13 @@
 html {
   scroll-behavior: smooth;
   background-color: #FAF6F0;
-  color: var(--color-brand-espresso);
+  color: #38322E;
+}
+
+body {
+  color: #38322E;
+  background-color: #FAF6F0;
+  font-family: var(--font-sans);
 }
 
 /* Custom scrollbars for high-end boutique feeling */
@@ -49,7 +55,7 @@ html {
 
 /* Custom styling to ensure the interactive elements stand out clearly */
 .custom-shadow {
-  box-shadow: 0 4px 20px -2px rgba(156, 124, 81, 0.08);
+  box-shadow: 0 4px 20px -2px rgba(56, 50, 46, 0.08);
 }
 
 .luxury-card-hover {
@@ -58,5 +64,5 @@ html {
 
 .luxury-card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 30px -4px rgba(156, 124, 81, 0.12);
+  box-shadow: 0 12px 30px -4px rgba(56, 50, 46, 0.12);
 }
