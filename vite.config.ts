@@ -8,6 +8,13 @@ export default defineConfig(() => {
     base: "/Belaku-Bakes/",
     build: {
       outDir: "docs",
+      rollupOptions: {
+        output: {
+          entryFileNames: "assets/index.js",
+          chunkFileNames: "assets/[name].js",
+          assetFileNames: "assets/index.[ext]",
+        },
+      },
     },
     plugins: [react(), tailwindcss()],
     resolve: {
