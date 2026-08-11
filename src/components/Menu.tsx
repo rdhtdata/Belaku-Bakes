@@ -167,7 +167,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
               <div className="relative bg-[#FAF6F0] rounded-3xl p-6 sm:p-12 shadow-2xl border-4 border-[#DF8CA3]/35 flex flex-col justify-between overflow-hidden min-h-[560px]">
                 
                 {/* Vintage Double Line Border Accents */}
-                <div className="absolute inset-2 border border-[#4E2E25]/10 pointer-events-none rounded-2xl" />
+                <div className="absolute inset-2 border border-[#38322E]/10 pointer-events-none rounded-2xl" />
                 <div className="absolute inset-4 border-2 border-dashed border-[#DF8CA3]/30 pointer-events-none rounded-xl" />
 
                 {/* Corner Pink Floral/Laurel Leaf Vector Graphics Mock (SVG) */}
@@ -179,14 +179,14 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                 </div>
 
                 {/* Card Sheet Header */}
-                <div className="text-center relative z-10 space-y-1.5 pb-6 border-b border-[#4E2E25]/15">
+                <div className="text-center relative z-10 space-y-1.5 pb-6 border-b border-[#38322E]/15">
                   <div className="flex items-center justify-center space-x-1.5 text-xs text-[#DF8CA3] tracking-widest uppercase font-bold">
                     <Star className="w-3.5 h-3.5 fill-current" />
                     <span>Belaku Bakes</span>
                     <Star className="w-3.5 h-3.5 fill-current" />
                   </div>
                   
-                  <h3 className="font-serif text-2xl sm:text-3.5xl font-extrabold text-[#4E2E25] tracking-tight py-1">
+                  <h3 className="font-serif text-2xl sm:text-3.5xl font-extrabold text-[#38322E] tracking-tight py-1">
                     {currentBookPage.title}
                   </h3>
                   
@@ -199,7 +199,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                 <div className="my-8 relative z-10 overflow-x-auto">
                   <table className="w-full text-left font-sans text-xs">
                     <thead>
-                      <tr className="border-b border-[#4E2E25]/15 text-[#4E2E25] font-bold text-[11px] uppercase tracking-wider">
+                      <tr className="border-b border-[#38322E]/15 text-[#38322E] font-bold text-[11px] uppercase tracking-wider">
                         {currentBookPage.columns.map((col: string, cIdx: number) => (
                           <th key={cIdx} className={`py-2.5 px-4 first:pl-2 font-black ${cIdx === currentBookPage.columns.length - 1 ? "last:text-right" : ""}`}>
                             {col}
@@ -207,7 +207,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                         ))}
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#4E2E25]/5 text-brand-espresso/90">
+                    <tbody className="divide-y divide-[#38322E]/5 text-brand-espresso/90">
                       {currentBookPage.rows.map((row: any, rIdx: number) => (
                         <tr
                           key={rIdx}
@@ -218,7 +218,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                           <td className="py-3 px-4 pl-2 font-medium">
                             <span className="flex items-center space-x-1.5">
                               <span className="w-1.5 h-1.5 rounded-full bg-[#DF8CA3] opacity-40 shrink-0" />
-                              <span className="group-hover/row:text-brand-caramel transition-colors font-serif text-sm font-bold text-[#4E2E25]">
+                              <span className="group-hover/row:text-brand-caramel transition-colors font-serif text-sm font-bold text-[#38322E]">
                                 {row.name}
                               </span>
                             </span>
@@ -246,7 +246,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                 </div>
 
                 {/* Bottom interactive config prompt callouts */}
-                <div className="pt-6 border-t border-[#4E2E25]/15 flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
+                <div className="pt-6 border-t border-[#38322E]/15 flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
                   <div className="text-left space-y-0.5">
                     <span className="block text-[10px] uppercase font-bold tracking-wider text-[#B5836C]">Interactive Feature</span>
                     <p className="text-[11px] text-brand-espresso/70 font-light">
