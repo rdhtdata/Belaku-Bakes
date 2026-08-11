@@ -34,9 +34,13 @@ export function SafeImage({ src, alt, className = "", fallbackType = "general", 
     );
   }
 
+  const resolvedSrc = src.startsWith("http") || src.startsWith("data:") || src.startsWith("blob:")
+    ? src
+    : `${import.meta.env.BASE_URL}${src.replace(/^\//, "")}`;
+
   return (
     <img
-      src={src}
+      src={resolvedSrc}
       alt={alt}
       onError={() => setError(true)}
       referrerPolicy="no-referrer"
