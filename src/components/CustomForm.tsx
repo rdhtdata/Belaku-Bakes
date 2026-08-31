@@ -541,7 +541,7 @@ Looking forward to your confirmation and payment coordinates! Thank you.`;
               <div className="space-y-1 border-b border-brand-cream/10 pb-4 text-left">
                 <span className="text-[10px] uppercase font-bold tracking-widest text-brand-gold block">Official Price Breakdown</span>
                 <h3 className="font-serif text-xl font-bold">Calculation Sheet</h3>
-                <span className="text-xs text-brand-cream/60 block font-light">Directly linked to menu rates CSV</span>
+                <span className="text-xs text-brand-cream/60 block font-light">Freshly calculated for your selection</span>
               </div>
 
               {/* Ledger list */}
@@ -561,7 +561,7 @@ Looking forward to your confirmation and payment coordinates! Thank you.`;
                     <span className="block font-semibold text-brand-gold">Selected Portion / Size:</span>
                     <span className="text-[11px] text-brand-cream/85">{selectedSize || "Standard"}</span>
                   </div>
-                  <span className="text-[10px] text-brand-cream/50 font-mono">Matched CSV Rate</span>
+                  <span className="text-[10px] text-brand-cream/50 font-mono">Standard Rate</span>
                 </div>
 
                 {category === "cakes" && (
@@ -600,7 +600,7 @@ Looking forward to your confirmation and payment coordinates! Thank you.`;
               <div className="text-left space-y-2.5 pt-2 text-[11px] font-light text-brand-cream/80 border-t border-brand-cream/10">
                 <div className="flex items-start space-x-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-brand-gold mt-1 shrink-0" />
-                  <p>Rates dynamically resolved from <strong className="font-semibold text-brand-cream">menu rates.csv</strong>.</p>
+                  <p>100% honest and transparent pricing with no hidden charges.</p>
                 </div>
                 <div className="flex items-start space-x-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-brand-gold mt-1 shrink-0" />
