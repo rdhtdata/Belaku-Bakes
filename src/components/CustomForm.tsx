@@ -4,6 +4,9 @@ import { CONTACT_INFO } from "../data";
 import { PARSED_SECTIONS, DYNAMIC_PRICE_CATALOG, CATEGORY_GALLERY } from "../menuDataLoader";
 import { Send, Sliders, AlertCircle, Info, Sparkles, CheckCircle2, Clock, Calendar, ShieldCheck, Tag } from "lucide-react";
 import { SafeImage } from "./SafeImage";
+import { ParallaxImage } from "./ParallaxImage";
+import { AnimatedPrice } from "./AnimatedPrice";
+import { MaskHeading } from "./RevealEffects";
 
 interface CustomFormProps {
   selectedItem: MenuItem | null;
@@ -261,9 +264,9 @@ Looking forward to your confirmation and payment details! Thank you.`;
             <Sliders className="w-3.5 h-3.5 text-brand-caramel" />
             <span>Bespoke WhatsApp Order Request</span>
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-espresso tracking-tight">
+          <MaskHeading className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-espresso tracking-tight">
             Order Custom Delicacies
-          </h2>
+          </MaskHeading>
           <p className="font-sans text-brand-espresso/70 text-sm sm:text-base font-light leading-relaxed">
             Select your desired product, choose the subcategory and flavor, and pick your portion size. The exact official rate from our menu will be calculated instantly!
           </p>
@@ -365,8 +368,9 @@ Looking forward to your confirmation and payment details! Thank you.`;
                   <label className="block text-xs uppercase font-bold tracking-wider text-brand-espresso">
                     4. Portion / Size &amp; Official Price
                   </label>
-                  <span className="font-mono text-xs font-bold text-brand-caramel bg-brand-linen px-2 py-0.5 rounded-md border border-brand-stone/40">
-                    Price: ₹{calculatedBasePrice}
+                  <span className="font-mono text-xs font-bold text-brand-caramel bg-brand-linen px-2.5 py-0.5 rounded-md border border-brand-stone/40 inline-flex items-center gap-1">
+                    <span>Price:</span>
+                    <AnimatedPrice value={calculatedBasePrice} className="font-bold text-brand-caramel" />
                   </span>
                 </div>
                 
@@ -520,14 +524,16 @@ Looking forward to your confirmation and payment details! Thank you.`;
             <div className="bg-brand-espresso text-brand-cream rounded-3xl p-5 sm:p-8 space-y-5 sm:space-y-6 shadow-2xl relative overflow-hidden border border-brand-stone/30">
               <div className="absolute top-0 left-0 right-0 h-1 bg-brand-gold" />
               
-              {/* Flavor Photo Thumbnail Preview */}
+              {/* Flavor Photo Thumbnail Preview with Parallax */}
               <div className="relative h-44 rounded-2xl overflow-hidden bg-brand-stone/40 border border-brand-cream/10">
-                <SafeImage
+                <ParallaxImage
                   src={getActivePreviewImage()}
                   alt="Flavor preview"
+                  offset={14}
+                  scale={1.12}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/85 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/85 via-transparent to-transparent pointer-events-none" />
                 <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
                   <span className="text-sm font-serif font-bold text-brand-cream">
                     {selectedFlavor ? selectedFlavor.split(" (")[0] : category.toUpperCase()}
@@ -553,7 +559,7 @@ Looking forward to your confirmation and payment details! Thank you.`;
                       {selectedFlavor ? selectedFlavor.split(" (")[0] : "None Selected"}
                     </span>
                   </div>
-                  <span className="font-mono text-sm text-brand-gold font-bold">₹{calculatedBasePrice}</span>
+                  <AnimatedPrice value={calculatedBasePrice} className="text-sm text-brand-gold font-bold" />
                 </div>
 
                 <div className="flex justify-between items-center pb-2 border-b border-brand-cream/5">
@@ -591,9 +597,7 @@ Looking forward to your confirmation and payment details! Thank you.`;
                   <span className="block text-xs uppercase font-semibold tracking-wider text-brand-gold">Total Estimated Price</span>
                   <span className="text-[10px] text-brand-cream/40">*Excluding custom decorations</span>
                 </div>
-                <span className="font-mono text-3xl font-bold text-brand-gold">
-                  ₹{grandTotalEstimate}
-                </span>
+                <AnimatedPrice value={grandTotalEstimate} className="text-3xl font-bold text-brand-gold" />
               </div>
 
               {/* Quality assurance bullets */}

@@ -5,6 +5,8 @@ import { MenuItem } from "../types";
 import { motion, AnimatePresence } from "motion/react";
 import { BelakuLogoSymbol } from "./BelakuLogo";
 import { SafeImage } from "./SafeImage";
+import { ParallaxImage } from "./ParallaxImage";
+import { MaskHeading, ClipPathReveal, StaggerCard } from "./RevealEffects";
 
 interface MenuProps {
   onSelectItemForCustomOrder: (item: MenuItem) => void;
@@ -101,9 +103,9 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
             <Sparkles className="w-3.5 h-3.5 text-brand-caramel fill-brand-caramel/25" />
             <span>Official Price Catalog</span>
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-espresso tracking-tight leading-tight">
+          <MaskHeading className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-espresso tracking-tight leading-tight">
             Our Freshly Baked Menu
-          </h2>
+          </MaskHeading>
           <p className="font-sans text-brand-espresso/70 text-sm sm:text-base font-light leading-relaxed">
             Browse our delightful creations as a premium Card Album, or switch to the Booklet View to flip through pages styled exactly after our official brand menu sheets. Each slice, bite, and savory bun is freshly baked on receipt.
           </p>
@@ -333,68 +335,81 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                 </div>
               </div>
 
-              {/* Grid cards */}
+              {/* Grid cards with Staggered Cascading Reveals */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredItems.map((item) => (
-                  <motion.div
-                    key={item.id}
-                    layoutId={`menu-card-${item.id}`}
-                    onClick={() => handleOpenItemModal(item)}
-                    className="group flex flex-col h-full bg-brand-linen/20 rounded-2xl overflow-hidden border border-brand-stone/40 luxury-card-hover cursor-pointer text-left"
-                  >
-                    <div className="relative aspect-4/3 overflow-hidden bg-brand-stone">
-                      <SafeImage
-                        src={item.image}
-                        alt={item.name}
-                        className="w-full h-full object-cover select-none group-hover:scale-105 duration-700 transition-transform"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/45 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      
-                      <span className="absolute top-3 left-3 bg-brand-cream/95 backdrop-blur-md text-[10px] text-brand-caramel tracking-wider font-bold uppercase py-1 px-2.5 rounded-full border border-brand-stone/40">
-                        {item.category}
-                      </span>
-
-                      {item.customizable && (
-                        <span className="absolute top-3 right-3 bg-brand-espresso/95 text-brand-gold text-[10px] tracking-wider font-bold uppercase py-1 px-2.5 rounded-full flex items-center space-x-1 border border-brand-stone/25">
-                          <Star className="w-3 h-3 text-brand-gold fill-brand-gold" />
-                          <span>Customizable</span>
+                {filteredItems.map((item, idx) => (
+                  <StaggerCard key={item.id} index={idx} className="h-full">
+                    <motion.div
+                      layoutId={`menu-card-${item.id}`}
+                      onClick={() => handleOpenItemModal(item)}
+                      whileHover={{ y: -6, transition: { duration: 0.3, ease: "easeOut" } }}
+                      className="group flex flex-col h-full bg-brand-linen/25 rounded-2xl overflow-hidden border border-brand-stone/40 hover:border-brand-caramel/50 hover:shadow-xl transition-all duration-300 cursor-pointer text-left relative"
+                    >
+                      {/* Step 1 & Step 3: Image with Zoom and Hover Overlay */}
+                      <div className="relative aspect-4/3 overflow-hidden bg-brand-stone">
+                        <ParallaxImage
+                          src={item.image}
+                          alt={item.name}
+                          offset={16}
+                          scale={1.12}
+                          className="select-none group-hover:scale-105 duration-700 transition-transform"
+                        />
+                        
+                        {/* Step 3: Hover Overlay with animated "View details →" pill */}
+                        <div className="absolute inset-0 bg-brand-espresso/35 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center pointer-events-none backdrop-blur-[1px]">
+                          <div className="transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300 bg-brand-cream/95 text-brand-espresso px-4 py-2 rounded-full text-xs font-serif font-bold tracking-wider shadow-lg border border-brand-stone/60 flex items-center space-x-2">
+                            <span>View details</span>
+                            {/* Step 4: Move arrow slightly to the right */}
+                            <ArrowRight className="w-3.5 h-3.5 text-brand-caramel transform group-hover:translate-x-1 transition-transform duration-300" />
+                          </div>
+                        </div>
+                        
+                        <span className="absolute top-3 left-3 bg-brand-cream/95 backdrop-blur-md text-[10px] text-brand-caramel tracking-wider font-bold uppercase py-1 px-2.5 rounded-full border border-brand-stone/40">
+                          {item.category}
                         </span>
-                      )}
-                    </div>
 
-                    <div className="p-6 flex flex-col flex-grow space-y-3">
-                      <div className="flex justify-between items-start gap-4">
-                        <h3 className="font-serif text-lg font-bold text-brand-espresso group-hover:text-brand-caramel transition-colors leading-tight">
-                          {item.name}
-                        </h3>
-                        <span className="font-sans text-sm font-bold text-brand-caramel whitespace-nowrap bg-brand-cream/80 border border-brand-stone/20 py-0.5 px-2 rounded-md">
-                          {item.priceEstimate}
-                        </span>
-                      </div>
-
-                      <p className="text-xs text-brand-espresso/70 leading-relaxed font-light line-clamp-2 h-9">
-                        {item.description}
-                      </p>
-
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {item.tags.map((tag) => (
-                          <span key={tag} className="text-[10px] font-sans font-medium text-brand-espresso/60 bg-brand-linen py-0.5 px-2 rounded-md border border-brand-stone/10">
-                            {tag}
+                        {item.customizable && (
+                          <span className="absolute top-3 right-3 bg-brand-espresso/95 text-brand-gold text-[10px] tracking-wider font-bold uppercase py-1 px-2.5 rounded-full flex items-center space-x-1 border border-brand-stone/25">
+                            <Star className="w-3 h-3 text-brand-gold fill-brand-gold" />
+                            <span>Customizable</span>
                           </span>
-                        ))}
+                        )}
                       </div>
 
-                      <div className="flex justify-between items-center pt-3 border-t border-brand-stone/20 mt-auto">
-                        <span className="inline-flex items-center text-[10px] sm:text-[11px] text-brand-espresso/50 font-mono">
-                          {item.subcategories ? "3 Cuts Available" : `${item.flavors?.length || 1} Flavor Choices`}
-                        </span>
-                        <span className="text-xs font-sans font-semibold text-brand-caramel flex items-center space-x-1 group-hover:underline">
-                          <span>View Details &amp; Photos</span>
-                          <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                        </span>
+                      <div className="p-6 flex flex-col flex-grow space-y-3">
+                        <div className="flex justify-between items-start gap-4">
+                          <h3 className="font-serif text-lg font-bold text-brand-espresso group-hover:text-brand-caramel transition-colors leading-tight">
+                            {item.name}
+                          </h3>
+                          <span className="font-sans text-sm font-bold text-brand-caramel whitespace-nowrap bg-brand-cream/80 border border-brand-stone/20 py-0.5 px-2 rounded-md">
+                            {item.priceEstimate}
+                          </span>
+                        </div>
+
+                        <p className="text-xs text-brand-espresso/70 leading-relaxed font-light line-clamp-2 h-9">
+                          {item.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {item.tags.map((tag) => (
+                            <span key={tag} className="text-[10px] font-sans font-medium text-brand-espresso/60 bg-brand-linen py-0.5 px-2 rounded-md border border-brand-stone/10">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="flex justify-between items-center pt-3 border-t border-brand-stone/20 mt-auto">
+                          <span className="inline-flex items-center text-[10px] sm:text-[11px] text-brand-espresso/50 font-mono">
+                            {item.subcategories ? "3 Cuts Available" : `${item.flavors?.length || 1} Flavor Choices`}
+                          </span>
+                          <span className="text-xs font-sans font-semibold text-brand-caramel flex items-center space-x-1 group-hover:text-brand-espresso transition-colors">
+                            <span>View Details &amp; Photos</span>
+                            <ArrowUpRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform duration-300" />
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
+                    </motion.div>
+                  </StaggerCard>
                 ))}
               </div>
 

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Instagram, Heart, MessageCircle, ExternalLink, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 import { SafeImage } from "./SafeImage";
+import { ParallaxImage } from "./ParallaxImage";
+import { MaskHeading, StaggerCard } from "./RevealEffects";
 
 const INSTAGRAM_POSTS = [
   {
@@ -72,10 +74,10 @@ export default function InstagramShowcase() {
               <Instagram className="w-3.5 h-3.5 text-[#4d2c19]" />
               <span>Behind The Scenes</span>
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-espresso tracking-tight leading-tight">
-              Glance At Our Daily Bake Story <br />
-              <span className="text-brand-caramel italic font-normal">on Instagram</span>
-            </h2>
+            <MaskHeading className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-espresso tracking-tight leading-tight">
+              <span>Glance At Our Daily Bake Story</span>
+              <span className="text-brand-caramel italic font-normal block mt-1">on Instagram</span>
+            </MaskHeading>
             <p className="text-xs sm:text-sm text-brand-espresso/80 font-light leading-relaxed max-w-lg">
               We post fresh custom bakes, festive limited menus, and crusty baking logs straight from our Hennur cloud kitchen workspace. Come say hello!
             </p>
@@ -95,31 +97,29 @@ export default function InstagramShowcase() {
           </div>
         </div>
 
-        {/* Visual Instagram Feed Grid */}
+        {/* Visual Instagram Feed Grid with Staggered Cascades */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {INSTAGRAM_POSTS.map((post) => (
-            <motion.a
-              key={post.id}
-              href="https://www.instagram.com/belaku_bakes/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative aspect-square rounded-2xl overflow-hidden bg-brand-stone cursor-pointer group border border-brand-stone/40 block shadow-sm hover:shadow-md transition-shadow"
-              onMouseEnter={() => setHoveredId(post.id)}
-              onMouseLeave={() => setHoveredId(null)}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5 }}
-            >
-              {/* Image */}
-              <SafeImage
+          {INSTAGRAM_POSTS.map((post, idx) => (
+            <StaggerCard key={post.id} index={idx} className="h-full">
+              <motion.a
+                href="https://www.instagram.com/belaku_bakes/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative aspect-square rounded-2xl overflow-hidden bg-brand-stone cursor-pointer group border border-brand-stone/40 block shadow-sm hover:shadow-md transition-shadow"
+                onMouseEnter={() => setHoveredId(post.id)}
+                onMouseLeave={() => setHoveredId(null)}
+              >
+              {/* Parallax Image */}
+              <ParallaxImage
                 src={post.imgUrl}
                 alt={post.alt}
+                offset={15}
+                scale={1.12}
                 className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
               />
 
               {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-brand-espresso/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 text-brand-cream">
+              <div className="absolute inset-0 bg-brand-espresso/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 text-brand-cream pointer-events-none">
                 
                 {/* Category tag */}
                 <div className="text-left">
@@ -148,8 +148,9 @@ export default function InstagramShowcase() {
 
               </div>
             </motion.a>
-          ))}
-        </div>
+          </StaggerCard>
+        ))}
+      </div>
 
         {/* Small Bottom Quote banner */}
         <div className="mt-8 text-center bg-brand-linen/60 rounded-2xl border border-brand-stone/40 p-4 max-w-md mx-auto">

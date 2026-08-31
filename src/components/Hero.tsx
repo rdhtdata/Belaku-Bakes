@@ -1,5 +1,6 @@
+import { useRef } from "react";
 import { ArrowRight, Sparkles, Sliders, MapPin } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { BelakuLogoSymbol } from "./BelakuLogo";
 import { SafeImage } from "./SafeImage";
 
@@ -8,6 +9,12 @@ interface HeroProps {
 }
 
 export default function Hero({ onScrollToSection }: HeroProps) {
+  const heroImageContainerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroImageContainerRef,
+    offset: ["start start", "end start"],
+  });
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [0, 40]);
   return (
     <section
       id="hero"
@@ -137,18 +144,21 @@ export default function Hero({ onScrollToSection }: HeroProps) {
             {/* Background styled border offset */}
             <div className="absolute top-[12px] left-[12px] right-[-12px] bottom-[-12px] sm:top-[20px] sm:left-[20px] sm:right-[-20px] sm:bottom-[-20px] rounded-2xl border-2 border-brand-stone/60 pointer-events-none" />
 
-            {/* 0.7s - 1.9s: Hero Image Scales In from 1.08 to 1 over 1.2s */}
+            {/* 0.7s - 1.9s: Hero Image Scales In from 1.08 to 1 over 1.2s + Parallax */}
             <motion.div
+              ref={heroImageContainerRef}
               initial={{ scale: 1.08, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1.2, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className="absolute inset-0 rounded-2xl overflow-hidden shadow-xl"
             >
-              <SafeImage
-                src="menu-images/cakes/featured bake.jpg"
-                alt="Belaku Bakes featured celebration cake"
-                className="w-full h-full object-cover select-none scale-102 hover:scale-105 duration-700 transition-transform"
-              />
+              <motion.div style={{ y: parallaxY }} className="w-full h-full scale-110 will-change-transform">
+                <SafeImage
+                  src="menu-images/cakes/featured bake.jpg"
+                  alt="Belaku Bakes featured celebration cake"
+                  className="w-full h-full object-cover select-none scale-102 hover:scale-105 duration-700 transition-transform"
+                />
+              </motion.div>
               <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/50 via-transparent to-transparent pointer-events-none" />
             </motion.div>
 

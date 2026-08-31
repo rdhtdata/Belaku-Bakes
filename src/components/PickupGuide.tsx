@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MapPin, Copy, Check, ExternalLink, Clock, Compass, ShieldCheck } from "lucide-react";
 import { CONTACT_INFO } from "../data";
+import { MaskHeading } from "./RevealEffects";
 
 export default function PickupGuide() {
   const [copied, setCopied] = useState(false);
@@ -24,10 +25,10 @@ export default function PickupGuide() {
             <MapPin className="w-3.5 h-3.5 text-brand-caramel" />
             <span>Our Location</span>
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-espresso tracking-tight leading-tight">
-            Find Our Kitchen <br />
-            <span className="text-brand-caramel italic font-normal">in the heart of Hennur</span>
-          </h2>
+          <MaskHeading className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-espresso tracking-tight leading-tight">
+            <span>Find Our Kitchen</span>
+            <span className="text-brand-caramel italic font-normal block mt-1">in the heart of Hennur</span>
+          </MaskHeading>
         </div>
 
         {/* Layout Grid */}

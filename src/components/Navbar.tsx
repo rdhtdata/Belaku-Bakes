@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Sparkles, Menu, X, Clock, UtensilsCrossed, Instagram } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useScroll, useSpring } from "motion/react";
 import { BelakuLogoFull } from "./BelakuLogo";
 
 interface NavbarProps {
@@ -19,11 +19,20 @@ export default function Navbar({
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Smooth scroll progress indicator
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 80);
     };
-    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -44,10 +53,10 @@ export default function Navbar({
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className={`sticky top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+      className={`sticky top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
         isScrolled
-          ? "bg-brand-cream/95 backdrop-blur-md border-b border-brand-stone/50 shadow-xs"
-          : "bg-brand-cream border-b border-brand-stone/30"
+          ? "bg-brand-cream/95 backdrop-blur-md border-b border-brand-stone/60 shadow-sm"
+          : "bg-brand-cream/40 backdrop-blur-xs border-b border-transparent"
       }`}
     >
         {/* Top Welcome Notification Bar (Embedded in flow, never overlapping headlines) */}
@@ -87,14 +96,20 @@ export default function Navbar({
           )}
         </AnimatePresence>
 
-        {/* Main Nav Bar */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-3.5 flex justify-between items-center">
+        {/* Main Nav Bar with Dynamic Height on Scroll */}
+        <div
+          className={`max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center transition-all duration-500 ease-out ${
+            isScrolled ? "py-2 sm:py-2.5" : "py-4 sm:py-5"
+          }`}
+        >
           {/* Logo Brand area */}
           <button
             onClick={() => handleItemClick("hero")}
-            className="group flex items-center text-left cursor-pointer focus:outline-hidden"
+            className="group flex items-center text-left cursor-pointer focus:outline-hidden transition-transform duration-500 ease-out"
           >
-            <BelakuLogoFull size={42} />
+            <div className={`transition-transform duration-500 origin-left ${isScrolled ? "scale-90" : "scale-100"}`}>
+              <BelakuLogoFull size={42} />
+            </div>
           </button>
 
           {/* Desktop Navigation Links */}
@@ -219,6 +234,12 @@ export default function Navbar({
           )}
         </AnimatePresence>
       </div>
+
+      {/* Editorial Brown Scroll Progress Indicator Line */}
+      <motion.div
+        style={{ scaleX }}
+        className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#4d2c19] origin-left z-50 pointer-events-none shadow-xs"
+      />
     </motion.header>
   );
 }
