@@ -234,10 +234,10 @@ Hello Vaishnavi, I would love to place a gourmet custom request from the Belaku 
 "${specialInstructions || "No additional notes. Please bake with utmost care!"}"
 
 *💰 ESTIMATED TOTAL:*
-- Base Rate from Menu: ₹${calculatedBasePrice}
-${calculatedEgglessAddon > 0 ? `- Eggless Modifier: +₹${calculatedEgglessAddon}\n` : ""}- Total Estimate: *₹${grandTotalEstimate}* (Subject to additional custom art decor)
+- Base Price: ₹${calculatedBasePrice}
+${calculatedEgglessAddon > 0 ? `- 100% Pure Eggless Sponge: +₹${calculatedEgglessAddon}\n` : ""}- Total Estimate: *₹${grandTotalEstimate}* (Subject to additional custom art decor)
 
-Looking forward to your confirmation and payment coordinates! Thank you.`;
+Looking forward to your confirmation and payment details! Thank you.`;
 
     const encodedMessage = encodeURIComponent(messageTemplate);
     const cleanNumber = CONTACT_INFO.whatsappNumber.replace(/[^0-9]/g, "");
@@ -259,7 +259,7 @@ Looking forward to your confirmation and payment coordinates! Thank you.`;
         <div className="text-center max-w-2xl mx-auto space-y-4 mb-16">
           <span className="inline-flex items-center space-x-2 text-xs uppercase tracking-widest text-brand-caramel font-bold">
             <Sliders className="w-3.5 h-3.5 text-brand-caramel" />
-            <span>Direct WhatsApp Order Configurator</span>
+            <span>Bespoke WhatsApp Order Request</span>
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-espresso tracking-tight">
             Order Custom Delicacies
@@ -366,7 +366,7 @@ Looking forward to your confirmation and payment coordinates! Thank you.`;
                     4. Portion / Size &amp; Official Price
                   </label>
                   <span className="font-mono text-xs font-bold text-brand-caramel bg-brand-linen px-2 py-0.5 rounded-md border border-brand-stone/40">
-                    Live Rate: ₹{calculatedBasePrice}
+                    Price: ₹{calculatedBasePrice}
                   </span>
                 </div>
                 
@@ -539,9 +539,9 @@ Looking forward to your confirmation and payment coordinates! Thank you.`;
               </div>
 
               <div className="space-y-1 border-b border-brand-cream/10 pb-4 text-left">
-                <span className="text-[10px] uppercase font-bold tracking-widest text-brand-gold block">Official Price Breakdown</span>
-                <h3 className="font-serif text-xl font-bold">Calculation Sheet</h3>
-                <span className="text-xs text-brand-cream/60 block font-light">Freshly calculated for your selection</span>
+                <span className="text-[10px] uppercase font-bold tracking-widest text-brand-gold block">Estimated Price Summary</span>
+                <h3 className="font-serif text-xl font-bold">Your Order Summary</h3>
+                <span className="text-xs text-brand-cream/60 block font-light">Freshly crafted for your custom selection</span>
               </div>
 
               {/* Ledger list */}

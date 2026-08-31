@@ -245,12 +245,12 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                   </table>
                 </div>
 
-                {/* Bottom interactive config prompt callouts */}
+                {/* Bottom easy order prompt callouts */}
                 <div className="pt-4 sm:pt-6 border-t border-[#4d2c19]/20 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 relative z-10">
                   <div className="text-left space-y-0.5">
-                    <span className="block text-[10px] uppercase font-bold tracking-wider text-[#4d2c19]">Interactive Feature</span>
+                    <span className="block text-[10px] uppercase font-bold tracking-wider text-[#4d2c19]">Easy WhatsApp Ordering</span>
                     <p className="text-[11px] text-brand-espresso/70 font-light">
-                      Click any row to configure its parameters and request directly on WhatsApp!
+                      Tap any bake to choose your flavor, portion size, and send your request directly to WhatsApp!
                     </p>
                   </div>
 
@@ -558,7 +558,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                     {selectedItem.sizes && selectedItem.sizes.length > 0 && (
                       <div className="pt-2">
                         <span className="block text-[11px] text-brand-espresso/70 tracking-tight font-semibold">
-                          Available Dimension Options:
+                          Available Sizes &amp; Portions:
                         </span>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {selectedItem.sizes.map((sz) => (
@@ -577,7 +577,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                       onClick={() => handleCustomOrderRequest(selectedItem)}
                       className="w-full py-3 bg-brand-espresso text-brand-cream hover:bg-brand-caramel hover:text-brand-espresso rounded-xl text-xs uppercase tracking-wider font-semibold transition-all duration-300 flex items-center justify-center space-x-2 cursor-pointer shadow-md"
                     >
-                      <span>Configure in Custom Form</span>
+                      <span>Customize &amp; Order</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </button>
 
