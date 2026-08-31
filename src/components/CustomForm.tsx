@@ -604,7 +604,7 @@ Looking forward to your confirmation and payment details! Thank you.`;
                 </div>
                 <div className="flex items-start space-x-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-brand-gold mt-1 shrink-0" />
-                  <p>Baked fresh on order; pure dairy butter and Belgian chocolate couverture.</p>
+                  <p>Baked fresh on order.</p>
                 </div>
               </div>
             </div>
