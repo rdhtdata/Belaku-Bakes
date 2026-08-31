@@ -11,7 +11,7 @@ function devHtmlPlugin(): Plugin {
       return html
         .replace(
           /<script type="module" crossorigin src=".*?assets\/index\.js"><\/script>/g,
-          '<script type="module" src="/src/main.tsx"></script>'
+          '<script type="module" src="./src/main.tsx"></script>'
         )
         .replace(
           /<link rel="stylesheet" crossorigin href=".*?assets\/index\.css">/g,

@@ -68,8 +68,8 @@ export default function InstagramShowcase() {
         {/* Header Block */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="text-left space-y-3 max-w-2xl">
-            <span className="inline-flex items-center space-x-2 text-xs uppercase tracking-widest text-[#B5836C] font-bold">
-              <Instagram className="w-3.5 h-3.5 text-[#B5836C]" />
+            <span className="inline-flex items-center space-x-2 text-xs uppercase tracking-widest text-[#4d2c19] font-bold">
+              <Instagram className="w-3.5 h-3.5 text-[#4d2c19]" />
               <span>Behind The Scenes</span>
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-espresso tracking-tight leading-tight">

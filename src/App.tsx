@@ -144,21 +144,21 @@ export default function App() {
               )}
             </div>
 
-            {/* Horizontal Scrolling Card Track: 3 cards visible at once on desktop */}
+            {/* Horizontal Scrolling Card Track: 3 cards visible at once on desktop, peek carousel on mobile */}
             <div
               ref={reviewsContainerRef}
-              className="flex gap-6 overflow-x-auto pb-6 pt-2 scrollbar-none snap-x snap-mandatory scroll-smooth"
+              className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 pt-2 scrollbar-none snap-x snap-mandatory scroll-smooth touch-pan-x"
             >
               {TESTIMONIALS.map((test) => (
                 <div
                   key={test.id}
-                  className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start bg-brand-cream p-8 rounded-3xl border border-brand-stone/50 shadow-sm flex flex-col justify-between text-left group hover:shadow-lg transition-shadow duration-300 min-h-[220px]"
+                  className="w-[85vw] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-center sm:snap-start bg-brand-cream p-5 sm:p-8 rounded-3xl border border-brand-stone/50 shadow-sm flex flex-col justify-between text-left group hover:shadow-lg transition-shadow duration-300 min-h-[200px] sm:min-h-[220px]"
                 >
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {/* Stars bar */}
                     <div className="flex items-center space-x-1">
                       {[...Array(test.rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-brand-gold fill-brand-gold" />
+                        <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-gold fill-brand-gold" />
                       ))}
                     </div>
                     
@@ -167,13 +167,13 @@ export default function App() {
                     </p>
                   </div>
 
-                  <div className="pt-6 mt-6 border-t border-brand-stone/30 flex items-center justify-between">
+                  <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t border-brand-stone/30 flex items-center justify-between">
                     <div>
-                      <span className="block font-serif text-sm font-bold text-brand-espresso">{test.name}</span>
-                      <span className="block text-[10px] text-brand-caramel uppercase tracking-wider font-semibold mt-0.5">{test.role}</span>
+                      <span className="block font-serif text-xs sm:text-sm font-bold text-brand-espresso">{test.name}</span>
+                      <span className="block text-[9px] sm:text-[10px] text-brand-caramel uppercase tracking-wider font-semibold mt-0.5">{test.role}</span>
                     </div>
                     
-                    <span className="text-[10px] uppercase font-mono tracking-widest text-brand-espresso/40">Verified client</span>
+                    <span className="text-[9px] sm:text-[10px] uppercase font-mono tracking-widest text-brand-espresso/40">Verified client</span>
                   </div>
                 </div>
               ))}
@@ -188,12 +188,12 @@ export default function App() {
       </main>
 
       {/* Luxury Footer with Contact layout */}
-      <footer className="bg-brand-espresso text-brand-cream pt-16 pb-12 relative overflow-hidden border-t-2 border-brand-gold/65">
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-12 border-b border-brand-cream/10">
+      <footer className="bg-brand-espresso text-brand-cream pt-14 sm:pt-16 pb-10 sm:pb-12 relative overflow-hidden border-t-2 border-brand-gold/65">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 sm:gap-12 pb-10 sm:pb-12 border-b border-brand-cream/10">
             
             {/* Column 1: Brand details */}
-            <div className="md:col-span-4 text-left space-y-4">
+            <div className="sm:col-span-2 md:col-span-4 text-left space-y-4">
               <span className="font-serif text-2xl tracking-wider font-bold text-brand-caramel block">
                 Belaku Bakes
               </span>
@@ -214,7 +214,7 @@ export default function App() {
             </div>
 
             {/* Column 2: Fast navigation */}
-            <div className="md:col-span-3 text-left space-y-4">
+            <div className="sm:col-span-1 md:col-span-3 text-left space-y-4">
               <span className="text-[11px] uppercase tracking-widest font-bold text-brand-gold block">
                 Fast Navigation
               </span>
@@ -243,7 +243,7 @@ export default function App() {
             </div>
 
             {/* Column 3: Contact & Hours info */}
-            <div className="md:col-span-5 text-left space-y-4">
+            <div className="sm:col-span-1 md:col-span-5 text-left space-y-4">
               <span className="text-[11px] uppercase tracking-widest font-bold text-brand-gold block">
                 Store Location &amp; Inquiries
               </span>

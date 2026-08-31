@@ -26,6 +26,6 @@ export const CONTACT_INFO = {
   instagramUrl: "https://instagram.com/belaku_bakes",
   address: "#11, cmr layout hennur bande opposite KCER Enclave bengaluru 560043",
   mapCoordinateGoogleMaps: "https://maps.app.goo.gl/43RSpB5Yz5DYQuFHA",
-  operatingHours: "10:30 AM - 8:30 PM (Tuesday to Sunday, Closed Mondays)",
-  deliveryNote: "Because we cook out of a dedicated pure artisanal cloud kitchen to guarantee peak freshness, we do not employ a proprietary delivery fleet. We extend full support to help you organize a convenient contactless pickup from our Hennur gate using local courier apps, such as Swiggy Genie, Uber Package/Auto, Porter, or a direct hand-pickup."
+  operatingHours: "10:30 AM - 8:30 PM (Monday to Sunday)",
+  deliveryNote: "Because we cook out of a dedicated pure artisanal cloud kitchen to guarantee peak freshness, we do not employ a proprietary delivery fleet. We extend full support to help you organize a convenient contactless pickup from our Hennur gate using local courier apps, such as Dunzo, Uber, Porter, or a direct hand-pickup."
 };

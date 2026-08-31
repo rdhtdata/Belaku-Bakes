@@ -135,8 +135,9 @@ export const CATEGORY_GALLERY: Record<string, { main: string; gallery: string[];
 // Clean price string to number e.g. "₹1,700" -> 1700
 function parsePrice(val: string): number {
   if (!val) return 0;
-  const cleaned = val.replace(/[^0-9]/g, "");
-  return cleaned ? parseInt(cleaned, 10) : 0;
+  const cleaned = val.replace(/[₹$,\s]/g, "");
+  const num = parseFloat(cleaned);
+  return isNaN(num) ? 0 : Math.round(num);
 }
 
 // Parse CSV text into sections
@@ -296,7 +297,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
     items.push({
       id: "cake-artisanal",
       name: "Artisanal Celebration Cakes",
-      description: "Sponge layers of pure premium cocoa and gourmet fruit gateau baked freshly on order. Stacked with velvet creams and crafted using only pure dairy butter.",
+      description: "Layers of rich premium cocoa, velvety cream, and gourmet fruits, freshly baked to turn every celebration into a deliciously unforgettable moment.",
       priceEstimate: `Starts at ₹${minCake || 750}`,
       category: "cakes",
       image: CATEGORY_GALLERY.cakes.main,
@@ -355,7 +356,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
   items.push({
     id: "brownies-unified",
     name: "Artisanal Belgian Brownies",
-    description: "Our signature Belgian chocolate brownies with crinkle tops and rich fudgy centers. Available in three distinct cuts: Brownie Bites, Medium Slabs, and Large Blocks.",
+    description: "Where premium couverture chocolate meets pure indulgence. Rich, fudgy, and handcrafted to perfection.",
     priceEstimate: `Starts at ₹${minBrownieOverall === 9999 ? 280 : minBrownieOverall}`,
     category: "brownies",
     image: CATEGORY_GALLERY.brownies.main,
@@ -376,7 +377,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
     items.push({
       id: "cheesecake-artisanal",
       name: "Artisanal Cream Cheesecakes",
-      description: "Velvety smooth pure Philadelphia-style cream cheese baked on a crunchy buttery biscuit crust with fresh gourmet fruit and caramel toppings.",
+      description: "Where creamy meets crunchy. A rich, velvety cheesecake on a buttery biscuit crust, crowned with indulgent toppings.",
       priceEstimate: `Starts at ₹${minCheese || 125} (${cheeseSection.sizes[0] || '100g'})`,
       category: "cheesecakes",
       image: CATEGORY_GALLERY.cheesecakes.main,
@@ -448,7 +449,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
       rating: 4.9,
       tags: ["Crispy Shortcrust", "Velvet Ganache", "Boutique"],
       customizable: true,
-      flavors: ["Artisanal Tart"],
+      flavors: tartsSection.rows.map((r) => r.flavor),
       sizes: tartsSection.sizes
     });
   }

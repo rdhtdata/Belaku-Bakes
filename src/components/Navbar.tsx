@@ -40,9 +40,8 @@ export default function Navbar({
   };
 
   return (
-    <>
-      <header
-        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    <header
+      className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
             ? "bg-brand-cream/95 backdrop-blur-md border-b border-brand-stone/50 shadow-xs"
             : "bg-brand-cream border-b border-brand-stone/30"
@@ -145,79 +144,78 @@ export default function Navbar({
             </button>
           </div>
 
-          {/* Mobile Menu Icon */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-            className="md:hidden p-2 text-brand-espresso focus:outline-hidden cursor-pointer rounded-full hover:bg-brand-linen/60"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
-        </div>
-      </header>
+        {/* Mobile Menu Icon */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
+          className="md:hidden p-2.5 text-brand-espresso focus:outline-hidden cursor-pointer rounded-full hover:bg-brand-linen/60 transition-colors"
+        >
+          {isMobileMenuOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <Menu className="w-6 h-6" />
+          )}
+        </button>
 
-      {/* Mobile Menu Drawer */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-x-0 top-[72px] z-40 bg-brand-cream border-b border-brand-stone shadow-lg max-h-screen overflow-y-auto block md:hidden"
-          >
-            <div className="p-6 space-y-6">
-              <nav className="flex flex-col space-y-4">
-                {navItems.map((item) => (
+        {/* Mobile Menu Drawer (Anchored directly under header) */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="absolute top-full left-0 right-0 z-40 bg-brand-cream border-b border-brand-stone shadow-xl max-h-[calc(100vh-80px)] overflow-y-auto block md:hidden"
+            >
+              <div className="p-5 sm:p-6 space-y-6">
+                <nav className="flex flex-col space-y-2">
+                  {navItems.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => handleItemClick(item.id)}
+                      className={`text-left text-lg font-serif py-3 px-2 border-b border-brand-stone/30 focus:outline-hidden cursor-pointer transition-colors ${
+                        activeSection === item.id
+                          ? "text-brand-caramel font-bold bg-brand-linen/40 rounded-lg"
+                          : "text-brand-espresso/85 hover:text-brand-espresso"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </nav>
+
+                <div className="pt-2 flex flex-col space-y-3.5">
                   <button
-                    key={item.id}
-                    onClick={() => handleItemClick(item.id)}
-                    className={`text-left text-lg font-serif py-2.5 border-b border-brand-stone/30 focus:outline-hidden cursor-pointer ${
-                      activeSection === item.id
-                        ? "text-brand-caramel font-semibold"
-                        : "text-brand-espresso/80"
-                    }`}
+                    onClick={() => handleItemClick("custom")}
+                    className="w-full text-center py-3.5 px-4 bg-brand-espresso text-brand-cream hover:bg-brand-caramel rounded-full text-xs uppercase tracking-wider font-bold transition-colors duration-300 cursor-pointer shadow-md"
                   >
-                    {item.label}
+                    Begin Custom Creation
                   </button>
-                ))}
-              </nav>
 
-              <div className="pt-2 flex flex-col space-y-3.5">
-                <button
-                  onClick={() => handleItemClick("custom")}
-                  className="w-full text-center py-3.5 bg-brand-espresso text-brand-cream hover:bg-brand-caramel rounded-full text-sm uppercase tracking-wider font-semibold transition-colors duration-300 cursor-pointer"
-                >
-                  Begin Custom Creation
-                </button>
+                  <a
+                    href="https://www.instagram.com/belaku_bakes/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full text-center py-3 px-4 bg-transparent text-brand-espresso hover:bg-brand-linen rounded-full text-xs uppercase tracking-wider font-bold transition-colors duration-300 cursor-pointer border border-brand-stone/60 inline-flex items-center justify-center space-x-2"
+                  >
+                    <Instagram className="w-4 h-4 text-brand-caramel" />
+                    <span>Follow @belaku_bakes</span>
+                  </a>
 
-                <a
-                  href="https://www.instagram.com/belaku_bakes/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full text-center py-3 bg-transparent text-brand-espresso hover:bg-brand-linen rounded-full text-sm uppercase tracking-wider font-bold transition-colors duration-300 cursor-pointer border border-brand-stone/60 inline-flex items-center justify-center space-x-2"
-                >
-                  <Instagram className="w-4 h-4 text-brand-caramel" />
-                  <span>Follow @belaku_bakes</span>
-                </a>
-
-                <div className="flex items-center justify-between text-xs text-brand-espresso/60 pt-4 border-t border-brand-stone/40">
-                  <span className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5" /> 10:30 AM - 8:30 PM
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <UtensilsCrossed className="w-3.5 h-3.5" /> Cloud Kitchen
-                  </span>
+                  <div className="flex items-center justify-between text-xs text-brand-espresso/70 pt-4 border-t border-brand-stone/40">
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <Clock className="w-3.5 h-3.5 text-brand-caramel" /> 10:30 AM - 8:30 PM
+                    </span>
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <UtensilsCrossed className="w-3.5 h-3.5 text-brand-caramel" /> Cloud Kitchen
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </header>
   );
 }

@@ -17,7 +17,7 @@ export function BelakuLogoSymbol({ className = "", size = 64 }: LogoProps) {
       className={`select-none ${className}`}
     >
       {/* Background soft glow */}
-      <circle cx="60" cy="60" r="50" fill="#FAF6F0" />
+      <circle cx="60" cy="60" r="50" fill="#f6e5d3" />
       
       {/* 2. Symmetrical Pink Leaf Wreath / Laurel (Soft Pink Rose #E39BB0) */}
       <g stroke="#DF8CA3" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -55,7 +55,7 @@ export function BelakuLogoSymbol({ className = "", size = 64 }: LogoProps) {
       <ellipse cx="60" cy="62" rx="20" ry="3" fill="#4E2E25" />
 
       {/* 4. Single Striped Birthday Candle (Cream base with Chocolate Stripes) */}
-      <rect x="58.5" y="44" width="3" height="15" fill="#FAF6F0" rx="1" />
+      <rect x="58.5" y="44" width="3" height="15" fill="#f6e5d3" rx="1" />
       <path d="M58.5 46 L61.5 48 M58.5 50 L61.5 52 M58.5 54 L61.5 56" stroke="#4E2E25" strokeWidth="1" />
 
       {/* Warm Golden Flame (Lit & Burning) */}
@@ -81,7 +81,7 @@ export function BelakuLogoFull({ className = "", size = 48 }: LogoProps) {
       <div className="flex flex-col">
         {/* Styled Typography to mimic the custom handwriting script perfectly */}
         <div className="relative">
-          <span className="block font-serif text-2xl tracking-wide font-bold text-[#9C7C51] flex items-end">
+          <span className="block font-serif text-2xl tracking-wide font-bold text-[#4d2c19] flex items-end">
             Belaku Bakes
             {/* Elegant vector swirling heart trailing from 's' */}
             <svg
@@ -108,7 +108,7 @@ export function BelakuLogoFull({ className = "", size = 48 }: LogoProps) {
           </span>
         </div>
         
-        <span className="block text-[9px] uppercase tracking-widest text-[#38322E]/80 font-bold -mt-0.5">
+        <span className="block text-[9px] uppercase tracking-widest text-[#4d2c19]/80 font-bold -mt-0.5">
           Gourmet Cloud Kitchen • Hennur
         </span>
       </div>

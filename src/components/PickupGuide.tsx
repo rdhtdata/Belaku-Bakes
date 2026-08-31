@@ -34,7 +34,7 @@ export default function PickupGuide() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* Left Panel: Location & Action Details */}
-          <div className="lg:col-span-5 bg-brand-linen rounded-3xl p-8 sm:p-10 border border-brand-stone/60 flex flex-col justify-between space-y-8">
+          <div className="lg:col-span-5 bg-brand-linen rounded-3xl p-6 sm:p-10 border border-brand-stone/60 flex flex-col justify-between space-y-8">
             <div className="space-y-6">
               <div className="space-y-2">
                 <span className="block text-xs uppercase tracking-widest font-bold text-brand-caramel">
@@ -92,7 +92,7 @@ export default function PickupGuide() {
                 <div className="flex items-start space-x-3 text-xs">
                   <Compass className="w-4 h-4 text-brand-caramel shrink-0 mt-0.5" />
                   <p className="text-brand-espresso/85 font-light leading-relaxed">
-                    We do not have a proprietary delivery team. You can pick up your delicacies directly or book a courier (such as <strong className="font-semibold text-brand-espresso">Swiggy Genie, Uber Package/Auto, or Porter courier fleets</strong>) with our gate coordinate as the pickup point!
+                    We do not have a proprietary delivery team. You can pick up your delicacies directly or book a courier (such as <strong className="font-semibold text-brand-espresso">Dunzo, Uber, or Porter courier fleets</strong>) with our coordinate as the pickup point!
                   </p>
                 </div>
               </div>
@@ -102,19 +102,16 @@ export default function PickupGuide() {
             <div className="pt-4 border-t border-brand-stone/40">
               <span className="block text-[10px] uppercase tracking-wider font-bold text-brand-espresso/65 mb-2">Operating Window</span>
               <div className="flex flex-wrap items-center gap-2 text-xs font-sans">
-                <div className="flex items-center space-x-1.5 bg-brand-cream px-3 py-1.5 rounded-full border border-brand-stone/40">
+                <div className="flex items-center space-x-1.5 bg-brand-cream px-3.5 py-1.5 rounded-full border border-brand-stone/40 font-medium">
                   <Clock className="w-3.5 h-3.5 text-brand-caramel" />
-                  <span>Tue-Sun: {CONTACT_INFO.operatingHours.split(" (")[0]}</span>
-                </div>
-                <div className="bg-brand-espresso text-brand-cream px-3 py-1.5 rounded-full text-[10px] uppercase font-bold tracking-wider">
-                  Closed Mondays
+                  <span>Mon-Sun: 10:30 AM - 8:30 PM</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Right Panel: Large Map Section */}
-          <div className="lg:col-span-7 relative rounded-3xl overflow-hidden border border-brand-stone/60 shadow-xl bg-brand-stone min-h-[400px] lg:min-h-[500px] flex">
+          <div className="lg:col-span-7 relative rounded-3xl overflow-hidden border border-brand-stone/60 shadow-xl bg-brand-stone min-h-[320px] sm:min-h-[420px] lg:min-h-[500px] flex">
             <iframe
               title="Interactive Hennur Bande Map Location"
               className="w-full h-full grayscale-20 border-0"

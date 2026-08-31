@@ -12,10 +12,10 @@ export default function About() {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           {/* Left: Beautiful image of artisan baker process */}
-          <div className="lg:col-span-5 relative order-last lg:order-first">
-            <div className="relative w-full aspect-2/3 max-w-[400px] mx-auto">
+          <div className="lg:col-span-5 relative order-last lg:order-first px-2 sm:px-0 mt-6 sm:mt-0">
+            <div className="relative w-full aspect-2/3 max-w-[340px] sm:max-w-[400px] mx-auto">
               {/* Background frame */}
-              <div className="absolute -top-4 -left-4 w-full h-full border border-brand-caramel/40 rounded-xl" />
+              <div className="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-full h-full border border-brand-caramel/40 rounded-xl pointer-events-none" />
               
               {/* Image box */}
               <div className="relative w-full h-full rounded-xl overflow-hidden shadow-lg bg-brand-stone">
@@ -27,11 +27,11 @@ export default function About() {
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/40 via-transparent to-transparent pointer-events-none" />
               </div>
 
-              {/* Quality overlay tag */}
-              <div className="absolute -bottom-6 -right-6 bg-brand-espresso text-brand-cream py-4 px-6 rounded-lg shadow-md max-w-[220px] text-left border border-brand-stone/20">
-                <span className="block font-serif text-lg text-brand-gold font-semibold">100% Honest Bakes</span>
-                <span className="text-[11px] text-brand-cream/80 leading-relaxed block mt-1">
-                  Pure butter, imported Belgian chocolate, organic fruits. Absolutely zero preservatives.
+              {/* Quality overlay pill badge */}
+              <div className="absolute -bottom-3 right-3 sm:-bottom-5 sm:-right-4 bg-brand-espresso text-brand-gold py-2 px-4 sm:py-2.5 sm:px-5 rounded-full shadow-xl border border-brand-stone/30 flex items-center space-x-2 backdrop-blur-xs">
+                <Sparkles className="w-3.5 h-3.5 text-brand-gold shrink-0" />
+                <span className="font-serif text-xs sm:text-sm font-bold tracking-wide whitespace-nowrap">
+                  100% Honest Bakes
                 </span>
               </div>
             </div>

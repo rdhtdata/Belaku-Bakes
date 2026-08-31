@@ -1,5 +1,5 @@
 import { useState, useTransition } from "react";
-import { Star, ArrowUpRight, ArrowLeft, ArrowRight, Sparkles, BookOpen, LayoutGrid, Info, Check } from "lucide-react";
+import { Star, ArrowUpRight, ArrowLeft, ArrowRight, Sparkles, BookOpen, LayoutGrid, Info, Check, X } from "lucide-react";
 import { MENU_ITEMS, BOOK_PAGES } from "../data";
 import { MenuItem } from "../types";
 import { motion, AnimatePresence } from "motion/react";
@@ -97,7 +97,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
         
         {/* Header Title Area */}
         <div className="text-center max-w-2xl mx-auto space-y-4 mb-12">
-          <span className="inline-flex items-center space-x-2 text-xs uppercase tracking-widest text-[#B5836C] font-bold">
+          <span className="inline-flex items-center space-x-2 text-xs uppercase tracking-widest text-[#4d2c19] font-bold">
             <Sparkles className="w-3.5 h-3.5 text-brand-caramel fill-brand-caramel/25" />
             <span>Official Price Catalog</span>
           </span>
@@ -164,61 +164,61 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
               </div>
 
               {/* Master Retro Menu Card Sheet (Matches PDF Booklet precisely) */}
-              <div className="relative bg-[#FAF6F0] rounded-3xl p-6 sm:p-12 shadow-2xl border-4 border-[#DF8CA3]/35 flex flex-col justify-between overflow-hidden min-h-[560px]">
+              <div className="relative bg-[#f6e5d3] rounded-3xl p-4 sm:p-8 lg:p-12 shadow-2xl border-2 sm:border-4 border-[#DF8CA3]/35 flex flex-col justify-between overflow-hidden min-h-[480px] sm:min-h-[560px]">
                 
                 {/* Vintage Double Line Border Accents */}
-                <div className="absolute inset-2 border border-[#38322E]/10 pointer-events-none rounded-2xl" />
-                <div className="absolute inset-4 border-2 border-dashed border-[#DF8CA3]/30 pointer-events-none rounded-xl" />
+                <div className="absolute inset-1.5 sm:inset-2 border border-[#4d2c19]/15 pointer-events-none rounded-2xl" />
+                <div className="absolute inset-3 sm:inset-4 border-2 border-dashed border-[#DF8CA3]/30 pointer-events-none rounded-xl" />
 
                 {/* Corner Pink Floral/Laurel Leaf Vector Graphics Mock (SVG) */}
-                <div className="absolute top-6 left-6 opacity-30 select-none pointer-events-none">
-                  <BelakuLogoSymbol size={44} />
+                <div className="absolute top-3 left-3 sm:top-6 sm:left-6 opacity-20 sm:opacity-30 select-none pointer-events-none">
+                  <BelakuLogoSymbol size={36} />
                 </div>
-                <div className="absolute bottom-6 right-6 opacity-30 select-none pointer-events-none transform rotate-180">
-                  <BelakuLogoSymbol size={44} />
+                <div className="absolute bottom-3 right-3 sm:bottom-6 sm:right-6 opacity-20 sm:opacity-30 select-none pointer-events-none transform rotate-180">
+                  <BelakuLogoSymbol size={36} />
                 </div>
 
                 {/* Card Sheet Header */}
-                <div className="text-center relative z-10 space-y-1.5 pb-6 border-b border-[#38322E]/15">
-                  <div className="flex items-center justify-center space-x-1.5 text-xs text-[#38322E] tracking-widest uppercase font-bold">
+                <div className="text-center relative z-10 space-y-1.5 pb-4 sm:pb-6 border-b border-[#4d2c19]/20">
+                  <div className="flex items-center justify-center space-x-1.5 text-xs text-[#4d2c19] tracking-widest uppercase font-bold">
                     <Star className="w-3.5 h-3.5 fill-brand-caramel text-brand-caramel" />
                     <span className="text-brand-caramel font-bold">Belaku Bakes</span>
                     <Star className="w-3.5 h-3.5 fill-brand-caramel text-brand-caramel" />
                   </div>
                   
-                  <h3 className="font-serif text-2xl sm:text-3.5xl font-extrabold text-[#38322E] tracking-tight py-1">
+                  <h3 className="font-serif text-xl sm:text-2xl lg:text-3.5xl font-extrabold text-[#4d2c19] tracking-tight py-1">
                     {currentBookPage.title}
                   </h3>
                   
-                  <p className="text-xs text-[#8D5B4C] font-sans italic tracking-wide max-w-md mx-auto">
+                  <p className="text-xs text-[#4d2c19]/80 font-sans italic tracking-wide max-w-md mx-auto px-2">
                     {currentBookPage.tagline}
                   </p>
                 </div>
 
-                {/* Printable Menu Table Listing */}
-                <div className="my-8 relative z-10 overflow-x-auto">
-                  <table className="w-full text-left font-sans text-xs">
+                {/* Printable Menu Table Listing (with horizontal swipe on narrow phones) */}
+                <div className="my-6 sm:my-8 relative z-10 overflow-x-auto scrollbar-thin touch-pan-x">
+                  <table className="w-full text-left font-sans text-xs min-w-[420px] sm:min-w-full">
                     <thead>
-                      <tr className="border-b border-[#38322E]/15 text-[#38322E] font-bold text-[11px] uppercase tracking-wider">
+                      <tr className="border-b border-[#4d2c19]/20 text-[#4d2c19] font-bold text-[11px] uppercase tracking-wider">
                         {currentBookPage.columns.map((col: string, cIdx: number) => (
-                          <th key={cIdx} className={`py-2.5 px-4 first:pl-2 font-black ${cIdx === currentBookPage.columns.length - 1 ? "last:text-right" : ""}`}>
+                          <th key={cIdx} className={`py-2.5 px-3 sm:px-4 first:pl-2 font-black ${cIdx === currentBookPage.columns.length - 1 ? "last:text-right" : ""}`}>
                             {col}
                           </th>
                         ))}
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#38322E]/5 text-brand-espresso/90">
+                    <tbody className="divide-y divide-[#4d2c19]/10 text-brand-espresso/90">
                       {currentBookPage.rows.map((row: any, rIdx: number) => (
                         <tr
                           key={rIdx}
                           onClick={() => handleDirectSelectBake(currentBookPage.category)}
-                          className="hover:bg-[#EAE1D4]/40 transition-colors group/row cursor-pointer"
+                          className="hover:bg-[#ebd5c1]/60 transition-colors group/row cursor-pointer"
                         >
                           {/* Col 1: Name */}
-                          <td className="py-3 px-4 pl-2 font-medium">
+                          <td className="py-2.5 sm:py-3 px-3 sm:px-4 pl-2 font-medium">
                             <span className="flex items-center space-x-1.5">
                               <span className="w-1.5 h-1.5 rounded-full bg-[#DF8CA3] opacity-40 shrink-0" />
-                              <span className="group-hover/row:text-brand-caramel transition-colors font-serif text-sm font-bold text-[#38322E]">
+                              <span className="group-hover/row:text-brand-caramel transition-colors font-serif text-xs sm:text-sm font-bold text-[#4d2c19]">
                                 {row.name}
                               </span>
                             </span>
@@ -229,13 +229,13 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                             currentBookPage.sizes.map((sz: string, sIdx: number) => (
                               <td
                                 key={sz}
-                                className={`py-3 px-4 text-[#8D5B4C] font-mono font-medium ${sIdx === currentBookPage.sizes.length - 1 ? "text-right" : ""}`}
+                                className={`py-2.5 sm:py-3 px-3 sm:px-4 text-[#4d2c19] font-mono text-xs font-medium ${sIdx === currentBookPage.sizes.length - 1 ? "text-right" : ""}`}
                               >
                                 {row[sz] || "-"}
                               </td>
                             ))
                           ) : (
-                            <td className="py-3 px-4 text-[#8D5B4C] font-mono font-medium text-right">
+                            <td className="py-2.5 sm:py-3 px-3 sm:px-4 text-[#4d2c19] font-mono text-xs font-medium text-right">
                               {row.price || "-"}
                             </td>
                           )}
@@ -246,9 +246,9 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                 </div>
 
                 {/* Bottom interactive config prompt callouts */}
-                <div className="pt-6 border-t border-[#38322E]/15 flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
+                <div className="pt-4 sm:pt-6 border-t border-[#4d2c19]/20 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 relative z-10">
                   <div className="text-left space-y-0.5">
-                    <span className="block text-[10px] uppercase font-bold tracking-wider text-[#B5836C]">Interactive Feature</span>
+                    <span className="block text-[10px] uppercase font-bold tracking-wider text-[#4d2c19]">Interactive Feature</span>
                     <p className="text-[11px] text-brand-espresso/70 font-light">
                       Click any row to configure its parameters and request directly on WhatsApp!
                     </p>
@@ -256,7 +256,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
 
                   <button
                     onClick={() => handleDirectSelectBake(currentBookPage.category)}
-                    className="py-3 px-6 bg-brand-espresso text-brand-cream hover:bg-brand-caramel hover:text-brand-espresso rounded-xl text-xs uppercase font-bold tracking-widest transition-all shadow-md inline-flex items-center space-x-2 cursor-pointer"
+                    className="w-full sm:w-auto py-2.5 sm:py-3 px-5 sm:px-6 bg-brand-espresso text-brand-cream hover:bg-brand-caramel hover:text-brand-espresso rounded-xl text-xs uppercase font-bold tracking-widest transition-all shadow-md inline-flex items-center justify-center space-x-2 cursor-pointer shrink-0"
                   >
                     <span>Request Custom {currentBookPage.title}</span>
                     <ArrowUpRight className="w-4 h-4" />
@@ -414,13 +414,13 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
       {/* Detail Modal Component with Interactive Image Gallery & Flavor Selector */}
       <AnimatePresence>
         {selectedItem && (
-          <div className="fixed inset-0 z-55 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedItem(null)}
-              className="absolute inset-0 bg-brand-espresso/45 backdrop-blur-sm"
+              className="absolute inset-0 bg-brand-espresso/50 backdrop-blur-xs"
             />
 
             <motion.div
@@ -430,6 +430,15 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
               transition={{ type: "spring", duration: 0.5 }}
               className="relative w-full max-w-3xl bg-brand-cream rounded-3xl overflow-hidden shadow-2xl border border-brand-stone z-10 flex flex-col max-h-[90vh] overflow-y-auto"
             >
+              {/* Explicit Floating Close Button */}
+              <button
+                onClick={() => setSelectedItem(null)}
+                aria-label="Close modal"
+                className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 w-8 h-8 rounded-full bg-brand-cream/90 hover:bg-brand-cream text-brand-espresso flex items-center justify-center shadow-md border border-brand-stone/60 cursor-pointer transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
               <div className="grid grid-cols-1 sm:grid-cols-12 items-stretch">
                 
                 {/* Image Section with Gallery */}
@@ -449,13 +458,13 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                       <span className="block text-[9px] uppercase tracking-wider font-bold text-brand-espresso/60 mb-2 text-left">
                         Category Gallery ({selectedItem.galleryImages.length} Photos)
                       </span>
-                      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+                      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none touch-pan-x">
                         {selectedItem.galleryImages.map((imgSrc, idx) => (
                           <button
                             key={idx}
                             type="button"
                             onClick={() => setActiveModalImage(imgSrc)}
-                            className={`relative w-12 h-12 rounded-lg overflow-hidden shrink-0 border-2 cursor-pointer transition-all ${
+                            className={`relative w-11 h-11 sm:w-12 sm:h-12 rounded-lg overflow-hidden shrink-0 border-2 cursor-pointer transition-all ${
                               activeModalImage === imgSrc
                                 ? "border-brand-caramel scale-105 shadow-sm"
                                 : "border-transparent opacity-70 hover:opacity-100"
@@ -470,9 +479,9 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                 </div>
 
                 {/* Information and Options Panel */}
-                <div className="sm:col-span-7 p-6 sm:p-8 flex flex-col justify-between text-left space-y-6">
+                <div className="sm:col-span-7 p-5 sm:p-8 flex flex-col justify-between text-left space-y-6">
                   <div className="space-y-4">
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start pr-8 sm:pr-0">
                       <span className="bg-brand-linen text-brand-caramel text-[9px] uppercase tracking-wider font-bold py-1 px-2.5 rounded-full border border-brand-stone/40 inline-block">
                         {selectedItem.category}
                       </span>

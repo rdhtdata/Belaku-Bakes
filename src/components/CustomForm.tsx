@@ -270,12 +270,12 @@ Looking forward to your confirmation and payment coordinates! Thank you.`;
         </div>
 
         {/* Builder Container Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           
           {/* Left Side: Interactive Configuration Form */}
-          <div className="lg:col-span-7 bg-brand-cream rounded-3xl p-6 sm:p-10 border border-brand-stone shadow-sm">
+          <div className="lg:col-span-7 bg-brand-cream rounded-3xl p-5 sm:p-8 lg:p-10 border border-brand-stone shadow-sm">
             {selectedItem && (
-              <div className="mb-6 bg-brand-linen/60 p-4 rounded-2xl flex items-center justify-between border border-brand-stone/40">
+              <div className="mb-6 bg-brand-linen/60 p-3.5 sm:p-4 rounded-2xl flex items-center justify-between border border-brand-stone/40">
                 <div className="flex items-center space-x-3 text-left">
                   <div className="w-12 h-12 rounded-xl overflow-hidden bg-brand-stone shrink-0">
                     <SafeImage src={selectedItem.image} alt={selectedItem.name} className="w-full h-full object-cover" />
@@ -288,7 +288,7 @@ Looking forward to your confirmation and payment coordinates! Thank you.`;
                 <button
                   type="button"
                   onClick={onClearSelectedItem}
-                  className="text-xs text-brand-espresso/50 hover:text-brand-espresso underline transition-colors cursor-pointer"
+                  className="text-xs text-brand-espresso/60 hover:text-brand-espresso underline transition-colors cursor-pointer"
                 >
                   Change Base
                 </button>
@@ -302,13 +302,13 @@ Looking forward to your confirmation and payment coordinates! Thank you.`;
                 <label className="block text-xs uppercase font-bold tracking-wider text-brand-espresso">
                   1. Choose Product
                 </label>
-                <div className="grid grid-cols-3 sm:grid-cols-7 gap-1.5">
+                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-1.5 sm:gap-2">
                   {["cakes", "brownies", "cheesecakes", "cupcakes", "cookies", "tarts", "savory"].map((cat) => (
                     <button
                       key={cat}
                       type="button"
                       onClick={() => handleCategoryChange(cat)}
-                      className={`py-2 px-1 text-[10px] font-sans font-bold uppercase rounded-lg border text-center cursor-pointer transition-all ${
+                      className={`py-2.5 px-2 text-xs sm:text-[11px] font-sans font-bold uppercase rounded-xl border text-center cursor-pointer transition-all ${
                         category === cat
                           ? "bg-brand-espresso text-brand-cream border-brand-espresso shadow-xs"
                           : "bg-transparent text-brand-espresso border-brand-stone/80 hover:bg-brand-linen"
@@ -516,8 +516,8 @@ Looking forward to your confirmation and payment coordinates! Thank you.`;
           </div>
 
           {/* Right Side: Estimated Bill Card with Dynamic Image Preview */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-6 sticky top-24">
-            <div className="bg-brand-espresso text-brand-cream rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden border border-brand-stone/30">
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-6 lg:sticky lg:top-24 mt-8 lg:mt-0">
+            <div className="bg-brand-espresso text-brand-cream rounded-3xl p-5 sm:p-8 space-y-5 sm:space-y-6 shadow-2xl relative overflow-hidden border border-brand-stone/30">
               <div className="absolute top-0 left-0 right-0 h-1 bg-brand-gold" />
               
               {/* Flavor Photo Thumbnail Preview */}
