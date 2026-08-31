@@ -40,13 +40,16 @@ export default function Navbar({
   };
 
   return (
-    <header
-      className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "bg-brand-cream/95 backdrop-blur-md border-b border-brand-stone/50 shadow-xs"
-            : "bg-brand-cream border-b border-brand-stone/30"
-        }`}
-      >
+    <motion.header
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className={`sticky top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+        isScrolled
+          ? "bg-brand-cream/95 backdrop-blur-md border-b border-brand-stone/50 shadow-xs"
+          : "bg-brand-cream border-b border-brand-stone/30"
+      }`}
+    >
         {/* Top Welcome Notification Bar (Embedded in flow, never overlapping headlines) */}
         <AnimatePresence>
           {showWelcomeBanner && (
@@ -216,6 +219,6 @@ export default function Navbar({
           )}
         </AnimatePresence>
       </div>
-    </header>
+    </motion.header>
   );
 }
