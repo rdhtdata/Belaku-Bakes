@@ -104,7 +104,7 @@ export default function App() {
       </main>
 
       {/* Luxury Footer with Contact layout */}
-      <footer className="bg-brand-espresso text-brand-cream pt-14 sm:pt-16 pb-10 sm:pb-12 relative overflow-hidden border-t-2 border-brand-gold/65">
+      <footer className="bg-brand-espresso text-brand-cream pt-14 sm:pt-16 pb-24 sm:pb-12 relative overflow-hidden border-t-2 border-brand-gold/65">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 sm:gap-12 pb-10 sm:pb-12 border-b border-brand-cream/10">
             
