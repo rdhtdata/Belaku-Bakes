@@ -6,9 +6,9 @@
   --font-serif: "Playfair Display", Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   
-  --color-brand-cream: #f6e5d3; /* New Background Beige: rgba(246, 229, 211) */
-  --color-brand-linen: #ebd5c1; /* Subtle secondary card/pill background */
-  --color-brand-stone: #dfc3aa; /* Soft border stone */
+  --color-brand-cream: #f2e0cc; /* Background Beige: rgb(242, 224, 204) */
+  --color-brand-linen: #e8d0ba; /* Subtle secondary card/pill background */
+  --color-brand-stone: #dcbfa5; /* Soft border stone */
   --color-brand-espresso: #4d2c19; /* Primary Text & UI: rgba(77, 44, 25) */
   --color-brand-dark: #4d2c19;
   --color-brand-dark-grey-brown: #4d2c19;
@@ -25,13 +25,13 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: #f6e5d3;
+  background-color: #f2e0cc;
   color: #4d2c19;
 }
 
 body {
   color: #4d2c19;
-  background-color: #f6e5d3;
+  background-color: #f2e0cc;
   font-family: var(--font-sans);
 }
 
@@ -47,7 +47,7 @@ input, select, textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f6e5d3;
+  background: #f2e0cc;
 }
 
 ::-webkit-scrollbar-thumb {

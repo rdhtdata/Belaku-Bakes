@@ -17,7 +17,7 @@ export function BelakuLogoSymbol({ className = "", size = 64 }: LogoProps) {
       className={`select-none ${className}`}
     >
       {/* Background soft glow */}
-      <circle cx="60" cy="60" r="50" fill="#f6e5d3" />
+      <circle cx="60" cy="60" r="50" fill="#f2e0cc" />
       
       {/* 2. Symmetrical Pink Leaf Wreath / Laurel (Soft Pink Rose #E39BB0) */}
       <g stroke="#DF8CA3" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -55,7 +55,7 @@ export function BelakuLogoSymbol({ className = "", size = 64 }: LogoProps) {
       <ellipse cx="60" cy="62" rx="20" ry="3" fill="#4E2E25" />
 
       {/* 4. Single Striped Birthday Candle (Cream base with Chocolate Stripes) */}
-      <rect x="58.5" y="44" width="3" height="15" fill="#f6e5d3" rx="1" />
+      <rect x="58.5" y="44" width="3" height="15" fill="#f2e0cc" rx="1" />
       <path d="M58.5 46 L61.5 48 M58.5 50 L61.5 52 M58.5 54 L61.5 56" stroke="#4E2E25" strokeWidth="1" />
 
       {/* Warm Golden Flame (Lit & Burning) */}

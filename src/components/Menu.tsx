@@ -166,7 +166,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
               </div>
 
               {/* Master Retro Menu Card Sheet (Matches PDF Booklet precisely) */}
-              <div className="relative bg-[#f6e5d3] rounded-3xl p-4 sm:p-8 lg:p-12 shadow-2xl border-2 sm:border-4 border-[#DF8CA3]/35 flex flex-col justify-between overflow-hidden min-h-[480px] sm:min-h-[560px]">
+              <div className="relative bg-[#f2e0cc] rounded-3xl p-4 sm:p-8 lg:p-12 shadow-2xl border-2 sm:border-4 border-[#DF8CA3]/35 flex flex-col justify-between overflow-hidden min-h-[480px] sm:min-h-[560px]">
                 
                 {/* Vintage Double Line Border Accents */}
                 <div className="absolute inset-1.5 sm:inset-2 border border-[#4d2c19]/15 pointer-events-none rounded-2xl" />
