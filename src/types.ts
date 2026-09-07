@@ -20,6 +20,9 @@ export interface MenuItem {
   customizable: boolean;
   flavors?: string[];
   sizes?: string[];
+  preselectedFlavor?: string;
+  preselectedSize?: string;
+  preselectedSubcategory?: string;
 }
 
 export interface CustomOrder {

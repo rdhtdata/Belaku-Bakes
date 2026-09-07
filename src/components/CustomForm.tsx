@@ -73,18 +73,24 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
   useEffect(() => {
     if (selectedItem) {
       setCategory(selectedItem.category);
+      
       if (selectedItem.category === "brownies") {
-        setSelectedSubcategory("brownie-bites");
+        setSelectedSubcategory(selectedItem.preselectedSubcategory || "brownie-bites");
       } else if (selectedItem.category === "cakes") {
-        setSelectedSubcategory("all-cakes");
+        setSelectedSubcategory(selectedItem.preselectedSubcategory || "all-cakes");
       } else {
         setSelectedSubcategory(selectedItem.id);
       }
 
-      if (selectedItem.flavors && selectedItem.flavors.length > 0) {
+      if (selectedItem.preselectedFlavor) {
+        setSelectedFlavor(selectedItem.preselectedFlavor);
+      } else if (selectedItem.flavors && selectedItem.flavors.length > 0) {
         setSelectedFlavor(selectedItem.flavors[0].split(" (")[0]);
       }
-      if (selectedItem.sizes && selectedItem.sizes.length > 0) {
+
+      if (selectedItem.preselectedSize) {
+        setSelectedSize(selectedItem.preselectedSize);
+      } else if (selectedItem.sizes && selectedItem.sizes.length > 0) {
         setSelectedSize(selectedItem.sizes[0]);
       }
     }

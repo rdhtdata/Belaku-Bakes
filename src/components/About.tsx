@@ -174,9 +174,9 @@ export default function About() {
                 <div className="w-10 h-10 rounded-full bg-brand-linen flex items-center justify-center text-brand-caramel shadow-xs border border-brand-stone/40">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
-                <h4 className="font-sans text-sm font-semibold text-brand-espresso">True Premium Grains</h4>
+                <h4 className="font-sans text-sm font-semibold text-brand-espresso">Rich Gourmet Flavors</h4>
                 <p className="text-xs text-brand-espresso/70 leading-relaxed font-light">
-                  Fine-milled grade organic flours, dark cocoa double-buttered chunks, and natural raw honey.
+                  Handcrafted with quality cocoa, luscious chocolate blends, and freshly baked sponges.
                 </p>
               </motion.div>
 
@@ -192,9 +192,9 @@ export default function About() {
                 <div className="w-10 h-10 rounded-full bg-brand-linen flex items-center justify-center text-brand-caramel shadow-xs border border-brand-stone/40">
                   <Sparkles className="w-5 h-5" />
                 </div>
-                <h4 className="font-sans text-sm font-semibold text-brand-espresso">Custom Designs</h4>
+                <h4 className="font-sans text-sm font-semibold text-brand-espresso">Tailored for You</h4>
                 <p className="text-xs text-brand-espresso/70 leading-relaxed font-light">
-                  Share a photo or color scheme and we'll sculpt matching buttercreams and edible garnishes.
+                  Tell us your celebration theme and flavor choice, and we'll bring your custom dessert to life.
                 </p>
               </motion.div>
             </div>

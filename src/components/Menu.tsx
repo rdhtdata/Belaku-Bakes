@@ -1,5 +1,5 @@
 import { useState, useTransition } from "react";
-import { Star, ArrowUpRight, ArrowLeft, ArrowRight, Sparkles, BookOpen, LayoutGrid, Info, Check, X } from "lucide-react";
+import { Star, ArrowUpRight, ArrowLeft, ArrowRight, Sparkles, BookOpen, LayoutGrid, Info, Check, X, Tag } from "lucide-react";
 import { MENU_ITEMS, BOOK_PAGES } from "../data";
 import { MenuItem } from "../types";
 import { motion, AnimatePresence } from "motion/react";
@@ -7,6 +7,7 @@ import { BelakuLogoSymbol } from "./BelakuLogo";
 import { SafeImage } from "./SafeImage";
 import { ParallaxImage } from "./ParallaxImage";
 import { MaskHeading, ClipPathReveal, StaggerCard } from "./RevealEffects";
+import { resolveItemPrice } from "../menuDataLoader";
 
 interface MenuProps {
   onSelectItemForCustomOrder: (item: MenuItem) => void;
@@ -20,6 +21,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [activeModalImage, setActiveModalImage] = useState<string>("");
   const [selectedFlavorInModal, setSelectedFlavorInModal] = useState<string>("");
+  const [selectedSizeInModal, setSelectedSizeInModal] = useState<string>("");
   const [activeSubcategory, setActiveSubcategory] = useState<string>("");
   const [, startTransition] = useTransition();
 
@@ -48,11 +50,31 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
   const handleOpenItemModal = (item: MenuItem) => {
     setSelectedItem(item);
     setActiveModalImage(item.image);
-    setSelectedFlavorInModal("");
+
     if (item.subcategories && item.subcategories.length > 0) {
-      setActiveSubcategory(item.subcategories[0].id);
+      const firstSub = item.subcategories[0];
+      setActiveSubcategory(firstSub.id);
+      setSelectedSizeInModal(firstSub.sizes && firstSub.sizes.length > 0 ? firstSub.sizes[0] : "");
+      setSelectedFlavorInModal(firstSub.flavors && firstSub.flavors.length > 0 ? firstSub.flavors[0] : "");
     } else {
       setActiveSubcategory("");
+      setSelectedSizeInModal(item.sizes && item.sizes.length > 0 ? item.sizes[0] : "Standard");
+      setSelectedFlavorInModal(item.flavors && item.flavors.length > 0 ? item.flavors[0] : "");
+    }
+  };
+
+  const handleSelectSubcategoryInModal = (subId: string) => {
+    setActiveSubcategory(subId);
+    if (selectedItem?.subcategories) {
+      const sub = selectedItem.subcategories.find((s) => s.id === subId);
+      if (sub) {
+        if (sub.sizes && sub.sizes.length > 0) {
+          setSelectedSizeInModal(sub.sizes[0]);
+        }
+        if (sub.flavors && sub.flavors.length > 0) {
+          setSelectedFlavorInModal(sub.flavors[0]);
+        }
+      }
     }
   };
 
@@ -65,7 +87,20 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
   };
 
   const handleCustomOrderRequest = (item: MenuItem) => {
-    onSelectItemForCustomOrder(item);
+    const cleanFlavor = selectedFlavorInModal
+      ? selectedFlavorInModal.split(" (")[0].trim()
+      : item.flavors && item.flavors.length > 0
+      ? item.flavors[0].split(" (")[0].trim()
+      : "";
+
+    const itemWithPreselection: MenuItem = {
+      ...item,
+      preselectedFlavor: cleanFlavor || undefined,
+      preselectedSize: selectedSizeInModal || undefined,
+      preselectedSubcategory: activeSubcategory || undefined,
+    };
+
+    onSelectItemForCustomOrder(itemWithPreselection);
     setSelectedItem(null); // Close modal
   };
 
@@ -525,7 +560,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                             <button
                               key={sub.id}
                               type="button"
-                              onClick={() => setActiveSubcategory(sub.id)}
+                              onClick={() => handleSelectSubcategoryInModal(sub.id)}
                               className={`py-2 px-2 rounded-xl text-[10px] font-sans font-bold text-center border transition-all cursor-pointer ${
                                 activeSubcategory === sub.id
                                   ? "bg-brand-espresso text-brand-cream border-brand-espresso shadow-xs"
@@ -540,50 +575,137 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                     )}
 
                     {/* Interactive Flavor Pills linked to photo preview */}
-                    {selectedItem.flavors && selectedItem.flavors.length > 0 && (
-                      <div className="pt-2 border-t border-brand-stone/30 space-y-1.5">
-                        <span className="block text-[11px] text-brand-espresso/70 tracking-tight font-semibold">
-                          Click Flavor to View Specific Photo:
-                        </span>
-                        <div className="flex flex-wrap gap-1.5">
-                          {selectedItem.flavors.map((fl) => {
-                            const cleanFl = fl.split(" (")[0].trim();
-                            const isSelected = selectedFlavorInModal === fl;
-                            return (
-                              <button
-                                key={fl}
-                                type="button"
-                                onClick={() => handleSelectFlavorInModal(fl)}
-                                className={`text-[10px] px-2.5 py-1 rounded-full font-sans transition-all flex items-center space-x-1 cursor-pointer border ${
-                                  isSelected
-                                    ? "bg-brand-caramel text-brand-cream border-brand-caramel font-bold shadow-xs"
-                                    : "bg-brand-cream/80 border-brand-stone/70 text-brand-espresso/85 hover:border-brand-caramel hover:text-brand-espresso"
-                                }`}
-                              >
-                                {isSelected && <Check className="w-2.5 h-2.5 mr-0.5 text-brand-cream" />}
-                                <span>{cleanFl}</span>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
+                    {(() => {
+                      const availableModalFlavors =
+                        selectedItem.subcategories && selectedItem.subcategories.length > 0
+                          ? selectedItem.subcategories.find((s) => s.id === activeSubcategory)?.flavors ||
+                            selectedItem.flavors ||
+                            []
+                          : selectedItem.flavors || [];
 
-                    {/* Sizes list */}
-                    {selectedItem.sizes && selectedItem.sizes.length > 0 && (
-                      <div className="pt-2">
-                        <span className="block text-[11px] text-brand-espresso/70 tracking-tight font-semibold">
-                          Available Sizes &amp; Portions:
-                        </span>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {selectedItem.sizes.map((sz) => (
-                            <span key={sz} className="text-[10px] bg-brand-cream border border-brand-stone/60 px-2 py-0.5 rounded-md font-mono text-brand-espresso/80">
-                              {sz}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+                      const availableModalSizes =
+                        selectedItem.subcategories && selectedItem.subcategories.length > 0
+                          ? selectedItem.subcategories.find((s) => s.id === activeSubcategory)?.sizes ||
+                            selectedItem.sizes ||
+                            []
+                          : selectedItem.sizes || [];
+
+                      const cleanCurrentFlavor = selectedFlavorInModal
+                        ? selectedFlavorInModal.split(" (")[0].trim()
+                        : availableModalFlavors[0]
+                        ? availableModalFlavors[0].split(" (")[0].trim()
+                        : "";
+
+                      const cleanCurrentSize =
+                        selectedSizeInModal || (availableModalSizes[0] || "Standard");
+
+                      const calculatedTentativePrice = resolveItemPrice(
+                        selectedItem.category,
+                        cleanCurrentFlavor,
+                        cleanCurrentSize,
+                        activeSubcategory
+                      );
+
+                      return (
+                        <>
+                          {availableModalFlavors.length > 0 && (
+                            <div className="pt-2 border-t border-brand-stone/30 space-y-1.5">
+                              <span className="block text-[11px] text-brand-espresso/70 tracking-tight font-semibold">
+                                1. Select Flavor:
+                              </span>
+                              <div className="flex flex-wrap gap-1.5">
+                                {availableModalFlavors.map((fl) => {
+                                  const cleanFl = fl.split(" (")[0].trim();
+                                  const isSelected =
+                                    cleanCurrentFlavor.toLowerCase() === cleanFl.toLowerCase();
+                                  return (
+                                    <button
+                                      key={fl}
+                                      type="button"
+                                      onClick={() => handleSelectFlavorInModal(fl)}
+                                      className={`text-[10px] px-2.5 py-1 rounded-full font-sans transition-all flex items-center space-x-1 cursor-pointer border ${
+                                        isSelected
+                                          ? "bg-brand-caramel text-brand-cream border-brand-caramel font-bold shadow-xs"
+                                          : "bg-brand-cream/80 border-brand-stone/70 text-brand-espresso/85 hover:border-brand-caramel hover:text-brand-espresso"
+                                      }`}
+                                    >
+                                      {isSelected && <Check className="w-2.5 h-2.5 mr-0.5 text-brand-cream" />}
+                                      <span>{cleanFl}</span>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Interactive Sizes Selection with individual prices */}
+                          {availableModalSizes.length > 0 && (
+                            <div className="pt-2 border-t border-brand-stone/30 space-y-2">
+                              <div className="flex justify-between items-center">
+                                <span className="block text-[11px] text-brand-espresso/70 tracking-tight font-semibold">
+                                  2. Choose Portion / Size:
+                                </span>
+                                {cleanCurrentSize && (
+                                  <span className="text-[10px] font-mono font-bold text-brand-caramel">
+                                    Selected: {cleanCurrentSize}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                {availableModalSizes.map((sz) => {
+                                  const isSelected = cleanCurrentSize === sz;
+                                  const sizePrice = resolveItemPrice(
+                                    selectedItem.category,
+                                    cleanCurrentFlavor,
+                                    sz,
+                                    activeSubcategory
+                                  );
+                                  return (
+                                    <button
+                                      key={sz}
+                                      type="button"
+                                      onClick={() => setSelectedSizeInModal(sz)}
+                                      className={`p-2 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center ${
+                                        isSelected
+                                          ? "bg-brand-espresso text-brand-cream border-brand-espresso shadow-xs"
+                                          : "bg-brand-cream/80 text-brand-espresso border-brand-stone/70 hover:bg-brand-linen"
+                                      }`}
+                                    >
+                                      <span className="text-[11px] font-bold font-sans">{sz}</span>
+                                      <span
+                                        className={`text-[10px] font-mono mt-0.5 ${
+                                          isSelected ? "text-brand-gold font-bold" : "text-brand-caramel font-semibold"
+                                        }`}
+                                      >
+                                        ₹{sizePrice > 0 ? sizePrice.toLocaleString("en-IN") : "-"}
+                                      </span>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Tentative Price Summary Box */}
+                          <div className="bg-brand-linen/60 rounded-xl p-3 border border-brand-stone/40 flex justify-between items-center text-left mt-2">
+                            <div>
+                              <span className="text-[10px] uppercase font-bold tracking-wider text-brand-caramel block">
+                                Tentative Rate
+                              </span>
+                              <span className="text-xs font-serif font-bold text-brand-espresso block mt-0.5">
+                                {cleanCurrentFlavor || selectedItem.name} {cleanCurrentSize ? `(${cleanCurrentSize})` : ""}
+                              </span>
+                            </div>
+                            <div className="text-right">
+                              <span className="font-mono text-xl font-bold text-brand-espresso">
+                                ₹{calculatedTentativePrice > 0 ? calculatedTentativePrice.toLocaleString("en-IN") : "-"}
+                              </span>
+                              <span className="text-[9px] text-brand-espresso/60 block">Official price</span>
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </div>
 
                   {/* Actions */}

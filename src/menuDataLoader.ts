@@ -304,7 +304,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
       galleryImages: CATEGORY_GALLERY.cakes.gallery,
       flavorImages: CATEGORY_GALLERY.cakes.flavorMap,
       rating: 5.0,
-      tags: ["Pure Butter", "13 Signature Flavors", "Eggless Option"],
+      tags: ["Freshly Baked", "13 Signature Flavors", "Eggless Option"],
       customizable: true,
       flavors,
       sizes: ["500g", "1000g"]
@@ -377,14 +377,14 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
     items.push({
       id: "cheesecake-artisanal",
       name: "Artisanal Cream Cheesecakes",
-      description: "Where creamy meets crunchy. A rich, velvety cheesecake on a buttery biscuit crust, crowned with indulgent toppings.",
+      description: "Where creamy meets crunchy. A rich, velvety cheesecake on a crisp biscuit crust, crowned with indulgent toppings.",
       priceEstimate: `Starts at ₹${minCheese || 125} (${cheeseSection.sizes[0] || '100g'})`,
       category: "cheesecakes",
       image: CATEGORY_GALLERY.cheesecakes.main,
       galleryImages: CATEGORY_GALLERY.cheesecakes.gallery,
       flavorImages: CATEGORY_GALLERY.cheesecakes.flavorMap,
       rating: 4.9,
-      tags: ["Real Cream Cheese", "Buttery Biscuit Base", "Gourmet Topping"],
+      tags: ["Real Cream Cheese", "Crisp Biscuit Base", "Gourmet Topping"],
       customizable: true,
       flavors: cheeseSection.rows.map((r) => r.flavor),
       sizes: cheeseSection.sizes
@@ -405,7 +405,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
       galleryImages: CATEGORY_GALLERY.cupcakes.gallery,
       flavorImages: CATEGORY_GALLERY.cupcakes.flavorMap,
       rating: 4.9,
-      tags: ["Hand-piped", "Mini & Regular", "Pure Buttercream"],
+      tags: ["Hand-piped", "Mini & Regular", "Freshly Whipped"],
       customizable: true,
       flavors: cupcakesSection.rows.map((r) => r.flavor),
       sizes: cupcakesSection.sizes
@@ -418,15 +418,15 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
     const minCookie = getMinPrice(cookiesSection);
     items.push({
       id: "cookies-buttery",
-      name: "Handmade Butter Cookies",
-      description: "Crispy, buttery cookies packed with premium chocolate chunks, gourmet red velvet dough, and artisanal fruit jams.",
+      name: "Handmade Artisanal Cookies",
+      description: "Crispy, delicious cookies packed with premium chocolate chunks, gourmet red velvet dough, and artisanal fruit jams.",
       priceEstimate: `Starts at ₹${minCookie || 200} (${cookiesSection.sizes[0] || 'Box of 8'})`,
       category: "cookies",
       image: CATEGORY_GALLERY.cookies.main,
       galleryImages: CATEGORY_GALLERY.cookies.gallery,
       flavorImages: CATEGORY_GALLERY.cookies.flavorMap,
       rating: 4.8,
-      tags: ["Melt-in-mouth", "Pure Butter", "Gift Boxes"],
+      tags: ["Melt-in-mouth", "Freshly Baked", "Gift Boxes"],
       customizable: true,
       flavors: cookiesSection.rows.map((r) => r.flavor),
       sizes: cookiesSection.sizes
@@ -461,7 +461,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
     items.push({
       id: "savory-snacks",
       name: "Artisanal Warm Snacks & Buns",
-      description: "Baked to golden perfection with rich cheese, herby garlic butter, and savoury toppings. Oven-fresh Korean cream cheese buns, garlic bread, and skewers.",
+      description: "Baked to golden perfection with rich cheese, herby garlic, and savoury toppings. Oven-fresh Korean cream cheese buns, garlic bread, and skewers.",
       priceEstimate: `Starts at ₹${minSnack || 150}`,
       category: "savory",
       image: CATEGORY_GALLERY.savory.main,
@@ -516,3 +516,52 @@ export const PARSED_SECTIONS = parseMenuCsv(rawCsv);
 export const DYNAMIC_PRICE_CATALOG = buildPriceCatalog(PARSED_SECTIONS);
 export const DYNAMIC_MENU_ITEMS = buildMenuItems(PARSED_SECTIONS);
 export const DYNAMIC_BOOKLET_PAGES = buildBookletPages(PARSED_SECTIONS);
+
+/**
+ * Resolves exact price for a given category, flavor, size, and optional subcategory
+ */
+export function resolveItemPrice(
+  cat: string,
+  flavorStr: string,
+  sizeStr: string,
+  subcategoryStr?: string
+): number {
+  if (!flavorStr) return 0;
+  const cleanFlavor = flavorStr.split(" (")[0].trim();
+
+  // 1. Direct key lookup
+  const directKey = `${cleanFlavor}-${sizeStr}`;
+  if (DYNAMIC_PRICE_CATALOG[directKey] !== undefined) {
+    return DYNAMIC_PRICE_CATALOG[directKey];
+  }
+
+  // 2. Lookup in parsed sections
+  const section = PARSED_SECTIONS.find((s) => {
+    if (cat === "brownies" && subcategoryStr) {
+      if (subcategoryStr === "brownie-bites") return s.title.toLowerCase().includes("bites");
+      if (subcategoryStr === "brownie-medium") return s.title.toLowerCase().includes("medium");
+      if (subcategoryStr === "brownie-large") return s.title.toLowerCase().includes("large");
+      return s.category === "brownies";
+    }
+    return s.category === cat;
+  });
+
+  if (section) {
+    const row = section.rows.find((r) => r.flavor.toLowerCase() === cleanFlavor.toLowerCase());
+    if (row && row.prices[sizeStr] !== undefined && row.prices[sizeStr] > 0) {
+      return row.prices[sizeStr];
+    }
+  }
+
+  // 3. Fallbacks
+  if (cat === "cakes") {
+    const base = DYNAMIC_PRICE_CATALOG[cleanFlavor] || 850;
+    return sizeStr === "1000g" ? base * 2 : base;
+  }
+
+  if (cat === "savory") {
+    return DYNAMIC_PRICE_CATALOG[cleanFlavor] || 150;
+  }
+
+  return DYNAMIC_PRICE_CATALOG[cleanFlavor] || 0;
+}

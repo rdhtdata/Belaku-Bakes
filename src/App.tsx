@@ -194,7 +194,7 @@ export default function App() {
               &copy; {new Date().getFullYear()} <strong className="text-brand-caramel font-bold">Belaku Bakes</strong>. All rights reserved. Baked freshly by hand in Bengaluru.
             </span>
             <div className="flex space-x-4">
-              <span className="hover:text-brand-gold transition-colors">Pure Butter &amp; Organic Flour Purists</span>
+              <span className="hover:text-brand-gold transition-colors">Artisanal Fresh Bakes • Handcrafted with Care</span>
             </div>
           </div>
 

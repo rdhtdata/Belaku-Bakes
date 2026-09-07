@@ -116,7 +116,7 @@ export default function Hero({ onScrollToSection }: HeroProps) {
           >
             <div className="text-left">
               <span className="block text-lg sm:text-xl font-serif font-bold text-brand-espresso">100%</span>
-              <span className="text-[10px] sm:text-xs text-brand-espresso/70 tracking-tight block">Pure Butter &amp; Care</span>
+              <span className="text-[10px] sm:text-xs text-brand-espresso/70 tracking-tight block">Honest Bakes</span>
             </div>
             <div className="text-left">
               <span className="block text-lg sm:text-xl font-serif font-bold text-brand-espresso">Bespoke</span>
@@ -124,7 +124,7 @@ export default function Hero({ onScrollToSection }: HeroProps) {
             </div>
             <div className="text-left">
               <span className="block text-lg sm:text-xl font-serif font-bold text-brand-espresso">Self-Pick</span>
-              <span className="text-[10px] sm:text-xs text-brand-espresso/70 tracking-tight block">Swiggy/Uber/Genie</span>
+              <span className="text-[10px] sm:text-xs text-brand-espresso/70 tracking-tight block">Swiggy/Uber</span>
             </div>
           </motion.div>
         </div>
