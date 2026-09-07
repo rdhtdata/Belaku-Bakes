@@ -251,7 +251,7 @@ Looking forward to your confirmation and payment details! Thank you.`;
     const encodedMessage = encodeURIComponent(messageTemplate);
     const cleanNumber = CONTACT_INFO.whatsappNumber.replace(/[^0-9]/g, "");
     const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
-    window.open(whatsappUrl, "_blank");
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
   const availableSubcategories = getSubcategoriesForCategory();
@@ -464,6 +464,7 @@ Looking forward to your confirmation and payment details! Thank you.`;
                   </label>
                   <input
                     type="text"
+                    maxLength={50}
                     placeholder="E.g. 4:00 PM - 6:00 PM"
                     value={pickupTime}
                     onChange={(e) => setPickupTime(e.target.value)}
@@ -479,6 +480,7 @@ Looking forward to your confirmation and payment details! Thank you.`;
                 </label>
                 <textarea
                   rows={2}
+                  maxLength={500}
                   placeholder="E.g. 'Please make it extra fudgy with roasted almonds on top' or 'Pastel pink floral accents'"
                   value={specialInstructions}
                   onChange={(e) => setSpecialInstructions(e.target.value)}
@@ -496,6 +498,7 @@ Looking forward to your confirmation and payment details! Thank you.`;
                   <input
                     type="text"
                     required
+                    maxLength={100}
                     placeholder="Your Full Name *"
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
@@ -505,6 +508,7 @@ Looking forward to your confirmation and payment details! Thank you.`;
                   <input
                     type="tel"
                     required
+                    maxLength={20}
                     placeholder="WhatsApp Number *"
                     value={contactNumber}
                     onChange={(e) => setContactNumber(e.target.value)}
