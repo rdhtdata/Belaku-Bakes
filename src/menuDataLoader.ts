@@ -126,7 +126,7 @@ export const CATEGORY_GALLERY: Record<string, { main: string; gallery: string[];
       "Korean buns (2)": "menu-images/snacks/korean buns.jpeg",
       "Korean buns": "menu-images/snacks/korean buns.jpeg",
       "Garlic Bread": "menu-images/snacks/Garlic Bread.jpeg",
-      "Pizza Pasta Skewers (5)": "menu-images/snacks/Pizza Pasta Skewers.jpeg",
+      "Pizza Pasta Skewers (4)": "menu-images/snacks/Pizza Pasta Skewers.jpeg",
       "Pizza Pasta Skewers": "menu-images/snacks/Pizza Pasta Skewers.jpeg"
     }
   }
@@ -191,6 +191,7 @@ export function parseMenuCsv(csvText: string): ParsedCsvSection[] {
         cat = "savory";
       }
 
+      currentSizes = [];
       currentSection = {
         title: firstCol,
         category: cat,
@@ -278,9 +279,20 @@ export function buildPriceCatalog(sections: ParsedCsvSection[]): Record<string, 
 
       // 3. Savory snacks
       if (sect.category === "savory") {
-        const pr = row.prices["Standard"] || 0;
+        const pr = row.prices["Standard"] || row.prices["Price"] || Object.values(row.prices)[0] || 0;
         catalog[row.flavor] = pr;
         catalog[`${row.flavor} (₹${pr})`] = pr;
+        catalog[`${row.flavor}-Standard`] = pr;
+        catalog[`${row.flavor}-Standard Portion`] = pr;
+        catalog[`${row.flavor}-Portion of 4`] = pr;
+        catalog[`${row.flavor}-Portion of 2`] = pr;
+        catalog[`${row.flavor}-Single Portion`] = pr;
+        
+        const cleanF = row.flavor.split(" (")[0].trim();
+        catalog[cleanF] = pr;
+        catalog[`${cleanF}-Portion of 4`] = pr;
+        catalog[`${cleanF}-Portion of 2`] = pr;
+        catalog[`${cleanF}-Standard Portion`] = pr;
       }
     });
   });
@@ -491,7 +503,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
       tags: ["Freshly Baked", "Warm Savory", "Authentic Herbs"],
       customizable: true,
       flavors: snacksSection.rows.map((r) => r.flavor),
-      sizes: ["Single Portion"]
+      sizes: ["Portion of 4", "Portion of 2", "Standard Portion"]
     });
   }
 
@@ -569,9 +581,19 @@ export function resolveItemPrice(
   });
 
   if (section) {
-    const row = section.rows.find((r) => r.flavor.toLowerCase() === cleanFlavor.toLowerCase());
-    if (row && row.prices[sizeStr] !== undefined && row.prices[sizeStr] > 0) {
-      return row.prices[sizeStr];
+    const row = section.rows.find(
+      (r) =>
+        r.flavor.toLowerCase() === cleanFlavor.toLowerCase() ||
+        r.flavor.toLowerCase() === flavorStr.toLowerCase() ||
+        r.flavor.toLowerCase().startsWith(cleanFlavor.toLowerCase())
+    );
+    if (row) {
+      if (row.prices[sizeStr] !== undefined && row.prices[sizeStr] > 0) {
+        return row.prices[sizeStr];
+      }
+      if (cat === "savory" && (row.prices["Standard"] !== undefined || Object.values(row.prices)[0] !== undefined)) {
+        return row.prices["Standard"] || Object.values(row.prices)[0];
+      }
     }
   }
 
@@ -596,6 +618,10 @@ export function resolveItemPrice(
   }
 
   if (cat === "savory") {
+    const lower = cleanFlavor.toLowerCase();
+    if (lower.includes("skewer") || lower.includes("pizza pasta")) return 150;
+    if (lower.includes("korean")) return 150;
+    if (lower.includes("garlic")) return 250;
     return DYNAMIC_PRICE_CATALOG[cleanFlavor] || 150;
   }
 

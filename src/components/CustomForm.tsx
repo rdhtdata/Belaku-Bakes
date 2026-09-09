@@ -124,6 +124,17 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
       return section ? section.sizes : ["Box of 6", "Box of 8", "Box of 16"];
     }
 
+    if (category === "savory") {
+      const lower = selectedFlavor.toLowerCase();
+      if (lower.includes("skewer") || lower.includes("pizza pasta")) {
+        return ["Portion of 4"];
+      }
+      if (lower.includes("korean") || lower.includes("buns")) {
+        return ["Portion of 2"];
+      }
+      return ["Standard Portion"];
+    }
+
     const section = PARSED_SECTIONS.find((s) => s.category === category);
     return section ? section.sizes : ["Standard Portion"];
   };
@@ -140,13 +151,13 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
     }
   };
 
-  // Refresh dependent flavors & sizes when category or subcategory changes
+  // Refresh dependent flavors & sizes when category, subcategory or flavor changes
   useEffect(() => {
     const flavors = getFlavorsForSelection();
     if (flavors.length > 0) {
       // Keep existing flavor if it belongs to new list, else pick first
-      const cleanExisting = selectedFlavor.split(" (")[0].trim();
-      if (!flavors.includes(cleanExisting)) {
+      const cleanExisting = selectedFlavor.split(" (")[0].trim().toLowerCase();
+      if (!flavors.some((f) => f.split(" (")[0].trim().toLowerCase() === cleanExisting)) {
         setSelectedFlavor(flavors[0]);
       }
     }
@@ -156,7 +167,7 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
         setSelectedSize(sizes[0]);
       }
     }
-  }, [category, selectedSubcategory]);
+  }, [category, selectedSubcategory, selectedFlavor]);
 
   // Compute live price
   const calculatedBasePrice = getPriceForOption(category, selectedFlavor, selectedSize);

@@ -56,6 +56,18 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
       setActiveSubcategory(firstSub.id);
       setSelectedSizeInModal(firstSub.sizes && firstSub.sizes.length > 0 ? firstSub.sizes[0] : "");
       setSelectedFlavorInModal(firstSub.flavors && firstSub.flavors.length > 0 ? firstSub.flavors[0] : "");
+    } else if (item.category === "savory") {
+      setActiveSubcategory("");
+      const firstFlavor = item.flavors && item.flavors.length > 0 ? item.flavors[0] : "";
+      setSelectedFlavorInModal(firstFlavor);
+      const lower = firstFlavor.toLowerCase();
+      if (lower.includes("skewer") || lower.includes("pizza pasta")) {
+        setSelectedSizeInModal("Portion of 4");
+      } else if (lower.includes("korean") || lower.includes("buns")) {
+        setSelectedSizeInModal("Portion of 2");
+      } else {
+        setSelectedSizeInModal("Standard Portion");
+      }
     } else {
       setActiveSubcategory("");
       setSelectedSizeInModal(item.sizes && item.sizes.length > 0 ? item.sizes[0] : "Standard");
@@ -83,6 +95,16 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
     const cleanFlavor = flavorName.split(" (")[0].trim();
     if (selectedItem?.flavorImages && selectedItem.flavorImages[cleanFlavor]) {
       setActiveModalImage(selectedItem.flavorImages[cleanFlavor]);
+    }
+    if (selectedItem?.category === "savory") {
+      const lower = flavorName.toLowerCase();
+      if (lower.includes("skewer") || lower.includes("pizza pasta")) {
+        setSelectedSizeInModal("Portion of 4");
+      } else if (lower.includes("korean") || lower.includes("buns")) {
+        setSelectedSizeInModal("Portion of 2");
+      } else {
+        setSelectedSizeInModal("Standard Portion");
+      }
     }
   };
 
@@ -584,7 +606,14 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                           : selectedItem.flavors || [];
 
                       const availableModalSizes =
-                        selectedItem.subcategories && selectedItem.subcategories.length > 0
+                        selectedItem.category === "savory"
+                          ? (() => {
+                              const fl = (selectedFlavorInModal || availableModalFlavors[0] || "").toLowerCase();
+                              if (fl.includes("skewer") || fl.includes("pizza pasta")) return ["Portion of 4"];
+                              if (fl.includes("korean") || fl.includes("buns")) return ["Portion of 2"];
+                              return ["Standard Portion"];
+                            })()
+                          : selectedItem.subcategories && selectedItem.subcategories.length > 0
                           ? selectedItem.subcategories.find((s) => s.id === activeSubcategory)?.sizes ||
                             selectedItem.sizes ||
                             []
