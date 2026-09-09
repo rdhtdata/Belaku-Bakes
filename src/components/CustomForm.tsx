@@ -1,7 +1,7 @@
 import { useState, useEffect, FormEvent } from "react";
 import { MenuItem } from "../types";
 import { CONTACT_INFO } from "../data";
-import { PARSED_SECTIONS, DYNAMIC_PRICE_CATALOG, CATEGORY_GALLERY } from "../menuDataLoader";
+import { PARSED_SECTIONS, DYNAMIC_PRICE_CATALOG, CATEGORY_GALLERY, resolveItemPrice } from "../menuDataLoader";
 import { Send, Sliders, AlertCircle, Info, Sparkles, CheckCircle2, Clock, Calendar, ShieldCheck, Tag } from "lucide-react";
 import { SafeImage } from "./SafeImage";
 import { ParallaxImage } from "./ParallaxImage";
@@ -28,45 +28,9 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
   const [pickupDate, setPickupDate] = useState<string>("");
   const [pickupTime, setPickupTime] = useState<string>("");
 
-  // Helper to fetch exact price from CSV data structure
+  // Helper to fetch exact price from unified price resolver
   const getPriceForOption = (cat: string, flavorStr: string, sizeStr: string): number => {
-    const cleanFlavor = flavorStr.split(" (")[0].trim();
-    
-    // Direct key lookup
-    const directKey = `${cleanFlavor}-${sizeStr}`;
-    if (DYNAMIC_PRICE_CATALOG[directKey] !== undefined) {
-      return DYNAMIC_PRICE_CATALOG[directKey];
-    }
-
-    // Lookup in parsed sections
-    const section = PARSED_SECTIONS.find((s) => {
-      if (cat === "brownies") {
-        if (selectedSubcategory === "brownie-bites") return s.title.toLowerCase().includes("bites");
-        if (selectedSubcategory === "brownie-medium") return s.title.toLowerCase().includes("medium");
-        if (selectedSubcategory === "brownie-large") return s.title.toLowerCase().includes("large");
-        return s.category === "brownies";
-      }
-      return s.category === cat;
-    });
-
-    if (section) {
-      const row = section.rows.find((r) => r.flavor.toLowerCase() === cleanFlavor.toLowerCase());
-      if (row && row.prices[sizeStr] !== undefined) {
-        return row.prices[sizeStr];
-      }
-    }
-
-    // Default cakes fallback
-    if (cat === "cakes") {
-      const base = DYNAMIC_PRICE_CATALOG[cleanFlavor] || 850;
-      return sizeStr === "1000g" ? base * 2 : base;
-    }
-
-    if (cat === "savory") {
-      return DYNAMIC_PRICE_CATALOG[cleanFlavor] || 150;
-    }
-
-    return DYNAMIC_PRICE_CATALOG[cleanFlavor] || 0;
+    return resolveItemPrice(cat, flavorStr, sizeStr, selectedSubcategory);
   };
 
   // Populate form if item is passed through from Menu Component

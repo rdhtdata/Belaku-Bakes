@@ -240,12 +240,32 @@ export function buildPriceCatalog(sections: ParsedCsvSection[]): Record<string, 
   const catalog: Record<string, number> = {};
 
   sections.forEach((sect) => {
+    const sectSlug = sect.title.toLowerCase().replace(/[^a-z0-9]/g, "-");
+    
     sect.rows.forEach((row) => {
-      // 1. Direct key lookups for flavor-size combinations
+      // 1. Direct key lookups with section/subcategory specificity
       Object.entries(row.prices).forEach(([size, price]) => {
-        catalog[`${row.flavor}-${size}`] = price;
-        catalog[`${row.flavor} (${size})`] = price;
-        catalog[`${row.flavor} (${size}: ₹${price})`] = price;
+        // Subcategory-scoped keys
+        catalog[`${sect.category}-${sectSlug}-${row.flavor}-${size}`] = price;
+        catalog[`${sectSlug}-${row.flavor}-${size}`] = price;
+        
+        // Brownie specific subcategory id aliases
+        if (sect.category === "brownies") {
+          if (sectSlug.includes("bites")) {
+            catalog[`brownies-brownie-bites-${row.flavor}-${size}`] = price;
+          } else if (sectSlug.includes("medium")) {
+            catalog[`brownies-brownie-medium-${row.flavor}-${size}`] = price;
+          } else if (sectSlug.includes("large")) {
+            catalog[`brownies-brownie-large-${row.flavor}-${size}`] = price;
+          }
+        }
+
+        // Global fallback keys (only if not already set by prior specific section)
+        if (catalog[`${row.flavor}-${size}`] === undefined) {
+          catalog[`${row.flavor}-${size}`] = price;
+          catalog[`${row.flavor} (${size})`] = price;
+          catalog[`${row.flavor} (${size}: ₹${price})`] = price;
+        }
       });
 
       // 2. Specific compound formats for Cakes
@@ -529,18 +549,20 @@ export function resolveItemPrice(
   if (!flavorStr) return 0;
   const cleanFlavor = flavorStr.split(" (")[0].trim();
 
-  // 1. Direct key lookup
-  const directKey = `${cleanFlavor}-${sizeStr}`;
-  if (DYNAMIC_PRICE_CATALOG[directKey] !== undefined) {
-    return DYNAMIC_PRICE_CATALOG[directKey];
-  }
-
-  // 2. Lookup in parsed sections
+  // 1. Precise section lookup (matches category & specific subcategory like bites/medium/large)
   const section = PARSED_SECTIONS.find((s) => {
-    if (cat === "brownies" && subcategoryStr) {
-      if (subcategoryStr === "brownie-bites") return s.title.toLowerCase().includes("bites");
-      if (subcategoryStr === "brownie-medium") return s.title.toLowerCase().includes("medium");
-      if (subcategoryStr === "brownie-large") return s.title.toLowerCase().includes("large");
+    if (cat === "brownies" || s.category === "brownies") {
+      if (subcategoryStr) {
+        if (subcategoryStr === "brownie-bites" || subcategoryStr.includes("bites")) {
+          return s.title.toLowerCase().includes("bites");
+        }
+        if (subcategoryStr === "brownie-medium" || subcategoryStr.includes("medium")) {
+          return s.title.toLowerCase().includes("medium");
+        }
+        if (subcategoryStr === "brownie-large" || subcategoryStr.includes("large")) {
+          return s.title.toLowerCase().includes("large");
+        }
+      }
       return s.category === "brownies";
     }
     return s.category === cat;
@@ -553,7 +575,21 @@ export function resolveItemPrice(
     }
   }
 
-  // 3. Fallbacks
+  // 2. Specific subcategory key lookup in catalog
+  if (subcategoryStr) {
+    const subKey = `${cat}-${subcategoryStr}-${cleanFlavor}-${sizeStr}`;
+    if (DYNAMIC_PRICE_CATALOG[subKey] !== undefined && DYNAMIC_PRICE_CATALOG[subKey] > 0) {
+      return DYNAMIC_PRICE_CATALOG[subKey];
+    }
+  }
+
+  // 3. Direct key lookup
+  const directKey = `${cleanFlavor}-${sizeStr}`;
+  if (DYNAMIC_PRICE_CATALOG[directKey] !== undefined && DYNAMIC_PRICE_CATALOG[directKey] > 0) {
+    return DYNAMIC_PRICE_CATALOG[directKey];
+  }
+
+  // 4. Fallbacks
   if (cat === "cakes") {
     const base = DYNAMIC_PRICE_CATALOG[cleanFlavor] || 850;
     return sizeStr === "1000g" ? base * 2 : base;
