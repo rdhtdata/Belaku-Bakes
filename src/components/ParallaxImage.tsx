@@ -35,11 +35,11 @@ export function ParallaxImage({
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden ${containerClassName}`}
+      className={`relative overflow-hidden ${containerClassName || "w-full h-full"}`}
     >
       <motion.div
         style={{ y, scale }}
-        className="w-full h-full will-change-transform transform-gpu"
+        className="w-full h-full will-change-transform transform-gpu flex items-center justify-center"
       >
         <SafeImage
           src={src}

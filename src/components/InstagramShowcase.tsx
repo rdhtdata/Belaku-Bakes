@@ -8,51 +8,57 @@ import { MaskHeading, StaggerCard } from "./RevealEffects";
 const INSTAGRAM_POSTS = [
   {
     id: "post1",
-    imgUrl: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600&auto=format&fit=crop",
-    alt: "Signature dense chocolate truffle cake dripping with rich ganache",
-    likes: "138",
+    imgUrl: "menu-images/cakes/chocalate cake.png",
+    alt: "Signature Belgian chocolate celebration cake dripping with rich ganache",
+    likes: "148",
     comments: "24",
-    type: "Signature Cake"
+    type: "Signature Cake",
+    fallbackType: "cake" as const
   },
   {
     id: "post2",
-    imgUrl: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=600&auto=format&fit=crop",
+    imgUrl: "menu-images/brownies/brownie main.jpg",
     alt: "Triple-layer chocolate fudgy brownie squares with crinkle top",
-    likes: "192",
+    likes: "196",
     comments: "32",
-    type: "Fudgy Brownies"
+    type: "Fudgy Brownies",
+    fallbackType: "brownie" as const
   },
   {
     id: "post3",
-    imgUrl: "https://images.unsplash.com/photo-1550617931-e17a7b70dce2?q=80&w=600&auto=format&fit=crop",
-    alt: "Gourmet freshly-piped vanilla blossom cupcakes with edible petals",
-    likes: "145",
+    imgUrl: "menu-images/cupcakes/cupcakes_main.jpg",
+    alt: "Gourmet freshly-piped boutique cupcakes with delicate frostings",
+    likes: "165",
     comments: "19",
-    type: "Blossom Cupcakes"
+    type: "Boutique Cupcakes",
+    fallbackType: "general" as const
   },
   {
     id: "post4",
-    imgUrl: "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=600&auto=format&fit=crop",
-    alt: "Exquisite layered strawberry baked cheesecake slice with real fruit coulis",
-    likes: "187",
-    comments: "28",
-    type: "Strawberry Cheesecake"
+    imgUrl: "menu-images/cheesecake/Cheeese cakes_main.png",
+    alt: "Exquisite layered fruit baked cheesecake on a crisp biscuit crust",
+    likes: "182",
+    comments: "27",
+    type: "Cheesecakes",
+    fallbackType: "cake" as const
   },
   {
     id: "post5",
-    imgUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=600&auto=format&fit=crop",
-    alt: "Freshly-baked herby vegetable canapes and Korean garlic rolls",
-    likes: "124",
-    comments: "15",
-    type: "Warm Savouries"
+    imgUrl: "menu-images/tarts/Tarts.jpg",
+    alt: "Handcrafted golden shortcrust bite-size and big dessert tarts",
+    likes: "173",
+    comments: "21",
+    type: "Artisanal Tarts",
+    fallbackType: "general" as const
   },
   {
     id: "post6",
-    imgUrl: "https://images.unsplash.com/photo-1558961309-dbdf71799f14?q=80&w=600&auto=format&fit=crop",
-    alt: "Bespoke customized birthday cake with delicate hand-sculpted pastel buttercream",
-    likes: "216",
-    comments: "41",
-    type: "Custom Cakes"
+    imgUrl: "menu-images/snacks/korean buns.jpeg",
+    alt: "Freshly-baked oven-fresh Korean cream cheese garlic buns and savory snacks",
+    likes: "139",
+    comments: "18",
+    type: "Warm Savouries",
+    fallbackType: "savory" as const
   }
 ];
 
@@ -105,52 +111,54 @@ export default function InstagramShowcase() {
                 href="https://www.instagram.com/belaku_bakes/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative aspect-square rounded-2xl overflow-hidden bg-brand-stone cursor-pointer group border border-brand-stone/40 block shadow-sm hover:shadow-md transition-shadow"
+                className="relative aspect-square w-full rounded-2xl overflow-hidden bg-brand-stone cursor-pointer group border border-brand-stone/40 block shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
                 onMouseEnter={() => setHoveredId(post.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
-              {/* Parallax Image */}
-              <ParallaxImage
-                src={post.imgUrl}
-                alt={post.alt}
-                offset={15}
-                scale={1.12}
-                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-              />
+                {/* Parallax Image */}
+                <ParallaxImage
+                  src={post.imgUrl}
+                  alt={post.alt}
+                  offset={8}
+                  scale={1.12}
+                  fallbackType={post.fallbackType}
+                  containerClassName="w-full h-full absolute inset-0"
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                />
 
-              {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-brand-espresso/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 text-brand-cream pointer-events-none">
-                
-                {/* Category tag */}
-                <div className="text-left">
-                  <span className="inline-block text-[9px] uppercase tracking-wider bg-brand-cream/20 px-2 py-0.5 rounded-md font-semibold text-brand-cream backdrop-blur-xs">
-                    {post.type}
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-brand-espresso/75 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3.5 sm:p-4 text-brand-cream z-10 pointer-events-none">
+                  
+                  {/* Category tag */}
+                  <div className="text-left">
+                    <span className="inline-block text-[9px] uppercase tracking-wider bg-brand-cream/20 px-2 py-0.5 rounded-md font-semibold text-brand-cream backdrop-blur-xs">
+                      {post.type}
+                    </span>
+                  </div>
+
+                  {/* Heart & Comments Counters */}
+                  <div className="flex items-center justify-center space-x-3 py-2">
+                    <div className="flex items-center space-x-1">
+                      <Heart className="w-3.5 h-3.5 fill-brand-gold text-brand-gold" />
+                      <span className="text-xs font-semibold">{post.likes}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <MessageCircle className="w-3.5 h-3.5 fill-brand-cream text-brand-cream" />
+                      <span className="text-xs font-semibold">{post.comments}</span>
+                    </div>
+                  </div>
+
+                  {/* Click action indicator */}
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-brand-gold flex items-center justify-center space-x-1 select-none">
+                    <span>View Post</span>
+                    <ExternalLink className="w-3 h-3" />
                   </span>
+
                 </div>
-
-                {/* Heart & Comments Counters */}
-                <div className="flex items-center justify-center space-x-4 py-2">
-                  <div className="flex items-center space-x-1.5">
-                    <Heart className="w-4 h-4 fill-brand-gold text-brand-gold" />
-                    <span className="text-xs font-semibold">{post.likes}</span>
-                  </div>
-                  <div className="flex items-center space-x-1.5">
-                    <MessageCircle className="w-4 h-4 fill-brand-cream text-brand-cream" />
-                    <span className="text-xs font-semibold">{post.comments}</span>
-                  </div>
-                </div>
-
-                {/* Click action indicator */}
-                <span className="text-[10px] uppercase font-bold tracking-widest text-brand-gold flex items-center justify-center space-x-1 select-none">
-                  <span>View Post</span>
-                  <ExternalLink className="w-3 h-3" />
-                </span>
-
-              </div>
-            </motion.a>
-          </StaggerCard>
-        ))}
-      </div>
+              </motion.a>
+            </StaggerCard>
+          ))}
+        </div>
 
         {/* Small Bottom Quote banner */}
         <div className="mt-8 text-center bg-brand-linen/60 rounded-2xl border border-brand-stone/40 p-4 max-w-md mx-auto">
