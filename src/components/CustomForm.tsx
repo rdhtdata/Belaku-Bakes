@@ -42,6 +42,8 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
         setSelectedSubcategory(selectedItem.preselectedSubcategory || "brownie-bites");
       } else if (selectedItem.category === "cakes") {
         setSelectedSubcategory(selectedItem.preselectedSubcategory || "all-cakes");
+      } else if (selectedItem.category === "tarts") {
+        setSelectedSubcategory(selectedItem.preselectedSubcategory || "tart-bites");
       } else {
         setSelectedSubcategory(selectedItem.id);
       }
@@ -76,6 +78,12 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
         { id: "brownie-large", name: "Elite Large Brownie Blocks" }
       ];
     }
+    if (category === "tarts") {
+      return [
+        { id: "tart-bites", name: "Bite Size Tarts (Box of 8, 16, 32)" },
+        { id: "tart-big", name: "Big Tarts (Box of 9, 16)" }
+      ];
+    }
     const section = PARSED_SECTIONS.find((s) => s.category === category);
     return [{ id: section?.category || category, name: `${section?.title || category} Collection` }];
   };
@@ -107,6 +115,13 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
       return section ? section.rows.map((r) => r.flavor) : ["Fudgy", "Peanut Butter", "Nutella", "Biscoff"];
     }
 
+    if (category === "tarts") {
+      let sectionName = "Bite";
+      if (selectedSubcategory === "tart-big" || selectedSubcategory.includes("big")) sectionName = "Big";
+      const section = PARSED_SECTIONS.find((s) => s.category === "tarts" && s.title.toLowerCase().includes(sectionName.toLowerCase()));
+      return section ? section.rows.map((r) => r.flavor) : (PARSED_SECTIONS.find((s) => s.category === "tarts")?.rows.map((r) => r.flavor) || ["Lemon Tart", "Strawberry", "Blueberry", "Chocolate"]);
+    }
+
     const section = PARSED_SECTIONS.find((s) => s.category === category);
     return section ? section.rows.map((r) => r.flavor) : [];
   };
@@ -122,6 +137,13 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
       if (selectedSubcategory === "brownie-large") sectionName = "Large Brownies";
       const section = PARSED_SECTIONS.find((s) => s.title.toLowerCase().includes(sectionName.toLowerCase()));
       return section ? section.sizes : ["Box of 6", "Box of 8", "Box of 16"];
+    }
+
+    if (category === "tarts") {
+      let sectionName = "Bite";
+      if (selectedSubcategory === "tart-big" || selectedSubcategory.includes("big")) sectionName = "Big";
+      const section = PARSED_SECTIONS.find((s) => s.category === "tarts" && s.title.toLowerCase().includes(sectionName.toLowerCase()));
+      return section ? section.sizes : (selectedSubcategory === "tart-big" ? ["Box of 9", "Box of 16"] : ["Box of 8", "Box of 16", "Box of 32"]);
     }
 
     if (category === "savory") {
@@ -146,6 +168,8 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
       setSelectedSubcategory("all-cakes");
     } else if (cat === "brownies") {
       setSelectedSubcategory("brownie-bites");
+    } else if (cat === "tarts") {
+      setSelectedSubcategory("tart-bites");
     } else {
       setSelectedSubcategory(cat);
     }

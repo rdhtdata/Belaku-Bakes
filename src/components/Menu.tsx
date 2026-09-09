@@ -457,7 +457,7 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
 
                         <div className="flex justify-between items-center pt-3 border-t border-brand-stone/20 mt-auto">
                           <span className="inline-flex items-center text-[10px] sm:text-[11px] text-brand-espresso/50 font-mono">
-                            {item.subcategories ? "3 Cuts Available" : `${item.flavors?.length || 1} Flavor Choices`}
+                            {item.subcategories ? `${item.subcategories.length} Options Available` : `${item.flavors?.length || 1} Flavor Choices`}
                           </span>
                           <span className="text-xs font-sans font-semibold text-brand-caramel flex items-center space-x-1 group-hover:text-brand-espresso transition-colors">
                             <span>View Details &amp; Photos</span>
@@ -571,13 +571,13 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                       </p>
                     </div>
 
-                    {/* Brownie Subcategories Switcher */}
+                    {/* Subcategories Switcher (Brownies & Tarts) */}
                     {selectedItem.subcategories && selectedItem.subcategories.length > 0 && (
                       <div className="pt-2 border-t border-brand-stone/30 space-y-2">
                         <span className="block text-[11px] text-brand-espresso/70 tracking-tight font-semibold">
-                          Choose Brownie Cut &amp; Size:
+                          Choose {selectedItem.category === "brownies" ? "Brownie Cut & Size" : selectedItem.category === "tarts" ? "Tart Style & Size" : "Category Option"}:
                         </span>
-                        <div className="grid grid-cols-3 gap-1.5">
+                        <div className={`grid ${selectedItem.subcategories.length === 2 ? 'grid-cols-2' : 'grid-cols-3'} gap-1.5`}>
                           {selectedItem.subcategories.map((sub) => (
                             <button
                               key={sub.id}

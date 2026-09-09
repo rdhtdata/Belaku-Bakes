@@ -250,7 +250,7 @@ export function buildPriceCatalog(sections: ParsedCsvSection[]): Record<string, 
         catalog[`${sect.category}-${sectSlug}-${row.flavor}-${size}`] = price;
         catalog[`${sectSlug}-${row.flavor}-${size}`] = price;
         
-        // Brownie specific subcategory id aliases
+        // Brownie & Tart specific subcategory id aliases
         if (sect.category === "brownies") {
           if (sectSlug.includes("bites")) {
             catalog[`brownies-brownie-bites-${row.flavor}-${size}`] = price;
@@ -258,6 +258,12 @@ export function buildPriceCatalog(sections: ParsedCsvSection[]): Record<string, 
             catalog[`brownies-brownie-medium-${row.flavor}-${size}`] = price;
           } else if (sectSlug.includes("large")) {
             catalog[`brownies-brownie-large-${row.flavor}-${size}`] = price;
+          }
+        } else if (sect.category === "tarts") {
+          if (sectSlug.includes("bite")) {
+            catalog[`tarts-tart-bites-${row.flavor}-${size}`] = price;
+          } else if (sectSlug.includes("big")) {
+            catalog[`tarts-tart-big-${row.flavor}-${size}`] = price;
           }
         }
 
@@ -465,26 +471,53 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
     });
   }
 
-  // 6. TARTS
-  const tartsSection = sections.find((s) => s.category === "tarts");
-  if (tartsSection) {
-    const minTart = getMinPrice(tartsSection);
-    items.push({
-      id: "tarts-artisanal",
-      name: "Artisanal Dessert Tarts",
-      description: "Crispy golden shortcrust pastry shells filled with luscious creams, dark chocolate ganache, and seasonal garnishes.",
-      priceEstimate: `Starts at ₹${minTart || 35} (${tartsSection.sizes[0] || 'Mini'})`,
-      category: "tarts",
-      image: CATEGORY_GALLERY.tarts.main,
-      galleryImages: CATEGORY_GALLERY.tarts.gallery,
-      flavorImages: CATEGORY_GALLERY.tarts.flavorMap,
-      rating: 4.9,
-      tags: ["Crispy Shortcrust", "Velvet Ganache", "Boutique"],
-      customizable: true,
-      flavors: tartsSection.rows.map((r) => r.flavor),
-      sizes: tartsSection.sizes
+  // 6. TARTS (Unified with subcategories: Bite Size & Big)
+  const biteTarts = sections.find((s) => s.category === "tarts" && s.title.toLowerCase().includes("bite"));
+  const bigTarts = sections.find((s) => s.category === "tarts" && s.title.toLowerCase().includes("big"));
+  const tartsGeneral = sections.find((s) => s.category === "tarts");
+
+  const minBiteTarts = getMinPrice(biteTarts);
+  const minBigTarts = getMinPrice(bigTarts);
+  const minTartsOverall = Math.min(minBiteTarts || 9999, minBigTarts || 9999, getMinPrice(tartsGeneral) || 9999);
+
+  const tartSubcategories = [];
+  if (biteTarts) {
+    tartSubcategories.push({
+      id: "tart-bites",
+      name: "Bite Size Tarts",
+      description: "Mini shortcrust pastry shells filled with luscious creams and chocolate ganache.",
+      sizes: biteTarts.sizes,
+      flavors: biteTarts.rows.map((r) => r.flavor),
+      priceEstimate: `Starts at ₹${minBiteTarts} (${biteTarts.sizes[0] || 'Box of 8'})`
     });
   }
+  if (bigTarts) {
+    tartSubcategories.push({
+      id: "tart-big",
+      name: "Big Tarts",
+      description: "Generously sized boutique dessert tarts baked to golden crispy perfection.",
+      sizes: bigTarts.sizes,
+      flavors: bigTarts.rows.map((r) => r.flavor),
+      priceEstimate: `Starts at ₹${minBigTarts} (${bigTarts.sizes[0] || 'Box of 9'})`
+    });
+  }
+
+  items.push({
+    id: "tarts-artisanal",
+    name: "Artisanal Dessert Tarts",
+    description: "Crispy golden shortcrust pastry shells filled with luscious creams, dark chocolate ganache, and seasonal garnishes.",
+    priceEstimate: `Starts at ₹${minTartsOverall === 9999 ? 280 : minTartsOverall}`,
+    category: "tarts",
+    image: CATEGORY_GALLERY.tarts.main,
+    galleryImages: CATEGORY_GALLERY.tarts.gallery,
+    flavorImages: CATEGORY_GALLERY.tarts.flavorMap,
+    subcategories: tartSubcategories.length > 0 ? tartSubcategories : undefined,
+    rating: 4.9,
+    tags: ["Crispy Shortcrust", "Bite Size & Big", "Boutique"],
+    customizable: true,
+    flavors: biteTarts ? biteTarts.rows.map((r) => r.flavor) : (tartsGeneral ? tartsGeneral.rows.map((r) => r.flavor) : ["Lemon Tart", "Strawberry", "Blueberry", "Chocolate"]),
+    sizes: biteTarts ? biteTarts.sizes : ["Box of 8", "Box of 16", "Box of 32"]
+  });
 
   // 7. SAVORY SNACKS
   const snacksSection = sections.find((s) => s.category === "savory");
@@ -561,12 +594,13 @@ export function resolveItemPrice(
   if (!flavorStr) return 0;
   const cleanFlavor = flavorStr.split(" (")[0].trim();
 
-  // 1. Precise section lookup (matches category & specific subcategory like bites/medium/large)
+  // 1. Precise section lookup (matches category & specific subcategory like bites/medium/large, tarts bite/big)
   const section = PARSED_SECTIONS.find((s) => {
-    if (cat === "brownies" || s.category === "brownies") {
+    if (s.category !== cat) return false;
+    if (cat === "brownies") {
       if (subcategoryStr) {
-        if (subcategoryStr === "brownie-bites" || subcategoryStr.includes("bites")) {
-          return s.title.toLowerCase().includes("bites");
+        if (subcategoryStr === "brownie-bites" || subcategoryStr.includes("bites") || subcategoryStr.includes("bite")) {
+          return s.title.toLowerCase().includes("bites") || s.title.toLowerCase().includes("bite");
         }
         if (subcategoryStr === "brownie-medium" || subcategoryStr.includes("medium")) {
           return s.title.toLowerCase().includes("medium");
@@ -575,9 +609,20 @@ export function resolveItemPrice(
           return s.title.toLowerCase().includes("large");
         }
       }
-      return s.category === "brownies";
+      return true;
     }
-    return s.category === cat;
+    if (cat === "tarts") {
+      if (subcategoryStr) {
+        if (subcategoryStr === "tart-bites" || subcategoryStr.includes("bite")) {
+          return s.title.toLowerCase().includes("bite");
+        }
+        if (subcategoryStr === "tart-big" || subcategoryStr.includes("big")) {
+          return s.title.toLowerCase().includes("big");
+        }
+      }
+      return true;
+    }
+    return true;
   });
 
   if (section) {
