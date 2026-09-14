@@ -258,7 +258,7 @@ Looking forward to your confirmation and payment details! Thank you.`;
   const availableSizes = getSizesForSelection();
 
   return (
-    <section id="custom" className="py-24 bg-brand-linen relative">
+    <section id="custom" className="py-24 bg-brand-linen relative overflow-hidden">
       <div className="absolute top-[10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-brand-stone/30 blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">

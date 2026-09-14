@@ -65,7 +65,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen font-sans bg-brand-cream text-brand-espresso flex flex-col relative antialiased selection:bg-brand-caramel/20 selection:text-brand-espresso">
+    <div className="min-h-screen font-sans bg-brand-cream text-brand-espresso flex flex-col relative antialiased selection:bg-brand-caramel/20 selection:text-brand-espresso overflow-x-hidden w-full max-w-full">
       
       {/* Styled Navbar with Integrated Announcement Bar */}
       <Navbar
@@ -76,7 +76,7 @@ export default function App() {
       />
 
       {/* Master Main Body Wrapper */}
-      <main className="flex-grow">
+      <main className="flex-grow overflow-x-hidden w-full max-w-full">
         
         {/* 1. Hero Showcase Area */}
         <Hero onScrollToSection={handleScrollToSection} />

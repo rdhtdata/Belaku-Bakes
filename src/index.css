@@ -27,12 +27,23 @@ html {
   scroll-behavior: smooth;
   background-color: #f2e0cc;
   color: #4d2c19;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 body {
   color: #4d2c19;
   background-color: #f2e0cc;
   font-family: var(--font-sans);
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
 }
 
 /* Ensure inputs, dropdown selects, and textareas have clear #4d2c19 text */

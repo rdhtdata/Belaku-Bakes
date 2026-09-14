@@ -29,7 +29,7 @@ export default function FloatingOrderCTA({ onOrderClick }: FloatingOrderCTAProps
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed z-40 bottom-0 left-0 right-0 p-3 sm:p-0 sm:bottom-6 sm:right-6 sm:left-auto pointer-events-none"
+          className="fixed z-40 bottom-0 left-0 right-0 p-3 sm:p-0 sm:bottom-6 sm:right-6 sm:left-auto pointer-events-none w-full sm:w-auto max-w-full overflow-hidden"
         >
           {/* Desktop Floating Pill (Bottom-Right) */}
           <div className="hidden sm:block pointer-events-auto">
@@ -48,11 +48,11 @@ export default function FloatingOrderCTA({ onOrderClick }: FloatingOrderCTAProps
           </div>
 
           {/* Mobile Sticky Full-Width Bar */}
-          <div className="block sm:hidden pointer-events-auto">
+          <div className="block sm:hidden pointer-events-auto w-full max-w-md mx-auto px-1">
             <div className="bg-brand-cream/95 backdrop-blur-md p-2 rounded-2xl border border-brand-stone/60 shadow-2xl">
               <button
                 onClick={onOrderClick}
-                className="w-full flex items-center justify-center space-x-2.5 bg-brand-espresso text-brand-cream py-3 px-6 rounded-xl font-serif font-bold text-sm shadow-md active:scale-[0.98] transition-transform cursor-pointer border border-brand-gold/30"
+                className="w-full flex items-center justify-center space-x-2.5 bg-brand-espresso text-brand-cream py-3 px-4 rounded-xl font-serif font-bold text-sm shadow-md active:scale-[0.98] transition-transform cursor-pointer border border-brand-gold/30"
               >
                 <Sparkles className="w-4 h-4 text-brand-gold" />
                 <span>Place an Order</span>

@@ -13,7 +13,7 @@ export default function PickupGuide() {
   };
 
   return (
-    <section id="pickup" className="py-24 bg-brand-cream relative">
+    <section id="pickup" className="py-24 bg-brand-cream relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute top-[20%] left-[-10%] w-[350px] h-[350px] rounded-full bg-brand-linen/50 blur-3xl pointer-events-none" />
       
