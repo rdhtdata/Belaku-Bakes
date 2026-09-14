@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { ArrowRight, Sparkles, Sliders, MapPin } from "lucide-react";
+import { ArrowRight, Sparkles, Sliders } from "lucide-react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { BelakuLogoSymbol } from "./BelakuLogo";
 import { SafeImage } from "./SafeImage";
@@ -171,18 +171,6 @@ export default function Hero({ onScrollToSection }: HeroProps) {
             >
               <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-brand-caramel font-bold">Featured Bake</span>
               <span className="block text-xs sm:text-sm font-serif font-bold text-brand-espresso mt-0.5">Artisanal Cake</span>
-            </motion.div>
-
-            {/* 1.35s Floating Pickup Guide Badge */}
-            <motion.div
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.7, delay: 1.35, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute top-3 left-3 sm:top-6 sm:left-6 bg-brand-cream/95 backdrop-blur-md px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-full border border-brand-stone/50 shadow-md flex items-center space-x-2 cursor-pointer hover:bg-brand-linen transition-colors"
-              onClick={() => onScrollToSection("pickup")}
-            >
-              <MapPin className="w-3.5 h-3.5 text-brand-caramel animate-bounce" />
-              <span className="text-[10.5px] sm:text-[11.5px] font-sans font-medium text-brand-espresso tracking-tight">Hennur, Bengaluru</span>
             </motion.div>
           </motion.div>
         </div>
