@@ -108,7 +108,7 @@ export default function Navbar({
             className="group flex items-center text-left cursor-pointer focus:outline-hidden transition-transform duration-500 ease-out"
           >
             <div className={`transition-transform duration-500 origin-left ${isScrolled ? "scale-90" : "scale-100"}`}>
-              <BelakuLogoFull size={42} />
+              <BelakuLogoFull size={50} />
             </div>
           </button>
 

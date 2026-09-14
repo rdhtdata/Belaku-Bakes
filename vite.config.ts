@@ -10,12 +10,20 @@ function devHtmlPlugin(): Plugin {
     transformIndexHtml(html) {
       return html
         .replace(
+          /<meta[\s\S]*?http-equiv="Content-Security-Policy"[\s\S]*?\/>/gi,
+          ''
+        )
+        .replace(
           /<script type="module" crossorigin src=".*?assets\/index\.js"><\/script>/g,
-          '<script type="module" src="./src/main.tsx"></script>'
+          ''
         )
         .replace(
           /<link rel="stylesheet" crossorigin href=".*?assets\/index\.css">/g,
           ''
+        )
+        .replace(
+          '</body>',
+          '  <script type="module" src="/Belaku-Bakes/src/main.tsx"></script>\n  </body>'
         );
     },
   };

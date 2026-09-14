@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { BelakuLogoSymbol } from "./BelakuLogo";
 
 interface SafeImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
@@ -19,7 +18,11 @@ export function SafeImage({ src, alt, className = "", fallbackType = "general", 
         <div className="absolute inset-4 border border-dashed border-brand-stone/30 rounded-lg pointer-events-none" />
         
         {/* Animated Brand Symbol Fallback */}
-        <BelakuLogoSymbol size={64} className="opacity-90 transform hover:scale-105 transition-transform duration-300" />
+        <img
+          src={`${import.meta.env.BASE_URL}brand_icon.jpeg`}
+          alt="Belaku Bakes"
+          className="w-14 h-14 rounded-full object-cover shadow-sm opacity-90 transform hover:scale-105 transition-transform duration-300 ring-2 ring-brand-caramel/20"
+        />
         
         {/* Fallback elegant label with serif title */}
         <div className="mt-4 space-y-1 z-10 px-4">

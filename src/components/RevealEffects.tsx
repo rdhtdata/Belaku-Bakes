@@ -74,6 +74,7 @@ interface StaggerCardProps {
   className?: string;
   index?: number;
   baseDelay?: number;
+  key?: React.Key;
 }
 
 /**

@@ -14,7 +14,7 @@ export default function Hero({ onScrollToSection }: HeroProps) {
     target: heroImageContainerRef,
     offset: ["start start", "end start"],
   });
-  const parallaxY = useTransform(scrollYProgress, [0, 1], [0, 40]);
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [0, 20]);
   return (
     <section
       id="hero"
@@ -42,10 +42,10 @@ export default function Hero({ onScrollToSection }: HeroProps) {
 
           {/* Staggered Line-by-Line Headline */}
           <div className="space-y-4">
-            <h1 className="font-serif text-4xl sm:text-6xl xl:text-7xl font-bold text-brand-espresso tracking-tight leading-[1.08] sm:leading-[1.05]">
+            <h1 className="font-serif text-4xl sm:text-6xl xl:text-7xl font-bold text-brand-espresso tracking-tight leading-[1.12] sm:leading-[1.1]">
               {/* 0.35s Line 1 */}
               <motion.span
-                className="block overflow-hidden"
+                className="block overflow-hidden pb-1 sm:pb-1.5"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
@@ -54,7 +54,7 @@ export default function Hero({ onScrollToSection }: HeroProps) {
               </motion.span>
               {/* 0.45s Line 2 */}
               <motion.span
-                className="block text-brand-caramel italic font-normal overflow-hidden"
+                className="block text-brand-caramel italic font-normal overflow-hidden pb-1 sm:pb-1.5"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
@@ -63,7 +63,7 @@ export default function Hero({ onScrollToSection }: HeroProps) {
               </motion.span>
               {/* 0.55s Line 3 */}
               <motion.span
-                className="block overflow-hidden"
+                className="block overflow-hidden pb-2 sm:pb-3"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
@@ -130,7 +130,7 @@ export default function Hero({ onScrollToSection }: HeroProps) {
         </div>
 
         {/* Visual Showcase with Continuous Floating Motion */}
-        <div className="lg:col-span-6 relative mt-4 sm:mt-8 lg:mt-0 px-2 sm:px-4">
+        <div className="lg:col-span-6 relative mt-4 sm:mt-8 lg:mt-0 px-1 sm:px-4">
           <motion.div
             animate={{ y: [0, -5, 0] }}
             transition={{
@@ -139,10 +139,10 @@ export default function Hero({ onScrollToSection }: HeroProps) {
               ease: "easeInOut",
               delay: 1.9,
             }}
-            className="relative w-full h-[320px] sm:h-[450px] xl:h-[500px]"
+            className="relative w-full h-[280px] sm:h-[450px] xl:h-[500px]"
           >
             {/* Background styled border offset */}
-            <div className="absolute top-[12px] left-[12px] right-[-12px] bottom-[-12px] sm:top-[20px] sm:left-[20px] sm:right-[-20px] sm:bottom-[-20px] rounded-2xl border-2 border-brand-stone/60 pointer-events-none" />
+            <div className="absolute top-[8px] left-[8px] right-[-8px] bottom-[-8px] sm:top-[20px] sm:left-[20px] sm:right-[-20px] sm:bottom-[-20px] rounded-2xl border-2 border-brand-stone/60 pointer-events-none" />
 
             {/* 0.7s - 1.9s: Hero Image Scales In from 1.08 to 1 over 1.2s + Parallax */}
             <motion.div
@@ -152,14 +152,14 @@ export default function Hero({ onScrollToSection }: HeroProps) {
               transition={{ duration: 1.2, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className="absolute inset-0 rounded-2xl overflow-hidden shadow-xl"
             >
-              <motion.div style={{ y: parallaxY }} className="w-full h-full scale-110 will-change-transform">
+              <motion.div style={{ y: parallaxY }} className="w-full h-full will-change-transform flex items-center justify-center">
                 <SafeImage
-                  src="menu-images/cakes/featured bake.jpg"
+                  src="featured_bake_resized.png"
                   alt="Belaku Bakes featured celebration cake"
-                  className="w-full h-full object-cover select-none scale-102 hover:scale-105 duration-700 transition-transform"
+                  className="w-full h-full object-cover select-none duration-700 transition-transform hover:scale-[1.02]"
                 />
               </motion.div>
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/50 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/40 via-transparent to-transparent pointer-events-none" />
             </motion.div>
 
             {/* 1.2s Floating Luxury Detail Badge */}

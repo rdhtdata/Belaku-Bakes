@@ -11,6 +11,7 @@ import FloatingOrderCTA from "./components/FloatingOrderCTA";
 import { MenuItem } from "./types";
 import { CONTACT_INFO } from "./data";
 import { MapPin, Instagram, MessageSquare } from "lucide-react";
+import { BelakuLogoSymbol } from "./components/BelakuLogo";
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("hero");
@@ -110,9 +111,12 @@ export default function App() {
             
             {/* Column 1: Brand details */}
             <div className="sm:col-span-2 md:col-span-4 text-left space-y-4">
-              <span className="font-serif text-2xl tracking-wider font-bold text-brand-caramel block">
-                Belaku Bakes
-              </span>
+              <div className="flex items-center space-x-3">
+                <BelakuLogoSymbol size={40} className="ring-2 ring-brand-gold/30" />
+                <span className="font-serif text-2xl tracking-wider font-bold text-brand-caramel block">
+                  Belaku Bakes
+                </span>
+              </div>
               <p className="text-xs text-brand-cream/70 leading-relaxed font-light max-w-sm">
                 An artisanal cloud kitchen dedicated to bringing joy and happiness through custom bakes, brownies, cookies, cheesecakes, and savory bites baked purely with care.
               </p>

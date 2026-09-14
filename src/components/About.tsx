@@ -12,24 +12,24 @@ export default function About() {
     target: founderImageContainerRef,
     offset: ["start end", "end start"],
   });
-  const founderParallaxY = useTransform(scrollYProgress, [0, 1], [-25, 25]);
+  const founderParallaxY = useTransform(scrollYProgress, [0, 1], [-10, 10]);
 
   return (
     <section id="about" className="py-24 bg-brand-linen relative overflow-hidden">
       {/* Decorative ambient elements */}
       <div className="absolute top-[30%] left-[-10%] w-[350px] h-[350px] rounded-full bg-brand-stone/20 blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           
           {/* Stage 1: Left Column - Image Enters from Left on Scroll */}
-          <div className="lg:col-span-5 relative order-last lg:order-first px-2 sm:px-0 mt-8 lg:mt-0">
+          <div className="lg:col-span-5 relative order-last lg:order-first px-2 sm:px-0 mt-6 lg:mt-0">
             <motion.div
               initial={{ opacity: 0, x: -60, y: 30, scale: 0.95 }}
               whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full aspect-2/3 max-w-[340px] sm:max-w-[400px] mx-auto"
+              className="relative w-full aspect-[788/1600] max-w-[280px] sm:max-w-[340px] mx-auto"
             >
               {/* Background frame */}
               <motion.div
@@ -42,14 +42,14 @@ export default function About() {
               
               {/* Image box with Parallax */}
               <div ref={founderImageContainerRef} className="relative w-full h-full rounded-2xl overflow-hidden shadow-xl bg-brand-stone">
-                <motion.div style={{ y: founderParallaxY }} className="w-full h-full scale-110 will-change-transform">
+                <motion.div style={{ y: founderParallaxY }} className="w-full h-full will-change-transform flex items-center justify-center">
                   <SafeImage
-                    src="our_story.png"
+                    src="our_story_update.jpeg"
                     alt="Belaku Bakes Our Story & Vision"
-                    className="w-full h-full object-cover select-none scale-102 hover:scale-105 duration-700 transition-transform"
+                    className="w-full h-full object-cover select-none duration-700 transition-transform hover:scale-[1.02]"
                   />
                 </motion.div>
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/40 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/30 via-transparent to-transparent pointer-events-none" />
               </div>
 
               {/* Quality overlay pill badge */}

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, type TouchEvent } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote, Sparkles } from "lucide-react";
 import { TESTIMONIALS } from "../data";
 
@@ -45,11 +45,11 @@ export default function TestimonialCarousel() {
   }, [nextReview, isPaused, maxIndex]);
 
   // Touch swipe handling
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = (e: TouchEvent) => {
     touchStartXRef.current = e.touches[0].clientX;
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const handleTouchEnd = (e: TouchEvent) => {
     if (touchStartXRef.current === null) return;
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchEndX - touchStartXRef.current;
