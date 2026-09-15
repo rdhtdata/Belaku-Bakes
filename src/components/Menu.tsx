@@ -680,58 +680,70 @@ export default function Menu({ onSelectItemForCustomOrder }: MenuProps) {
                                   </span>
                                 )}
                               </div>
-                              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                                {availableModalSizes.map((sz) => {
-                                  const isSelected = cleanCurrentSize === sz;
-                                  const sizePrice = resolveItemPrice(
-                                    selectedItem.category,
-                                    cleanCurrentFlavor,
-                                    sz,
-                                    activeSubcategory
-                                  );
-                                  return (
-                                    <button
-                                      key={sz}
-                                      type="button"
-                                      onClick={() => setSelectedSizeInModal(sz)}
-                                      className={`p-2 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center ${
-                                        isSelected
-                                          ? "bg-brand-espresso text-brand-cream border-brand-espresso shadow-xs"
-                                          : "bg-brand-cream/80 text-brand-espresso border-brand-stone/70 hover:bg-brand-linen"
-                                      }`}
-                                    >
-                                      <span className="text-[11px] font-bold font-sans">{sz}</span>
-                                      <span
-                                        className={`text-[10px] font-mono mt-0.5 ${
-                                          isSelected ? "text-brand-gold font-bold" : "text-brand-caramel font-semibold"
+                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                  {availableModalSizes.map((sz) => {
+                                    const isSelected = cleanCurrentSize === sz;
+                                    const isCustom = sz === "Custom Weight";
+                                    const sizePrice = resolveItemPrice(
+                                      selectedItem.category,
+                                      cleanCurrentFlavor,
+                                      sz,
+                                      activeSubcategory
+                                    );
+                                    return (
+                                      <button
+                                        key={sz}
+                                        type="button"
+                                        onClick={() => setSelectedSizeInModal(sz)}
+                                        className={`p-2 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center ${
+                                          isSelected
+                                            ? "bg-brand-espresso text-brand-cream border-brand-espresso shadow-xs"
+                                            : "bg-brand-cream/80 text-brand-espresso border-brand-stone/70 hover:bg-brand-linen"
                                         }`}
                                       >
-                                        ₹{sizePrice > 0 ? sizePrice.toLocaleString("en-IN") : "-"}
-                                      </span>
-                                    </button>
-                                  );
-                                })}
+                                        <span className="text-[11px] font-bold font-sans">{sz}</span>
+                                        <span
+                                          className={`text-[10px] font-mono mt-0.5 ${
+                                            isSelected ? "text-brand-gold font-bold" : "text-brand-caramel font-semibold"
+                                          }`}
+                                        >
+                                          {isCustom ? "Custom Price" : sizePrice > 0 ? `₹${sizePrice.toLocaleString("en-IN")}` : "-"}
+                                        </span>
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Tentative Price Summary Box */}
+                            <div className="bg-brand-linen/60 rounded-xl p-3 border border-brand-stone/40 flex justify-between items-center text-left mt-2">
+                              <div>
+                                <span className="text-[10px] uppercase font-bold tracking-wider text-brand-caramel block">
+                                  Tentative Rate
+                                </span>
+                                <span className="text-xs font-serif font-bold text-brand-espresso block mt-0.5">
+                                  {cleanCurrentFlavor || selectedItem.name} {cleanCurrentSize ? `(${cleanCurrentSize})` : ""}
+                                </span>
+                              </div>
+                              <div className="text-right">
+                                {cleanCurrentSize === "Custom Weight" ? (
+                                  <>
+                                    <span className="font-serif text-lg font-bold text-brand-espresso">
+                                      Custom Price
+                                    </span>
+                                    <span className="text-[9px] text-brand-espresso/60 block">Quote on request</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <span className="font-mono text-xl font-bold text-brand-espresso">
+                                      ₹{calculatedTentativePrice > 0 ? calculatedTentativePrice.toLocaleString("en-IN") : "-"}
+                                    </span>
+                                    <span className="text-[9px] text-brand-espresso/60 block">Official price</span>
+                                  </>
+                                )}
                               </div>
                             </div>
-                          )}
-
-                          {/* Tentative Price Summary Box */}
-                          <div className="bg-brand-linen/60 rounded-xl p-3 border border-brand-stone/40 flex justify-between items-center text-left mt-2">
-                            <div>
-                              <span className="text-[10px] uppercase font-bold tracking-wider text-brand-caramel block">
-                                Tentative Rate
-                              </span>
-                              <span className="text-xs font-serif font-bold text-brand-espresso block mt-0.5">
-                                {cleanCurrentFlavor || selectedItem.name} {cleanCurrentSize ? `(${cleanCurrentSize})` : ""}
-                              </span>
-                            </div>
-                            <div className="text-right">
-                              <span className="font-mono text-xl font-bold text-brand-espresso">
-                                ₹{calculatedTentativePrice > 0 ? calculatedTentativePrice.toLocaleString("en-IN") : "-"}
-                              </span>
-                              <span className="text-[9px] text-brand-espresso/60 block">Official price</span>
-                            </div>
-                          </div>
                         </>
                       );
                     })()}

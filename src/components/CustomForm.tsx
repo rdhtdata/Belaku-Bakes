@@ -18,6 +18,7 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
   const [selectedSubcategory, setSelectedSubcategory] = useState<string>("all-cakes");
   const [selectedFlavor, setSelectedFlavor] = useState<string>("Signature Chocolate");
   const [selectedSize, setSelectedSize] = useState<string>("500g");
+  const [customWeight, setCustomWeight] = useState<string>("");
   const [isEggless, setIsEggless] = useState<boolean>(false);
   const [writingOnCake, setWritingOnCake] = useState<string>("");
   const [specialInstructions, setSpecialInstructions] = useState<string>("");
@@ -129,7 +130,7 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
   // Derive Sizes for the selected category & subcategory
   const getSizesForSelection = () => {
     if (category === "cakes") {
-      return ["500g", "1000g"];
+      return ["500g", "1000g", "Custom Weight"];
     }
     if (category === "brownies") {
       let sectionName = "Brownie Bites";
@@ -193,9 +194,12 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
     }
   }, [category, selectedSubcategory, selectedFlavor]);
 
+  // Custom Weight check
+  const isCustomWeight = category === "cakes" && selectedSize === "Custom Weight";
+
   // Compute live price
-  const calculatedBasePrice = getPriceForOption(category, selectedFlavor, selectedSize);
-  const calculatedEgglessAddon = isEggless && category === "cakes" ? 50 : 0;
+  const calculatedBasePrice = isCustomWeight ? 0 : getPriceForOption(category, selectedFlavor, selectedSize);
+  const calculatedEgglessAddon = isEggless && category === "cakes" && !isCustomWeight ? 50 : 0;
   const grandTotalEstimate = calculatedBasePrice + calculatedEgglessAddon;
 
   // Active preview image
@@ -216,8 +220,24 @@ export default function CustomForm({ selectedItem, onClearSelectedItem }: Custom
       return;
     }
 
+    if (isCustomWeight && !customWeight.trim()) {
+      alert("Please enter your desired custom weight (e.g. 2.5 kg).");
+      return;
+    }
+
     const eggText = isEggless ? "🍃 YES (100% Pure Eggless)" : "🥚 Regular";
     const cakeDetails = category === "cakes" && writingOnCake ? `\n✍️ Text on Cake: "${writingOnCake}"` : "";
+    const sizeDisplay = isCustomWeight
+      ? `Custom Weight (${customWeight.trim()}) [Custom Pricing]`
+      : `${selectedSize} (₹${calculatedBasePrice})`;
+
+    const priceBreakdown = isCustomWeight
+      ? `*💰 ESTIMATED TOTAL:*
+- Base Price: *Custom Price* (Will be quoted based on ${customWeight.trim()} custom weight)
+${isEggless ? "- 100% Pure Eggless Sponge: Yes (Included in custom quote)\n" : ""}- Total Estimate: *Custom Price* (Subject to custom weight & design decor)`
+      : `*💰 ESTIMATED TOTAL:*
+- Base Price: ₹${calculatedBasePrice}
+${calculatedEgglessAddon > 0 ? `- 100% Pure Eggless Sponge: +₹${calculatedEgglessAddon}\n` : ""}- Total Estimate: *₹${grandTotalEstimate}* (Subject to additional custom art decor)`;
 
     const messageTemplate = `*✨ NEW CUSTOM ORDER REQUEST - BELAKU BAKES ✨*
 
@@ -230,7 +250,7 @@ Hello Vaishnavi, I would love to place a gourmet custom request from the Belaku 
 *🎂 ORDER DETAILS:*
 - Category: ${category.toUpperCase()}
 - Selection: ${selectedFlavor.split(" (")[0]}
-- Portion / Size: ${selectedSize} (₹${calculatedBasePrice})
+- Portion / Size: ${sizeDisplay}
 - Dietary Preference: ${eggText}${cakeDetails}
 
 *📅 PICKUP LOGISTICS:*
@@ -241,9 +261,7 @@ Hello Vaishnavi, I would love to place a gourmet custom request from the Belaku 
 *✍️ SPECIAL INSTRUCTIONS:*
 "${specialInstructions || "No additional notes. Please bake with utmost care!"}"
 
-*💰 ESTIMATED TOTAL:*
-- Base Price: ₹${calculatedBasePrice}
-${calculatedEgglessAddon > 0 ? `- 100% Pure Eggless Sponge: +₹${calculatedEgglessAddon}\n` : ""}- Total Estimate: *₹${grandTotalEstimate}* (Subject to additional custom art decor)
+${priceBreakdown}
 
 Looking forward to your confirmation and payment details! Thank you.`;
 
@@ -373,16 +391,23 @@ Looking forward to your confirmation and payment details! Thank you.`;
                   <label className="block text-xs uppercase font-bold tracking-wider text-brand-espresso">
                     4. Portion / Size &amp; Official Price
                   </label>
-                  <span className="font-mono text-xs font-bold text-brand-caramel bg-brand-linen px-2.5 py-0.5 rounded-md border border-brand-stone/40 inline-flex items-center gap-1">
-                    <span>Price:</span>
-                    <AnimatedPrice value={calculatedBasePrice} className="font-bold text-brand-caramel" />
-                  </span>
+                  {isCustomWeight ? (
+                    <span className="font-sans text-xs font-bold text-brand-caramel bg-brand-linen px-2.5 py-0.5 rounded-md border border-brand-stone/40">
+                      Custom Price
+                    </span>
+                  ) : (
+                    <span className="font-mono text-xs font-bold text-brand-caramel bg-brand-linen px-2.5 py-0.5 rounded-md border border-brand-stone/40 inline-flex items-center gap-1">
+                      <span>Price:</span>
+                      <AnimatedPrice value={calculatedBasePrice} className="font-bold text-brand-caramel" />
+                    </span>
+                  )}
                 </div>
                 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {availableSizes.map((sz) => {
                     const priceForThisSize = getPriceForOption(category, selectedFlavor, sz);
                     const isSelected = selectedSize === sz;
+                    const isCustom = sz === "Custom Weight";
                     return (
                       <button
                         key={sz}
@@ -396,12 +421,34 @@ Looking forward to your confirmation and payment details! Thank you.`;
                       >
                         <span className="text-xs font-bold font-sans">{sz}</span>
                         <span className={`text-[11px] font-mono mt-0.5 ${isSelected ? "text-brand-gold font-bold" : "text-brand-caramel font-semibold"}`}>
-                          ₹{priceForThisSize > 0 ? priceForThisSize.toLocaleString("en-IN") : "-"}
+                          {isCustom ? "Custom Price" : priceForThisSize > 0 ? `₹${priceForThisSize.toLocaleString("en-IN")}` : "-"}
                         </span>
                       </button>
                     );
                   })}
                 </div>
+
+                {/* Custom Weight Input Box for Custom Cakes */}
+                {isCustomWeight && (
+                  <div className="mt-3 p-3.5 bg-brand-linen/80 rounded-xl border border-brand-stone/70 space-y-2">
+                    <label className="block text-xs uppercase font-bold tracking-wider text-brand-espresso flex items-center justify-between">
+                      <span>Specify Desired Cake Weight *</span>
+                      <span className="text-[10px] text-brand-caramel font-medium normal-case">e.g. 1.5 kg, 2 kg, 2.5 kg, 3 kg</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      maxLength={30}
+                      placeholder="e.g. 2.5 kg"
+                      value={customWeight}
+                      onChange={(e) => setCustomWeight(e.target.value)}
+                      className="w-full px-4 py-2.5 bg-brand-cream border border-brand-stone/80 rounded-xl focus:outline-hidden focus:border-brand-caramel font-sans text-xs text-brand-espresso placeholder:text-brand-espresso/40 font-medium"
+                    />
+                    <p className="text-[11px] text-brand-espresso/70 font-light italic">
+                      ✨ No fixed price is displayed for custom weights. Our baker will review and provide a custom quote for you upon WhatsApp order confirmation.
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Eggless option for cakes */}
@@ -548,7 +595,7 @@ Looking forward to your confirmation and payment details! Thank you.`;
                     {selectedFlavor ? selectedFlavor.split(" (")[0] : category.toUpperCase()}
                   </span>
                   <span className="text-xs font-mono font-bold text-brand-gold bg-brand-espresso/80 px-2 py-0.5 rounded-sm border border-brand-gold/30">
-                    {selectedSize}
+                    {isCustomWeight ? (customWeight ? `${customWeight}` : "Custom Weight") : selectedSize}
                   </span>
                 </div>
               </div>
@@ -568,15 +615,23 @@ Looking forward to your confirmation and payment details! Thank you.`;
                       {selectedFlavor ? selectedFlavor.split(" (")[0] : "None Selected"}
                     </span>
                   </div>
-                  <AnimatedPrice value={calculatedBasePrice} className="text-sm text-brand-gold font-bold" />
+                  {isCustomWeight ? (
+                    <span className="text-xs font-semibold text-brand-gold font-sans">Custom Price</span>
+                  ) : (
+                    <AnimatedPrice value={calculatedBasePrice} className="text-sm text-brand-gold font-bold" />
+                  )}
                 </div>
 
                 <div className="flex justify-between items-center pb-2 border-b border-brand-cream/5">
                   <div>
                     <span className="block font-semibold text-brand-gold">Selected Portion / Size:</span>
-                    <span className="text-[11px] text-brand-cream/85">{selectedSize || "Standard"}</span>
+                    <span className="text-[11px] text-brand-cream/85">
+                      {isCustomWeight ? (customWeight ? `Custom Weight (${customWeight})` : "Custom Weight") : (selectedSize || "Standard")}
+                    </span>
                   </div>
-                  <span className="text-[10px] text-brand-cream/50 font-mono">Standard Rate</span>
+                  <span className="text-[10px] text-brand-cream/50 font-mono">
+                    {isCustomWeight ? "Custom Quote" : "Standard Rate"}
+                  </span>
                 </div>
 
                 {category === "cakes" && (
@@ -585,7 +640,9 @@ Looking forward to your confirmation and payment details! Thank you.`;
                       <span className="block font-semibold text-brand-gold">Dietary Sponge:</span>
                       <span className="text-[11px] text-brand-cream/85">{isEggless ? "🍃 100% Pure Eggless" : "🥚 Regular Sponge"}</span>
                     </div>
-                    <span className="font-mono text-sm text-brand-gold">+{calculatedEgglessAddon}</span>
+                    <span className="font-mono text-sm text-brand-gold">
+                      {isCustomWeight ? (isEggless ? "Included in quote" : "-") : `+₹${calculatedEgglessAddon}`}
+                    </span>
                   </div>
                 )}
 
@@ -604,9 +661,15 @@ Looking forward to your confirmation and payment details! Thank you.`;
               <div className="bg-brand-cream/5 p-4 rounded-xl flex justify-between items-center text-left border border-brand-cream/10">
                 <div>
                   <span className="block text-xs uppercase font-semibold tracking-wider text-brand-gold">Total Estimated Price</span>
-                  <span className="text-[10px] text-brand-cream/40">*Excluding custom decorations</span>
+                  <span className="text-[10px] text-brand-cream/60">
+                    {isCustomWeight ? "*Custom price will be quoted on WhatsApp" : "*Excluding custom decorations"}
+                  </span>
                 </div>
-                <AnimatedPrice value={grandTotalEstimate} className="text-3xl font-bold text-brand-gold" />
+                {isCustomWeight ? (
+                  <span className="text-xl sm:text-2xl font-serif font-bold text-brand-gold">Custom Price</span>
+                ) : (
+                  <AnimatedPrice value={grandTotalEstimate} className="text-3xl font-bold text-brand-gold" />
+                )}
               </div>
 
               {/* Quality assurance bullets */}

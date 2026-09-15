@@ -345,7 +345,7 @@ export function buildMenuItems(sections: ParsedCsvSection[]): MenuItem[] {
       tags: ["Freshly Baked", "13 Signature Flavors", "Eggless Option"],
       customizable: true,
       flavors,
-      sizes: ["500g", "1000g"]
+      sizes: ["500g", "1000g", "Custom Weight"]
     });
   }
 
@@ -591,7 +591,7 @@ export function resolveItemPrice(
   sizeStr: string,
   subcategoryStr?: string
 ): number {
-  if (!flavorStr) return 0;
+  if (!flavorStr || sizeStr === "Custom Weight") return 0;
   const cleanFlavor = flavorStr.split(" (")[0].trim();
 
   // 1. Precise section lookup (matches category & specific subcategory like bites/medium/large, tarts bite/big)
