@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { ArrowRight, Sparkles, Sliders } from "lucide-react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { BelakuLogoSymbol } from "./BelakuLogo";
 import { SafeImage } from "./SafeImage";
 
 interface HeroProps {
@@ -27,19 +26,6 @@ export default function Hero({ onScrollToSection }: HeroProps) {
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-10">
         {/* Text Content Area */}
         <div className="lg:col-span-6 space-y-6 sm:space-y-8 text-left">
-          {/* 0.2s Eyebrow */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center space-x-2 px-3 py-1 bg-brand-linen border border-brand-stone/50 rounded-full"
-          >
-            <BelakuLogoSymbol size={28} className="shrink-0" />
-            <span className="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-[#4d2c19] font-bold">
-              Artisan Cloud Kitchen
-            </span>
-          </motion.div>
-
           {/* Staggered Line-by-Line Headline */}
           <div className="space-y-4">
             <h1 className="font-serif text-4xl sm:text-6xl xl:text-7xl font-bold text-brand-espresso tracking-tight leading-[1.12] sm:leading-[1.1]">
