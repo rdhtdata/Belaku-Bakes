@@ -1,11 +1,11 @@
 {
   "name": "react-example",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "build": "vite build && cp docs/src/template.html docs/index.html && cp docs/src/template.html ./index.html && cp -r docs/assets/* assets/",
+    "build": "vite build && rm -rf docs && cp -r dist docs && cp -r dist/assets/* assets/ 2>/dev/null || true",
     "deploy": "npm run build && npx gh-pages -d docs -b gh-pages",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
