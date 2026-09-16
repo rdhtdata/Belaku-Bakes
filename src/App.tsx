@@ -197,8 +197,17 @@ export default function App() {
             <span>
               &copy; {new Date().getFullYear()} <strong className="text-brand-caramel font-bold">Belaku Bakes</strong>. All rights reserved. Baked freshly by hand in Bengaluru.
             </span>
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-3">
               <span className="hover:text-brand-gold transition-colors">Artisanal Fresh Bakes • Handcrafted with Care</span>
+              <span className="hidden sm:inline text-brand-cream/30">•</span>
+              <a
+                href="https://octagramai.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand-cream/70 hover:text-brand-gold transition-colors underline-offset-4 hover:underline"
+              >
+                Website designed by <span className="font-semibold text-brand-caramel hover:text-brand-gold transition-colors">Octagram</span>
+              </a>
             </div>
           </div>
 
