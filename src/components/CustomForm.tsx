@@ -267,8 +267,17 @@ Looking forward to your confirmation and payment details! Thank you.`;
 
     const encodedMessage = encodeURIComponent(messageTemplate);
     const cleanNumber = CONTACT_INFO.whatsappNumber.replace(/[^0-9]/g, "");
-    const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
-    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    
+    // Use api.whatsapp.com instead of wa.me to prevent iOS Safari 302 redirect emoji corruption
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${cleanNumber}&text=${encodedMessage}`;
+    
+    // On iOS and mobile devices, direct navigation avoids Safari pop-up redirect encoding issues
+    const isMobile = typeof navigator !== "undefined" && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      window.location.href = whatsappUrl;
+    } else {
+      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    }
   };
 
   const availableSubcategories = getSubcategoriesForCategory();
