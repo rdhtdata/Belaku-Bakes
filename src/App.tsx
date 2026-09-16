@@ -10,7 +10,7 @@ import InstagramShowcase from "./components/InstagramShowcase";
 import FloatingOrderCTA from "./components/FloatingOrderCTA";
 import { MenuItem } from "./types";
 import { CONTACT_INFO } from "./data";
-import { MapPin, Instagram, MessageSquare } from "lucide-react";
+import { MapPin, Instagram, MessageSquare, ArrowUpRight } from "lucide-react";
 import { BelakuLogoSymbol } from "./components/BelakuLogo";
 
 export default function App() {
@@ -105,7 +105,7 @@ export default function App() {
       </main>
 
       {/* Luxury Footer with Contact layout */}
-      <footer className="bg-brand-espresso text-brand-cream pt-14 sm:pt-16 pb-24 sm:pb-12 relative overflow-hidden border-t-2 border-brand-gold/65">
+      <footer className="bg-brand-espresso text-brand-cream pt-14 sm:pt-16 pb-36 sm:pb-16 relative overflow-hidden border-t-2 border-brand-gold/65">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 sm:gap-12 pb-10 sm:pb-12 border-b border-brand-cream/10">
             
@@ -113,7 +113,7 @@ export default function App() {
             <div className="sm:col-span-2 md:col-span-4 text-left space-y-4">
               <div className="flex items-center space-x-3">
                 <BelakuLogoSymbol size={40} className="ring-2 ring-brand-gold/30" />
-                <span className="font-serif text-2xl tracking-wider font-bold text-brand-caramel block">
+                <span className="font-serif text-2xl tracking-wider font-bold text-brand-cream block">
                   Belaku Bakes
                 </span>
               </div>
@@ -192,21 +192,26 @@ export default function App() {
 
           </div>
 
-          {/* Bottom Copyright area */}
-          <div className="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-brand-cream/50 font-light space-y-3 sm:space-y-0 text-center sm:text-left">
-            <span>
-              &copy; {new Date().getFullYear()} <strong className="text-brand-caramel font-bold">Belaku Bakes</strong>. All rights reserved. Baked freshly by hand in Bengaluru.
-            </span>
-            <div className="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-3">
-              <span className="hover:text-brand-gold transition-colors">Artisanal Fresh Bakes • Handcrafted with Care</span>
+          {/* Bottom Copyright and Designer Credit area */}
+          <div className="pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-brand-cream/70 font-light space-y-4 md:space-y-0 text-center md:text-left">
+            <div className="space-y-1 sm:space-y-0 sm:flex sm:items-center sm:space-x-3">
+              <span>
+                &copy; {new Date().getFullYear()} <strong className="text-brand-cream font-bold">Belaku Bakes</strong>. All rights reserved.
+              </span>
               <span className="hidden sm:inline text-brand-cream/30">•</span>
+              <span className="text-brand-cream/60">Baked freshly in Bengaluru</span>
+            </div>
+
+            <div className="flex items-center space-x-3">
               <a
                 href="https://octagramai.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-brand-cream/70 hover:text-brand-gold transition-colors underline-offset-4 hover:underline"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-brand-cream/10 hover:bg-brand-cream/20 text-brand-cream border border-brand-cream/20 hover:border-brand-cream/40 transition-all text-xs font-normal group"
               >
-                Website designed by <span className="font-semibold text-brand-caramel hover:text-brand-gold transition-colors">Octagram</span>
+                <span className="text-brand-cream/80">Website designed by</span>
+                <span className="font-bold text-brand-cream group-hover:text-brand-gold transition-colors">Octagram</span>
+                <ArrowUpRight className="w-3.5 h-3.5 text-brand-gold group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
             </div>
           </div>
